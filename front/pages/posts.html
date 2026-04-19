@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Posts — express-app</title>
+  <link rel="stylesheet" href="../styles/global.css" />
+</head>
+<body>
+  <script src="../components/nav.js"></script>
+  <script>renderNav();</script>
+
+  <main>
+    <div class="container">
+
+      <h1>📝 Posts</h1>
+      <p>간단한 게시글 작성 / 삭제 예제</p>
+
+      <!-- 작성 폼 -->
+      <div class="card">
+        <h2>게시글 작성</h2>
+        <div class="form-group">
+          <label>제목</label>
+          <input type="text" id="inp-title" placeholder="제목을 입력하세요" />
+        </div>
+        <div class="form-group">
+          <label>내용</label>
+          <textarea id="inp-body" rows="4" placeholder="내용을 입력하세요..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="addPost()">작성</button>
+      </div>
+
+      <!-- 게시글 목록 -->
+      <div id="post-list"></div>
+
+    </div>
+  </main>
+
+  <script src="../js/posts.js"></script>
+</body>
+</html>

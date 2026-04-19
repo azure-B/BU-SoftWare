@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Counter — express-app</title>
+  <link rel="stylesheet" href="../styles/global.css" />
+  <style>
+    .counter-display {
+      font-size: 6rem;
+      font-weight: bold;
+      font-family: var(--font-mono);
+      color: var(--accent);
+      text-align: center;
+      padding: 40px 0;
+      transition: transform 0.1s;
+    }
+    .counter-display.bump { transform: scale(1.15); }
+    .counter-btns { display: flex; gap: 12px; justify-content: center; }
+  </style>
+</head>
+<body>
+  <script src="../components/nav.js"></script>
+  <script>renderNav();</script>
+
+  <main>
+    <div class="container">
+
+      <h1>🔢 Counter</h1>
+      <p>서버 사이드 카운터 — 새로고침해도 값이 유지됩니다.</p>
+
+      <div class="card" style="text-align:center">
+        <div class="counter-display" id="count">—</div>
+        <div class="counter-btns">
+          <button class="btn btn-ghost"  onclick="adjust(-1)">− 감소</button>
+          <button class="btn btn-primary" onclick="adjust(1)">+ 증가</button>
+          <button class="btn btn-danger"  onclick="reset()">↺ 초기화</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="../js/counter.js"></script>
+</body>
+</html>
