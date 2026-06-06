@@ -14,7 +14,7 @@ function resolveSecure(port) {
 }
 
 /**
- * 네이버 등 SMTP는 발신 주소가 로그인 계정과 같아야 함.
+ * Gmail 등 SMTP는 발신 주소가 로그인 계정과 같아야 함.
  * SMTP_FROM에 @ 없으면 "표시이름" <SMTP_USER> 형식으로 보정
  */
 function resolveFromAddress() {
@@ -87,16 +87,24 @@ async function sendVerificationEmail(to, code) {
     if (process.env.NODE_ENV === 'development') {
       message = `이메일 발송 실패: ${err.message}`;
     }
-    if (String(err.message).includes('535')) {
-      message =
-        '네이버 SMTP 로그인 거부(535). 네이버 2단계 인증 후 '
-        + '「애플리케이션 비밀번호」를 발급해 SMTP_PASS에 넣어 주세요. '
-        + '일반 로그인 비밀번호는 사용할 수 없습니다.';
+    const smtpErr = String(err.message);
+    const isGmail = String(process.env.SMTP_HOST || '').includes('gmail.com');
+    if (
+      smtpErr.includes('535')
+      || smtpErr.includes('EAUTH')
+      || smtpErr.includes('Invalid login')
+      || smtpErr.includes('Authentication')
+    ) {
+      message = isGmail
+        ? 'Gmail SMTP 로그인 실패. Google 계정 2단계 인증 ON 후 '
+          + '「앱 비밀번호」를 발급해 SMTP_PASS에 넣어 주세요. '
+          + '일반 로그인 비밀번호는 사용할 수 없습니다.'
+        : 'SMTP 로그인 실패. 앱 비밀번호(또는 SMTP 전용 비밀번호)를 SMTP_PASS에 설정했는지 확인해 주세요.';
     }
-    if (String(err.message).includes('timeout') || String(err.message).includes('Timeout')) {
+    if (smtpErr.includes('timeout') || smtpErr.includes('Timeout')) {
       message =
-        'SMTP 서버 연결 시간 초과입니다. Render 등 클라우드에서는 네이버 SMTP가 차단될 수 있습니다. '
-        + '로컬 서버에서 테스트하거나 Gmail SMTP를 시도해 보세요.';
+        'SMTP 서버 연결 시간 초과입니다. SMTP_HOST·PORT·SMTP_SECURE 값과 '
+        + 'Render 환경 변수 설정을 확인해 주세요.';
     }
 
     const wrapped = new Error(message);

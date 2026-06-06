@@ -12,7 +12,8 @@
     "tour:seed-posts": "node scripts/seed-tour-posts.js",
     "test": "jest --runInBand --forceExit",
     "test:watch": "jest --watch",
-    "test:cover": "jest --coverage --forceExit"
+    "test:cover": "jest --coverage --forceExit",
+    "test:smtp": "node scripts/test-smtp.js"
   },
   "jest": {
     "testEnvironment": "node",
