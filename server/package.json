@@ -1,0 +1,40 @@
+{
+  "name": "express-app",
+  "version": "1.0.0",
+  "description": "Express.js MVC boilerplate",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node scripts/kill-port.js && nodemon src/app.js",
+    "dev:clean": "node scripts/kill-port.js",
+    "tour:verify": "node scripts/verify-campus-tour.js",
+    "tour:sync": "node scripts/seed-campus-tour.js",
+    "tour:seed-posts": "node scripts/seed-tour-posts.js",
+    "test": "jest --runInBand --forceExit",
+    "test:watch": "jest --watch",
+    "test:cover": "jest --coverage --forceExit"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.107.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^8.0.10",
+    "pg": "^8.21.0",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^7.2.2"
+  }
+}
