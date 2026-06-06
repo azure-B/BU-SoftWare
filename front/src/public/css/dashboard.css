@@ -1,0 +1,111 @@
+/* --- dashboard.css (from publish/Dashboard.html) --- */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 65fr 35fr;
+  gap: 32px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metric-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  padding: 2rem;
+  border: 1px solid var(--accent-gold);
+}
+
+.campus-digest-item {
+  border-bottom: 1px solid #e0e3e5;
+  padding-bottom: 1.5rem;
+}
+
+.dashboard-facility-panel {
+  display: flex;
+  flex-direction: column;
+  height: 7.5rem;
+  min-height: 7.5rem;
+}
+
+.dashboard-facility-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-facility-nav {
+  flex-shrink: 0;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-course-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 11rem;
+}
+
+.dashboard-course-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.dashboard-course-nav {
+  flex-shrink: 0;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-square-post-panel {
+  display: flex;
+  flex-direction: column;
+  height: 13rem;
+  min-height: 13rem;
+}
+
+.dashboard-square-post-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.dashboard-square-post-nav {
+  flex-shrink: 0;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-square-post-fade {
+  transition: opacity 0.2s ease;
+}
+
+.dashboard-square-post-visible {
+  opacity: 1;
+}
+
+.dashboard-square-post-hidden {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-square-post-fade {
+    transition: none;
+  }
+}
+
+.progress-bar {
+  height: 0.5rem;
+  border-radius: 9999px;
+}

@@ -1,0 +1,9 @@
+# Indexed for search only — AI can still @-reference if needed
+# Use .cursorignore for hard blocks (node_modules, secrets, binaries)
+
+**/node_modules/
+**/build/
+**/dist/
+**/coverage/
+**/picture/
+**/*.lock

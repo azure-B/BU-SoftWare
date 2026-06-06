@@ -1,0 +1,18 @@
+---
+description: Publish HTML to React JSX conversion — read front/docs/publish-to-jsx.md when converting public/publish/*.html or migrating static HTML to front/src/jsx
+globs: front/public/publish/**/*.html, front/src/jsx/**/*.jsx, front/src/public/css/**/*.css
+alwaysApply: false
+---
+
+# Publish → JSX
+
+**Canonical guide:** [front/docs/publish-to-jsx.md](mdc:front/docs/publish-to-jsx.md)
+
+Before converting any `front/public/publish/*.html`:
+
+1. Follow the checklist in that doc (CSS split → JSX → components → App.js).
+2. Reuse `AppShell` / `AppHeader` / `AppFooter` — never duplicate header/footer in page JSX.
+3. Output paths: `src/jsx/<Page>.jsx`, `src/public/css/<page>.css`.
+4. Update `App.js` nav/view and add a row to [front/sub.md](mdc:front/sub.md).
+
+Invoke skill: `@html-publish-to-react`

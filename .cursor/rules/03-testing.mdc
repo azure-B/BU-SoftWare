@@ -1,0 +1,14 @@
+---
+description: Server tests — run before finishing backend changes
+globs: server/**/*.test.js, server/tests/**
+alwaysApply: false
+---
+
+# Testing
+
+- Run: `cd server && npm test`
+- Tests live in `server/tests/`; use existing patterns (`supertest` + exported `app`)
+- Fix failing tests before marking work complete
+- Prefer behavior assertions (status, JSON shape) over implementation details
+
+When adding an endpoint, add or update a test in the same change when practical.

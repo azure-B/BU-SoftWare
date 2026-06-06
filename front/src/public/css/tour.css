@@ -1,0 +1,73 @@
+.tour-divider {
+  border-color: var(--accent-gold);
+}
+
+.tour-kakao-map {
+  min-height: 100%;
+}
+
+.tour-map-cluster-menu {
+  backdrop-filter: blur(4px);
+}
+
+.tour-map-overlay-btn {
+  backdrop-filter: blur(4px);
+}
+
+.tour-sidebar {
+  background-color: #f1f4f6;
+}
+
+.tour-filter-active {
+  border-color: #001e59;
+  color: #001e59;
+}
+
+.tour-filter-active:hover {
+  background-color: #001e59;
+  color: #ffffff;
+}
+
+.tour-rank-gold {
+  color: var(--accent-gold);
+}
+
+.tour-section-tabs {
+  display: flex;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--surface-variant, #c4c7c5);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tour-section-tab {
+  padding: 0 0 0.5rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--outline, #74777f);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.tour-section-tab:hover {
+  color: var(--secondary, #1d5abc);
+}
+
+.tour-section-tab--active {
+  color: var(--secondary, #1d5abc);
+  border-bottom-color: var(--accent-gold, #c4a035);
+}
+
+.tour-post-panel {
+  scrollbar-width: thin;
+}
+
+.tour-comment-item:last-of-type {
+  margin-bottom: 0;
+}

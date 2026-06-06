@@ -1,0 +1,288 @@
+/* --- regi.css (from publish/regi.html) --- */
+.registration-card {
+  border: 1px solid #c5a880;
+  background: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  transition: box-shadow 0.4s ease;
+}
+
+.form-input-border {
+  border: none;
+  border-bottom: 1px solid #001e59;
+  border-radius: 0;
+  background: transparent;
+  padding: 8px 0;
+  transition: border-color 0.25s ease, border-width 0.2s ease;
+}
+
+.form-input-border:focus {
+  outline: none;
+  border-bottom: 2px solid #1d5abc;
+  box-shadow: none;
+}
+
+.editorial-rule {
+  height: 1px;
+  background-color: #c5a880;
+  width: 60px;
+  margin-top: 8px;
+}
+
+.regi-email-local {
+  border: none;
+  box-shadow: none;
+}
+
+/* ── 단계 진행 표시 ── */
+.regi-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+}
+
+.regi-progress__item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  transition: color 0.35s ease;
+}
+
+.regi-progress__item--active {
+  color: #001e59;
+  font-weight: 600;
+}
+
+.regi-progress__item--done {
+  color: #1d5abc;
+}
+
+.regi-progress__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d1d5db;
+  transition: background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.regi-progress__item--active .regi-progress__dot {
+  background: #001e59;
+  transform: scale(1.25);
+  box-shadow: 0 0 0 3px rgba(0, 30, 89, 0.12);
+}
+
+.regi-progress__item--done .regi-progress__dot {
+  background: #1d5abc;
+}
+
+.regi-progress__line {
+  width: 1.25rem;
+  height: 1px;
+  background: #e5e7eb;
+  transition: background 0.4s ease;
+}
+
+.regi-progress__line--done {
+  background: #1d5abc;
+}
+
+/* ── 단계별 reveal ── */
+.regi-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.regi-step {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(12px);
+  margin-top: 0;
+  transition:
+    grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    margin-top 0.45s ease;
+  pointer-events: none;
+}
+
+.regi-step--visible {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 2rem;
+  pointer-events: auto;
+}
+
+.regi-step__inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.regi-step__content {
+  padding-top: 2px;
+}
+
+.regi-step-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c5a880 20%, #c5a880 80%, transparent);
+  opacity: 0;
+  transform: scaleX(0.6);
+  transition: opacity 0.45s ease 0.1s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+
+.regi-step-divider--visible {
+  opacity: 0.5;
+  transform: scaleX(1);
+  margin-top: 2rem;
+}
+
+/* ── 완료 배지 ── */
+.regi-step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1d5abc;
+  margin-bottom: 0.75rem;
+  animation: regiBadgeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes regiBadgeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── 가입 버튼 reveal ── */
+/* ── 필드 인라인 메시지 ── */
+.regi-field-msg {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  margin-top: 0.5rem;
+  animation: regiFieldMsgIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.regi-field-msg--error {
+  color: #b3261e;
+}
+
+.regi-field-msg--info {
+  color: #1d5abc;
+}
+
+.regi-field-msg--hint {
+  color: #6b7280;
+}
+
+@keyframes regiFieldMsgIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.regi-submit-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.regi-submit-wrap--visible {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 2rem;
+}
+
+.regi-submit-wrap__inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.regi-submit-btn {
+  animation: regiSubmitPulse 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes regiSubmitPulse {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.regi-quote-aside {
+  opacity: 0.4;
+  width: 210px;
+  right: calc(100% + 2rem);
+  left: auto;
+  animation: regiQuoteFadeIn 0.7s cubic-bezier(0, 0, 0.2, 1) 0.15s both;
+}
+
+@keyframes regiQuoteFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-16px);
+  }
+  to {
+    opacity: 0.4;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .registration-card {
+    max-width: 100%;
+    margin: 0 20px;
+    padding: 2rem !important;
+  }
+
+  .regi-progress__label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .regi-step,
+  .regi-step-divider,
+  .regi-submit-wrap,
+  .regi-step-badge,
+  .regi-submit-btn {
+    transition: none;
+    animation: none;
+  }
+
+  .regi-step--hidden {
+    display: none;
+  }
+
+  .regi-step--visible {
+    transform: none;
+  }
+}

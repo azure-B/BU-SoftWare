@@ -1,0 +1,181 @@
+.post-layout {
+  align-items: flex-start;
+}
+
+/* Community 목록은 lg:col-span-8 — FAQ·Quick Links(lg:col-span-4) 없으므로 본문 전체 폭 사용 */
+.post-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+}
+
+.post-title {
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 768px) {
+  .post-title {
+    font-size: 48px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+}
+
+.post-back-link:hover .material-symbols-outlined {
+  transform: translateX(-0.25rem);
+}
+
+.post-divider {
+  height: 1px;
+  background-color: var(--accent-gold);
+}
+
+.post-recruitment {
+  border: 1px solid var(--outline-variant, #c4c6d3);
+}
+
+.post-recruitment-bullet {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background-color: var(--accent-gold);
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+}
+
+.post-comments-section {
+  border-top: 1px solid var(--accent-gold);
+}
+
+.post-title-row .post-title {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.post-action-group {
+  align-items: flex-end;
+  gap: 0.625rem;
+}
+
+.post-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 3.575rem;
+  height: 1.7875rem;
+  padding: 0 0.875rem;
+  font-family: var(--font-secondary, 'Hanken Grotesk', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 0.125rem;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.post-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.post-action-btn--primary {
+  background-color: var(--brand-navy);
+  color: #ffffff;
+  border: 1px solid var(--brand-navy);
+}
+
+.post-action-btn--primary:hover:not(:disabled) {
+  background-color: #1455b7;
+  border-color: #1455b7;
+}
+
+.post-action-btn--danger {
+  background-color: transparent;
+  color: var(--brand-navy);
+  border: 1px solid var(--brand-navy);
+}
+
+.post-action-btn--danger:hover:not(:disabled) {
+  background-color: #1d5abc;
+  border-color: #1d5abc;
+  color: #ffffff;
+}
+
+.post-comment-edit-textarea {
+  min-height: 1.6rem;
+  max-height: 12rem;
+  overflow-y: auto;
+  line-height: 1.6;
+  padding: 0;
+  border: 0;
+  field-sizing: content;
+}
+
+@supports not (field-sizing: content) {
+  .post-comment-edit-textarea {
+    overflow: hidden;
+  }
+}
+
+.post-comment-edit {
+  margin-top: -0.125rem;
+}
+
+.post-comment-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-comment-textarea {
+  display: block;
+  padding: 0 0 0.375rem;
+  line-height: 1.6;
+  border: 0;
+  border-bottom: 1px solid var(--brand-navy);
+  transition: border-color 0.2s, border-width 0.2s;
+}
+
+.post-comment-action:hover {
+  text-decoration: underline;
+}
+
+.post-comment-textarea:focus {
+  border-bottom-width: 2px;
+  border-color: #1d5abc;
+}
+
+.post-list-btn:hover {
+  background-color: #1d5abc;
+  border-color: #1d5abc;
+  color: #ffffff;
+}
+
+.post-submit-btn:hover {
+  background-color: #1d5abc;
+}
+
+.post-body-html strong {
+  font-weight: 700;
+}
+
+.post-body-html em {
+  font-style: italic;
+}
+
+.post-body-html u {
+  text-decoration: underline;
+}
+
+.post-comment-item {
+  border-color: var(--outline-variant, #c4c6d3);
+}

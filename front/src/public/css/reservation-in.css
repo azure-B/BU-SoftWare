@@ -1,0 +1,70 @@
+/* --- reservation-in.css (from publish/reservation_in.html) --- */
+
+.reservation-in-header {
+  border-bottom: 1px solid var(--accent-gold, #c5a880);
+}
+
+.reservation-in-input {
+  box-sizing: border-box;
+  border-bottom: 1px solid #0d337f;
+  height: 30px;
+  min-height: 30px;
+  padding: 0;
+}
+
+textarea.reservation-in-input {
+  resize: none;
+  overflow: hidden;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.reservation-in-input:focus {
+  outline: none;
+  border-bottom-width: 2px;
+  border-color: #1d5abc;
+}
+
+.reservation-in-time-slot {
+  border: 1px solid var(--accent-gold, #c5a880);
+}
+
+.reservation-in-time-slot--disabled {
+  border-color: #e0e3e5;
+  background-color: #ebeef0;
+  color: #747682;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.reservation-in-btn-cancel {
+  border: 1px solid #0d337f;
+  color: #0d337f;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.reservation-in-btn-cancel:hover {
+  background-color: #e0e3e5;
+}
+
+.reservation-in-btn-submit {
+  background-color: #0d337f;
+  color: #ffffff;
+  border: 0;
+  cursor: pointer;
+}
+
+.reservation-in-btn-submit:hover {
+  background-color: #1d5abc;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reservation-in-input,
+  .reservation-in-time-slot,
+  .reservation-in-btn-cancel,
+  .reservation-in-btn-submit {
+    transition: none;
+  }
+}

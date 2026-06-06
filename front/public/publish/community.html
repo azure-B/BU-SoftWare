@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="ko"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>BAEKSEOK UNIVERSITY - 학생광장</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#ebeef0",
+                    "on-background": "#181c1e",
+                    "surface-variant": "#e0e3e5",
+                    "outline-variant": "#c4c6d3",
+                    "on-secondary-fixed": "#001943",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#e0c298",
+                    "surface-container-high": "#e5e9eb",
+                    "on-error-container": "#93000a",
+                    "background": "#f7fafc",
+                    "primary-container": "#0d337f",
+                    "tertiary-fixed": "#fedeb2",
+                    "secondary-container": "#6899fe",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#d7dadc",
+                    "on-tertiary-fixed": "#281800",
+                    "inverse-on-surface": "#eef1f3",
+                    "surface-container-highest": "#e0e3e5",
+                    "inverse-primary": "#b3c5ff",
+                    "primary-fixed": "#dbe1ff",
+                    "on-primary-container": "#839ff1",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#483516",
+                    "secondary": "#1d5abc",
+                    "inverse-surface": "#2d3133",
+                    "outline": "#747682",
+                    "surface-tint": "#3d5ba8",
+                    "surface-container-low": "#f1f4f6",
+                    "primary-fixed-dim": "#b3c5ff",
+                    "on-secondary-container": "#003072",
+                    "on-error": "#ffffff",
+                    "secondary-fixed": "#d9e2ff",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#444651",
+                    "surface": "#f7fafc",
+                    "primary": "#001e59",
+                    "surface-bright": "#f7fafc",
+                    "on-tertiary-container": "#ba9d76",
+                    "on-primary-fixed": "#001849",
+                    "tertiary": "#312004",
+                    "on-tertiary-fixed-variant": "#584323",
+                    "secondary-fixed-dim": "#afc6ff",
+                    "on-surface": "#181c1e",
+                    "on-secondary-fixed-variant": "#004299",
+                    "on-primary-fixed-variant": "#22428e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "column-gap": "32px",
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "margin-desktop": "64px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Libre Caslon Text"
+                    ],
+                    "headline-lg-mobile": [
+                            "Libre Caslon Text"
+                    ],
+                    "display-lg": [
+                            "Libre Caslon Text"
+                    ],
+                    "label-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "body-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "body-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "headline-lg": [
+                            "Libre Caslon Text"
+                    ],
+                    "display-lg-mobile": [
+                            "Libre Caslon Text"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg": [
+                            "64px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.0",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "40px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "40px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+    <style>
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+            body {
+                background-color: #F8FBFD;
+            }
+        </style>
+    </head>
+    <body class="text-on-background antialiased min-h-screen flex flex-col font-body-md text-body-md relative">
+    <!-- TopAppBar from SCREEN_2 -->
+    <header class="bg-surface/90 backdrop-blur-sm text-primary flex justify-between items-center px-margin-desktop w-full h-20 max-w-full docked full-width top-0 border-b border-outline-variant transition-all duration-200 ease-in-out sticky z-50">
+    <div class="flex items-center gap-4">
+    <img alt="Baekseok University Logo" class="h-10 w-10 rounded-full shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQqQ6Sq-NbTlvgCsnY-Sqhpa03cBZ-6_iyNKWVF-C8Sxla_rEvDMw1j0CBHteRYhYkyZrHvCC2B7dvH5t6dBX_7t8p1mSJNQKB9EEl0nQZ23Ops_piiHCmCFvahgL2X8jB9yOsqj9IuyhWCQ_rhJORNXUKSBg_f8joAfZFl4R4Z8e8thJTXafrlN8txU3Sh5H0fnnTkZEJe3pxJ9m6mu9iBD_StG6p0dGeQ-2z91ibvhppc_Vhm_MsVyqbNRAdk-stDMyAdJhfoA">
+    <div class="font-display-lg text-headline-md text-primary">백석 학생 허브</div>
+    </div>
+    <nav class="hidden md:flex gap-8 font-label-md text-label-md tracking-widest uppercase">
+    <a class="text-on-surface-variant hover:text-secondary duration-300" href="#">대시보드</a>
+    <a class="text-secondary border-b-2 border-tertiary-container pb-1 hover:text-secondary duration-300" href="#">학생광장</a>
+    <a class="text-on-surface-variant hover:text-secondary duration-300" href="#">학과광장</a>
+    <a class="text-on-surface-variant hover:text-secondary duration-300" href="#">시설예약</a>
+    </nav>
+    <div class="flex items-center gap-4">
+    <span class="material-symbols-outlined hover:text-secondary duration-300 cursor-pointer text-[24px]">account_circle</span>
+    </div>
+    </header>
+    <div class="flex flex-1 max-w-screen-2xl mx-auto w-full pt-16 relative z-10">
+    <!-- SideNavBar -->
+    <aside class="hidden md:flex flex-col h-[calc(100vh-80px)] w-64 border-r border-outline-variant sticky top-20 pt-8 shrink-0">
+    <div class="px-6 mb-8">
+    <h2 class="font-headline-md text-headline-md text-primary mb-1">학생광장</h2>
+    <p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest text-[10px]">STUDENT SQUARE</p>
+    </div>
+    <nav class="flex flex-col gap-2">
+    <a class="flex items-center gap-3 text-on-surface-variant pl-4 py-3 font-label-md hover:bg-surface-container-highest transition-colors" href="#">
+    <span class="material-symbols-outlined text-[20px]" data-icon="payments">payments</span>
+                        장학 공고
+                    </a>
+    <a class="flex items-center gap-3 text-on-surface-variant pl-4 py-3 font-label-md hover:bg-surface-container-highest transition-colors" href="#">
+    <span class="material-symbols-outlined text-[20px]" data-icon="emoji_events">emoji_events</span>
+                        대회 공고
+                    </a>
+    <!-- Expanded Community Section -->
+    <div class="flex flex-col">
+    <a class="flex items-center gap-3 text-secondary border-l-4 border-secondary pl-4 py-3 font-bold bg-surface-bright hover:bg-surface-container-highest transition-colors" href="#">
+    <span class="material-symbols-outlined text-[20px]" data-icon="groups">groups</span>
+                            커뮤니티
+                        </a>
+    <div class="flex flex-col pl-12 py-2 gap-3 border-l-4 border-transparent">
+    <a class="text-on-surface-variant font-label-md hover:text-secondary transition-colors text-sm" href="#">멘토링</a>
+    <a class="text-on-surface-variant font-label-md hover:text-secondary transition-colors text-sm" href="#">팀프로젝트</a>
+    </div>
+    </div>
+    <a class="flex items-center gap-3 text-on-surface-variant pl-4 py-3 font-label-md hover:bg-surface-container-highest transition-colors" href="#">
+    <span class="material-symbols-outlined text-[20px]" data-icon="school">school</span>
+                        학과 게시판
+                    </a>
+    </nav>
+    </aside>
+    <!-- Main Content Area (Editorial Grid) -->
+    <main class="flex-1 px-4 md:px-12 py-12 flex flex-col gap-12">
+    <!-- Page Header -->
+    <header class="border-b border-[#C5A880] pb-6 flex justify-between items-end">
+    <div>
+    <h1 class="font-display-lg text-display-lg text-primary mb-2">커뮤니티</h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">A space for academic discourse, mentorship opportunities, and collaborative endeavors across disciplines.</p>
+    </div>
+    <button class="bg-primary text-on-primary font-label-md py-3 px-6 hover:bg-[#1455B7] transition-colors rounded-sm uppercase tracking-wider">
+                        글쓰기
+                    </button>
+    </header>
+    <!-- Content Grid (Asymmetric) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Main Post List (7 columns) -->
+    <div class="lg:col-span-8 flex flex-col gap-6">
+    <!-- Search/Filter -->
+    <div class="flex justify-between items-center pb-4 border-b border-[#0D337F]">
+    <div class="flex gap-4">
+    <span class="font-label-md text-secondary border-b border-secondary pb-1 cursor-pointer">전체</span>
+    <span class="font-label-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer">멘토링</span>
+    <span class="font-label-md text-on-surface-variant hover:text-secondary transition-colors cursor-pointer">팀프로젝트</span>
+    </div>
+    <div class="relative w-64">
+    <input class="w-full bg-transparent border-b border-[#0D337F] focus:border-secondary focus:border-b-2 py-1 outline-none font-body-md text-sm transition-all pb-1 pl-1 pr-8 placeholder:text-outline-variant" placeholder="Search discussions..." type="text">
+    <span class="material-symbols-outlined absolute right-1 top-1 text-on-surface-variant text-[18px]">search</span>
+    </div>
+    </div>
+    <!-- Post Items -->
+    <div class="flex flex-col">
+    <!-- Item 1 -->
+    <article class="py-6 border-b border-[#C5A880] group cursor-pointer hover:bg-surface-bright transition-colors -mx-4 px-4">
+    <div class="flex justify-between items-start gap-4">
+    <div class="flex-1">
+    <div class="flex items-center gap-3 mb-2">
+    <span class="px-2 py-1 bg-surface-container-high text-on-surface font-label-md text-[10px] uppercase tracking-wider">팀프로젝트</span>
+    <span class="text-on-surface-variant text-sm">2 hours ago</span>
+    </div>
+    <h3 class="font-headline-md text-headline-md text-primary mb-2 group-hover:text-[#1455B7] transition-colors">2024학년도 1학기 컴퓨터공학부 졸업작품 팀원 모집 (웹/앱 개발)</h3>
+    <p class="text-on-surface-variant text-sm line-clamp-2">프론트엔드 1명, 백엔드 1명 모집합니다. React와 Spring Boot 기반으로 개발 예정이며, 매주 화요일 오프라인 미팅 가능하신 분 우대합니다.</p>
+    </div>
+    <div class="hidden sm:flex flex-col items-end text-sm text-outline">
+    <div class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-[16px]">visibility</span> 142</div>
+    <div class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">chat_bubble</span> 5</div>
+    </div>
+    </div>
+    </article>
+    <!-- Item 2 -->
+    <article class="py-6 border-b border-[#C5A880] group cursor-pointer hover:bg-surface-bright transition-colors -mx-4 px-4">
+    <div class="flex justify-between items-start gap-4">
+    <div class="flex-1">
+    <div class="flex items-center gap-3 mb-2">
+    <span class="px-2 py-1 bg-primary-container text-on-primary-container font-label-md text-[10px] uppercase tracking-wider">멘토링</span>
+    <span class="text-on-surface-variant text-sm">Yesterday</span>
+    </div>
+    <h3 class="font-headline-md text-headline-md text-primary mb-2 group-hover:text-[#1455B7] transition-colors">[신입생 필독] 전공 기초 과목 튜터링 안내 (C언어, 자료구조)</h3>
+    <p class="text-on-surface-variant text-sm line-clamp-2">선배들이 직접 진행하는 전공 튜터링 프로그램 신청이 시작되었습니다. 기초가 부족한 신입생 여러분들의 많은 참여 바랍니다.</p>
+    </div>
+    <div class="hidden sm:flex flex-col items-end text-sm text-outline">
+    <div class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-[16px]">visibility</span> 358</div>
+    <div class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">chat_bubble</span> 12</div>
+    </div>
+    </div>
+    </article>
+    <!-- Item 3 -->
+    <article class="py-6 border-b border-[#C5A880] group cursor-pointer hover:bg-surface-bright transition-colors -mx-4 px-4">
+    <div class="flex justify-between items-start gap-4">
+    <div class="flex-1">
+    <div class="flex items-center gap-3 mb-2">
+    <span class="px-2 py-1 bg-surface-container-high text-on-surface font-label-md text-[10px] uppercase tracking-wider">일반</span>
+    <span class="text-on-surface-variant text-sm">May 14, 2024</span>
+    </div>
+    <h3 class="font-headline-md text-headline-md text-primary mb-2 group-hover:text-[#1455B7] transition-colors">제 2도서관 열람실 노트북 사용 관련 건의사항</h3>
+    <p class="text-on-surface-variant text-sm line-clamp-2">노트북 타이핑 소음으로 인한 불편사항이 지속적으로 접수되고 있습니다. 노트북 전용석 확대 배치 및 에티켓 캠페인을 건의합니다.</p>
+    </div>
+    <div class="hidden sm:flex flex-col items-end text-sm text-outline">
+    <div class="flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-[16px]">visibility</span> 89</div>
+    <div class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">chat_bubble</span> 2</div>
+    </div>
+    </div>
+    </article>
+    </div>
+    <!-- Pagination -->
+    <div class="flex justify-center items-center gap-4 mt-8 font-label-md">
+    <button class="text-outline hover:text-primary transition-colors disabled:opacity-50" disabled="">← Prev</button>
+    <div class="flex gap-2">
+    <span class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary rounded-sm">1</span>
+    <span class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-surface-variant cursor-pointer rounded-sm transition-colors">2</span>
+    <span class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-surface-variant cursor-pointer rounded-sm transition-colors">3</span>
+    </div>
+    <button class="text-outline hover:text-primary transition-colors">Next →</button>
+    </div>
+    </div>
+    <!-- Marginalia / Sidebar (4 columns) -->
+    <div class="lg:col-span-4 flex flex-col gap-8">
+    <!-- Notice Card -->
+    <div class="border border-[#C5A880] p-6 bg-surface-container-lowest relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-16 h-16 bg-tertiary-fixed opacity-20 transform rotate-45 translate-x-8 -translate-y-8"></div>
+    <h4 class="font-headline-md text-[18px] text-primary border-b border-[#0D337F] pb-2 mb-4">"자주 묻는 질문 (Q&amp;A)"</h4>
+    <ul class="flex flex-col gap-3 font-body-md text-sm"><li class="flex gap-2 items-start">
+    <span class="material-symbols-outlined text-[#C5A880] text-[16px] mt-[2px]">help</span>
+    <a class="hover:text-secondary hover:underline line-clamp-2" href="#">'መ샤강신챵 변강 기간은 앤제간가요?'</a>
+    </li>
+    <li class="flex gap-2 items-start">
+    <span class="material-symbols-outlined text-[#C5A880] text-[16px] mt-[2px]">help</span>
+    <a class="hover:text-secondary hover:underline line-clamp-2" href="#">'상재ᄀ 즈ᄆ꼉새 발그븐 어디사ᄅ 하나요?'</a>
+    </li>
+    <li class="flex gap-2 items-start">
+    <span class="material-symbols-outlined text-[#C5A880] text-[16px] mt-[2px]">help</span>
+    <a class="hover:text-secondary hover:underline line-clamp-2" href="#">'장하ᄀ그ᄒ신챵 사류 제ᄀ출 방버ᄇ 아내'</a>
+    </li></ul>
+    </div>
+    <!-- Quick Links / Actions -->
+    <div class="bg-primary text-on-primary p-6">
+    <h4 class="font-headline-md text-[18px] text-tertiary-fixed mb-4">Quick Links</h4>
+    <div class="flex flex-col gap-4">
+    <a class="flex justify-between items-center border border-on-primary/30 p-3 hover:bg-[#1455B7] transition-colors group" href="#">
+    <span class="font-label-md tracking-wider">중앙도서관</span>
+    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+    </a>
+    <a class="flex justify-between items-center border border-on-primary/30 p-3 hover:bg-[#1455B7] transition-colors group" href="#">
+    <span class="font-label-md tracking-wider">종합정보시스템</span>
+    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+    </a>
+    </div>
+    </div>
+    </div>
+    </div>
+    </main>
+    </div>
+    <!-- Footer from SCREEN_2 -->
+    <footer class="bg-primary dark:bg-on-background text-on-primary dark:text-on-primary-fixed full-width border-t border-tertiary-container flex flex-col md:flex-row justify-between items-center py-12 px-margin-desktop w-full mt-20 opacity-90 hover:opacity-100 duration-200 z-10 relative">
+    <div class="font-display-lg text-headline-md text-on-primary mb-6 md:mb-0">Baekseok University</div>
+    <nav class="flex flex-wrap gap-6 justify-center md:justify-end mb-6 md:mb-0 font-body-md text-body-md">
+    <a class="text-on-primary-container dark:text-outline-variant hover:text-tertiary-fixed transition-colors" href="#">Privacy Policy</a>
+    <a class="text-on-primary-container dark:text-outline-variant hover:text-tertiary-fixed transition-colors" href="#">Terms of Service</a>
+    <a class="text-on-primary-container dark:text-outline-variant hover:text-tertiary-fixed transition-colors" href="#">Campus Directory</a>
+    <a class="text-on-primary-container dark:text-outline-variant hover:text-tertiary-fixed transition-colors" href="#">Contact Support</a>
+    </nav>
+    <div class="font-label-md text-label-md text-on-primary-container dark:text-outline-variant text-center md:text-right">
+                © 2024 Baekseok University. All rights reserved. Intellectual Rigour &amp; Academic Excellence.
+            </div>
+    </footer>
+    </body></html>

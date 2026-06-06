@@ -1,0 +1,50 @@
+﻿# Dependencies (front + server + any nested package)
+**/node_modules/
+**/.pnp
+**/.pnp.js
+**/vendor/
+
+# Lockfiles
+**/package-lock.json
+**/yarn.lock
+**/pnpm-lock.yaml
+
+# Build / cache
+**/build/
+**/dist/
+**/out/
+**/.next/
+**/.nuxt/
+**/.cache/
+**/.parcel-cache/
+**/.eslintcache/
+**/coverage/
+**/__pycache__/
+
+# Environment & secrets
+**/.env
+**/.env.*
+!**/.env.example
+
+# Version control
+.git/
+
+# Logs
+**/*.log
+
+# OS
+**/.DS_Store
+**/Thumbs.db
+
+# Large / binary assets
+**/picture/
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.webp
+**/*.ico
+**/*.pdf
+
+# CRA / tooling
+**/.turbo/

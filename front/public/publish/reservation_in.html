@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>시설 예약 신청 - Baekseok Student Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#6899fe",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-container": "#ba9d76",
+                      "outline": "#747682",
+                      "surface-container-low": "#f1f4f6",
+                      "on-surface-variant": "#444651",
+                      "on-background": "#181c1e",
+                      "secondary": "#1d5abc",
+                      "outline-variant": "#c4c6d3",
+                      "on-tertiary-fixed-variant": "#584323",
+                      "on-secondary-fixed-variant": "#004299",
+                      "inverse-on-surface": "#eef1f3",
+                      "tertiary-container": "#483516",
+                      "primary-container": "#0d337f",
+                      "on-tertiary-fixed": "#281800",
+                      "surface-bright": "#f7fafc",
+                      "on-secondary-container": "#003072",
+                      "on-surface": "#181c1e",
+                      "tertiary-fixed-dim": "#e0c298",
+                      "on-tertiary": "#ffffff",
+                      "surface-container": "#ebeef0",
+                      "on-primary-container": "#839ff1",
+                      "surface-tint": "#3d5ba8",
+                      "background": "#f7fafc",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#afc6ff",
+                      "on-secondary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#fedeb2",
+                      "error": "#ba1a1a",
+                      "surface": "#f7fafc",
+                      "inverse-surface": "#2d3133",
+                      "surface-container-highest": "#e0e3e5",
+                      "primary-fixed": "#dbe1ff",
+                      "primary": "#001e59",
+                      "on-error": "#ffffff",
+                      "secondary-fixed": "#d9e2ff",
+                      "on-error-container": "#93000a",
+                      "surface-variant": "#e0e3e5",
+                      "on-secondary-fixed": "#001943",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "on-primary-fixed-variant": "#22428e",
+                      "inverse-primary": "#b3c5ff",
+                      "surface-container-high": "#e5e9eb",
+                      "surface-dim": "#d7dadc",
+                      "on-primary-fixed": "#001849",
+                      "tertiary": "#312004"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "24px",
+                      "margin-mobile": "20px",
+                      "margin-desktop": "64px",
+                      "column-gap": "32px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "display-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "display-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "64px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+      </script>
+<style>
+        /* Specific editorial overrides that Tailwind doesn't handle natively */
+        body {
+            background-color: #f7fafc; /* background */
+            color: #181c1e; /* on-background */
+        }
+        .editorial-border {
+            border-color: #C5A880; /* Decoration Gold representation */
+        }
+        .editorial-navy-border {
+            border-color: #0d337f; /* Deep Navy representation */
+        }
+      </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-body-md text-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar component generated from JSON -->
+<header class="bg-surface text-primary border-b border-on-tertiary-container sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<a class="font-headline-md text-headline-md tracking-tighter text-primary" href="#">BAEKSEOK UNIVERSITY</a>
+<nav class="hidden md:flex gap-6 items-center pt-1">
+<a class="text-on-surface-variant font-label-md hover:text-secondary transition-colors duration-300" href="#">대시보드</a>
+<a class="text-on-surface-variant font-label-md hover:text-secondary transition-colors duration-300" href="#">학생광장</a>
+<a class="text-on-surface-variant font-label-md hover:text-secondary transition-colors duration-300" href="#">학과광장</a>
+<a class="text-secondary border-b-2 border-secondary font-bold font-label-md" href="#">시설예약</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button aria-label="Search" class="text-primary hover:text-secondary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button aria-label="Notifications" class="text-primary hover:text-secondary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button aria-label="Account" class="text-primary hover:text-secondary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-screen-2xl mx-auto px-margin-desktop py-16 grid grid-cols-12 gap-column-gap">
+<!-- Sidebar Navigation (2 columns on desktop) -->
+<aside class="col-span-12 md:col-span-2 hidden md:block border-r editorial-border pr-8">
+<h2 class="font-headline-md text-headline-md text-primary-container mb-2">시설 안내</h2>
+<p class="font-label-md text-label-md text-outline mb-8 uppercase tracking-widest text-[10px]">FACILITIES</p>
+<nav class="flex flex-col gap-4">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors py-2 border-b border-surface-variant flex items-center justify-between group" href="#">
+<span>창업지원단</span>
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors py-2 border-b border-surface-variant flex items-center justify-between group" href="#">
+<span>학생처</span>
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</a>
+<a class="font-body-md text-body-md text-primary-container font-semibold py-2 border-b editorial-navy-border flex items-center justify-between" href="#">
+<span>소속 학과</span>
+<span class="material-symbols-outlined text-[16px] text-primary-container">arrow_forward</span>
+</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-secondary transition-colors py-2 border-b border-surface-variant flex items-center justify-between group" href="#">
+<span>풋살장</span>
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</a>
+</nav>
+<!-- Marginalia -->
+<div class="mt-16 pt-8 border-t border-surface-variant">
+<p class="font-label-md text-[12px] text-outline mb-2 uppercase tracking-widest">Notice</p>
+<p class="font-body-md text-[13px] text-on-surface-variant leading-relaxed">
+                    당일 예약은 불가하며, 최소 1일 전 신청 바랍니다. 예약 취소는 사용 예정일 2일 전까지 가능합니다.
+                </p>
+</div>
+</aside>
+<!-- Main Form Content (8 columns on desktop, centered roughly) -->
+<div class="col-span-12 md:col-span-8 md:col-start-4">
+<header class="mb-12 border-b editorial-border pb-6 flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary-container mb-2">시설 예약 신청</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">코워킹 스페이스 (Coworking Space)</p>
+</div>
+<div class="text-right hidden sm:block">
+<p class="font-label-md text-[12px] text-outline uppercase tracking-widest mb-1">Capacity</p>
+<p class="font-body-md text-body-md text-on-surface-variant">최대 20명 / 본관 3층 302호</p>
+</div>
+</header>
+<form class="space-y-12">
+<!-- Section 1: Date & Time -->
+<section>
+<h3 class="font-headline-md text-[20px] text-primary-container mb-6 flex items-center gap-2">
+<span class="text-on-tertiary-container font-serif italic">1.</span> Date &amp; Time
+                    </h3>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Date Input -->
+<div class="space-y-2 relative">
+<label class="block font-label-md text-[12px] uppercase tracking-widest text-on-surface-variant mb-1" for="reservation-date">예약 일자</label>
+<input class="w-full bg-transparent border-0 border-b editorial-navy-border focus:ring-0 focus:border-b-2 focus:border-secondary transition-all px-0 py-2 font-body-md text-on-surface" id="reservation-date" required="" type="date"/>
+</div>
+<!-- Time Slots Grid -->
+<div>
+<label class="block font-label-md text-[12px] uppercase tracking-widest text-on-surface-variant mb-3">사용 시간 (최대 4시간)</label>
+<div class="grid grid-cols-4 gap-2">
+<label class="cursor-pointer">
+<input class="peer sr-only" name="time-slot" type="checkbox" value="09:00"/>
+<div class="text-center py-2 border editorial-border font-body-md text-[14px] text-on-surface-variant peer-checked:bg-primary-container peer-checked:text-on-primary peer-checked:border-primary-container transition-colors hover:bg-surface-variant">09:00</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="time-slot" type="checkbox" value="10:00"/>
+<div class="text-center py-2 border editorial-border font-body-md text-[14px] text-on-surface-variant peer-checked:bg-primary-container peer-checked:text-on-primary peer-checked:border-primary-container transition-colors hover:bg-surface-variant">10:00</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" disabled="" name="time-slot" type="checkbox" value="11:00"/>
+<div class="text-center py-2 border border-surface-variant bg-surface-container text-outline line-through font-body-md text-[14px]">11:00</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" disabled="" name="time-slot" type="checkbox" value="12:00"/>
+<div class="text-center py-2 border border-surface-variant bg-surface-container text-outline line-through font-body-md text-[14px]">12:00</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="time-slot" type="checkbox" value="13:00"/>
+<div class="text-center py-2 border editorial-border font-body-md text-[14px] text-on-surface-variant peer-checked:bg-primary-container peer-checked:text-on-primary peer-checked:border-primary-container transition-colors hover:bg-surface-variant">13:00</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="time-slot" type="checkbox" value="14:00"/>
+<div class="text-center py-2 border editorial-border font-body-md text-[14px] text-on-surface-variant peer-checked:bg-primary-container peer-checked:text-on-primary peer-checked:border-primary-container transition-colors hover:bg-surface-variant">14:00</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="time-slot" type="checkbox" value="15:00"/>
+<div class="text-center py-2 border editorial-border font-body-md text-[14px] text-on-surface-variant peer-checked:bg-primary-container peer-checked:text-on-primary peer-checked:border-primary-container transition-colors hover:bg-surface-variant">15:00</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="time-slot" type="checkbox" value="16:00"/>
+<div class="text-center py-2 border editorial-border font-body-md text-[14px] text-on-surface-variant peer-checked:bg-primary-container peer-checked:text-on-primary peer-checked:border-primary-container transition-colors hover:bg-surface-variant">16:00</div>
+</label>
+</div>
+</div>
+</div>
+</section>
+<hr class="border-t border-surface-variant"/>
+<!-- Section 2: Details -->
+<section>
+<h3 class="font-headline-md text-[20px] text-primary-container mb-6 flex items-center gap-2">
+<span class="text-on-tertiary-container font-serif italic">2.</span> Details
+                    </h3>
+<div class="space-y-8">
+<!-- Number of People -->
+<div>
+<label class="block font-label-md text-[12px] uppercase tracking-widest text-on-surface-variant mb-1" for="participants">사용 인원</label>
+<div class="relative w-full md:w-1/3">
+<input class="w-full bg-transparent border-0 border-b editorial-navy-border focus:ring-0 focus:border-b-2 focus:border-secondary transition-all px-0 py-2 font-body-md text-on-surface" id="participants" max="20" min="1" placeholder="예: 5" required="" type="number"/>
+<span class="absolute right-0 top-3 text-outline font-body-md text-[14px]">명</span>
+</div>
+</div>
+<!-- Reason -->
+<div>
+<label class="block font-label-md text-[12px] uppercase tracking-widest text-on-surface-variant mb-1" for="reason">사용 목적</label>
+<textarea class="w-full bg-transparent border-0 border-b editorial-navy-border focus:ring-0 focus:border-b-2 focus:border-secondary transition-all px-0 py-2 font-body-md text-on-surface resize-none" id="reason" placeholder="행사명 또는 모임의 구체적인 목적을 기재해주세요." required="" rows="4"></textarea>
+</div>
+</div>
+</section>
+<!-- Action Buttons -->
+<div class="pt-8 flex flex-col-reverse sm:flex-row justify-end gap-4">
+<button class="px-8 py-3 border border-primary-container text-primary-container font-label-md hover:bg-surface-variant transition-colors" type="button">
+                        취소
+                    </button>
+<button class="px-8 py-3 bg-primary-container text-on-primary font-label-md hover:bg-secondary transition-colors" type="submit">
+                        신청하기
+                    </button>
+</div>
+</form>
+</div>
+</main>
+<!-- Footer component generated from JSON -->
+<footer class="bg-primary mt-auto">
+<div class="w-full py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter border-t border-on-tertiary-container max-w-screen-2xl mx-auto">
+<div class="flex flex-col items-center md:items-start gap-4">
+<span class="font-headline-md text-headline-md text-on-primary">BAEKSEOK UNIVERSITY</span>
+<p class="font-body-md text-body-md text-on-primary opacity-80">© 2024 Baekseok University. All Rights Reserved.</p>
+</div>
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="font-label-md text-label-md text-primary-fixed-dim opacity-80 hover:text-tertiary-fixed hover:opacity-100 transition-all" href="#">이용약관</a>
+<a class="font-label-md text-label-md text-primary-fixed-dim opacity-80 hover:text-tertiary-fixed hover:opacity-100 transition-all" href="#">개인정보처리방침</a>
+<a class="font-label-md text-label-md text-primary-fixed-dim opacity-80 hover:text-tertiary-fixed hover:opacity-100 transition-all" href="#">대학본부</a>
+<a class="font-label-md text-label-md text-primary-fixed-dim opacity-80 hover:text-tertiary-fixed hover:opacity-100 transition-all" href="#">학사일정</a>
+</nav>
+</div>
+</footer>
+</body></html>

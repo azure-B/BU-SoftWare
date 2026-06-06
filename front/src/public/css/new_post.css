@@ -1,0 +1,91 @@
+.new-post-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.new-post-header-divider {
+  border-top: 1px solid var(--accent-gold);
+}
+
+.new-post-field {
+  border-bottom: 1px solid var(--brand-navy);
+  transition: border-color 0.2s, border-width 0.2s;
+}
+
+.new-post-field:focus {
+  border-bottom-width: 2px;
+  border-color: #1d5abc;
+  outline: none;
+}
+
+.new-post-editor {
+  border: 1px solid var(--outline-variant, #c4c6d3);
+}
+
+.new-post-editor-content:empty::before {
+  content: attr(data-placeholder);
+  color: #747682;
+  pointer-events: none;
+}
+
+.new-post-editor-content ul,
+.post-body-html ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.new-post-editor-content ol,
+.post-body-html ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.new-post-editor-content li,
+.post-body-html li {
+  margin: 0.25rem 0;
+}
+
+.new-post-editor-toolbar button:hover {
+  background-color: #ebeef0;
+}
+
+.new-post-guidelines {
+  border: 1px solid var(--accent-gold);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.new-post-guidelines-title {
+  border-bottom: 1px solid var(--accent-gold);
+}
+
+.new-post-guidelines-body {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.new-post-guideline-text {
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.new-post-cancel-btn {
+  border-color: var(--brand-navy);
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.new-post-cancel-btn:hover {
+  background-color: #ebeef0;
+}
+
+.new-post-submit-btn {
+  background-color: var(--brand-navy);
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.new-post-submit-btn:hover {
+  background-color: #1d5abc;
+}

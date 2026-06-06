@@ -1,0 +1,18 @@
+/* --- layout.css (header / footer shells) --- */
+.app-footer--app.footer-shared {
+  background-color: var(--brand-navy);
+  color: #ffffff;
+}
+
+.login-page .app-footer--login.footer-shared,
+.regi-page .app-footer--login.footer-shared,
+.auth-flow .app-footer--login.footer-shared {
+  border-top: 1px solid #ba9d76;
+}
+
+.app-layout.dashboard-page .app-footer--app.footer-shared,
+.app-page .app-footer--app.footer-shared,
+.dashboard-page .app-footer--app.footer-shared {
+  background-color: var(--brand-navy);
+  color: #ffffff;
+}

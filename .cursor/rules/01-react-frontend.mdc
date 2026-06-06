@@ -1,0 +1,18 @@
+---
+description: React CRA frontend — follow front/sub.md
+globs: front/**/*.js, front/**/*.jsx, front/**/*.css
+alwaysApply: false
+---
+
+# React frontend
+
+Canonical structure: [front/sub.md](mdc:front/sub.md).
+
+- React 19 + `react-scripts`; pages under `front/src/jsx/`; shared chrome in `front/src/components/layout/`
+- Tailwind v3 (CRA): `tailwind.config.js`, `postcss.config.js`, `@tailwind` directives in `common.css`
+- Shared CSS: `front/src/public/css/common.css` (import once in `index.js`)
+- Page CSS: `front/src/public/css/<page>.css` (import in matching JSX)
+- `App.js` wires the active screen (e.g. `Login`)
+- Call backend at `http://localhost:3000` for `/api/*` in development
+
+NEVER add a second global CSS file without updating `sub.md` and `AGENTS.md`.

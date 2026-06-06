@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="ko"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Baekseok University - 시설예약</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        "colors": {
+                            "surface-variant": "#e0e3e5",
+                            "on-secondary-fixed-variant": "#004299",
+                            "on-primary-container": "#839ff1",
+                            "secondary-fixed-dim": "#afc6ff",
+                            "primary-fixed": "#dbe1ff",
+                            "on-primary-fixed": "#001849",
+                            "surface-container-lowest": "#ffffff",
+                            "on-tertiary-fixed": "#281800",
+                            "tertiary-container": "#483516",
+                            "surface-container": "#ebeef0",
+                            "on-error-container": "#93000a",
+                            "surface-container-highest": "#e0e3e5",
+                            "surface-dim": "#d7dadc",
+                            "primary-fixed-dim": "#b3c5ff",
+                            "on-primary-fixed-variant": "#22428e",
+                            "on-tertiary-fixed-variant": "#584323",
+                            "secondary-fixed": "#d9e2ff",
+                            "tertiary-fixed-dim": "#e0c298",
+                            "primary": "#001e59",
+                            "on-tertiary-container": "#ba9d76",
+                            "on-secondary": "#ffffff",
+                            "on-background": "#181c1e",
+                            "tertiary-fixed": "#fedeb2",
+                            "outline": "#747682",
+                            "on-error": "#ffffff",
+                            "inverse-on-surface": "#eef1f3",
+                            "background": "#f7fafc",
+                            "secondary": "#1d5abc",
+                            "primary-container": "#0d337f",
+                            "on-secondary-fixed": "#001943",
+                            "inverse-primary": "#b3c5ff",
+                            "surface-bright": "#f7fafc",
+                            "on-primary": "#ffffff",
+                            "outline-variant": "#c4c6d3",
+                            "on-surface": "#181c1e",
+                            "surface-container-high": "#e5e9eb",
+                            "on-tertiary": "#ffffff",
+                            "inverse-surface": "#2d3133",
+                            "error-container": "#ffdad6",
+                            "surface": "#f7fafc",
+                            "secondary-container": "#6899fe",
+                            "surface-tint": "#3d5ba8",
+                            "on-secondary-container": "#003072",
+                            "on-surface-variant": "#444651",
+                            "error": "#ba1a1a",
+                            "tertiary": "#312004",
+                            "surface-container-low": "#f1f4f6"
+                        },
+                        "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                        },
+                        "spacing": {
+                            "gutter": "24px",
+                            "unit": "4px",
+                            "margin-desktop": "64px",
+                            "margin-mobile": "20px",
+                            "column-gap": "32px"
+                        },
+                        "fontFamily": {
+                            "display-lg-mobile": ["Libre Caslon Text"],
+                            "body-md": ["Hanken Grotesk"],
+                            "headline-md": ["Libre Caslon Text"],
+                            "display-lg": ["Libre Caslon Text"],
+                            "headline-lg-mobile": ["Libre Caslon Text"],
+                            "body-lg": ["Hanken Grotesk"],
+                            "headline-lg": ["Libre Caslon Text"],
+                            "label-md": ["Hanken Grotesk"]
+                        },
+                        "fontSize": {
+                            "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                            "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                            "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                            "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                            "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                            "headline-lg": ["40px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                            "label-md": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                        }
+                    }
+                }
+            }
+        </script>
+    <style type="text/tailwindcss">
+            /* --- common.css --- */
+            .gold-divider {
+                border-bottom: 1px solid #C5A880;
+            }
+            .site-header {
+                @apply bg-surface dark:bg-inverse-surface border-b border-on-tertiary-container dark:border-tertiary-container z-50;
+            }
+            .site-footer {
+                @apply bg-primary dark:bg-tertiary-container w-full mt-auto border-t border-on-tertiary-container;
+            }
+            .typography-headline {
+                @apply font-headline-md text-xl tracking-tighter text-primary dark:text-primary-fixed-dim;
+            }
+    
+            /* --- reservation.css --- */
+            .sidebar-container {
+                @apply w-full md:w-56 flex-shrink-0 mb-8 md:mb-0;
+            }
+            .facility-card {
+                @apply border border-[#C5A880] bg-surface-container-lowest p-4 flex flex-col justify-between h-full;
+            }
+            .book-now-btn {
+                @apply w-full bg-primary text-on-primary font-label-md text-xs py-2 hover:bg-secondary transition-colors duration-300;
+            }
+            .book-unavailable-btn {
+                @apply w-full bg-surface-variant text-on-surface-variant font-label-md text-xs py-2 cursor-not-allowed;
+            }
+        </style>
+    </head>
+    <body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col antialiased">
+    <!-- TopNavBar -->
+    <header class="site-header">
+    <div class="flex justify-between items-center w-full px-8 md:px-16 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-4">
+    <img alt="BAEKSEOK UNIVERSITY Logo" class="h-10 w-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCABnzTdJTdeiz4H6tWqvlzLlrEtiOf5nIjlRPcNAcqPgyWyyBFag1feDW8vKFTxRRNUCM8JX3Hstba_okAsyAkUZPjsC8iBaeGezfEMRwXa14wX97x4ji8ffxtL85KnrTZencCGwwQu_slkCDULaFnv0hhWlP3CaKE2xsi7CRCYZewe1j8_0IOVQDepQb-BN2Tx4EASPyo9ThKT1ZVU9MKwwYZebdDLAqopT4ZaheWcPRMVgp2PsXDqbfUpj93_MrBLrFejADXTA">
+    <span class="typography-headline">BAEKSEOK UNIVERSITY</span>
+    </div>
+    <nav class="hidden md:flex gap-8 items-center">
+    <a class="text-on-surface-variant dark:text-outline-variant font-label-md text-xs hover:text-secondary transition-colors duration-300" href="#">대시보드</a>
+    <a class="text-on-surface-variant dark:text-outline-variant font-label-md text-xs hover:text-secondary transition-colors duration-300" href="#">학생광장</a>
+    <a class="text-on-surface-variant dark:text-outline-variant font-label-md text-xs hover:text-secondary transition-colors duration-300" href="#">학과광장</a>
+    <a class="text-secondary dark:text-secondary-fixed-dim border-b-2 border-secondary font-bold font-label-md text-xs hover:text-secondary transition-colors duration-300 pb-1" href="#">시설예약</a>
+    </nav>
+    <div class="flex items-center gap-4">
+    <button class="text-primary dark:text-inverse-primary hover:text-secondary transition-colors duration-300 scale-95 active:scale-90 transition-transform">
+    <span class="material-symbols-outlined">notifications</span>
+    </button>
+    <button class="text-primary dark:text-inverse-primary hover:text-secondary transition-colors duration-300 scale-95 active:scale-90 transition-transform">
+    <span class="material-symbols-outlined">account_circle</span>
+    </button>
+    </div>
+    </div>
+    </header>
+    <!-- Main Layout -->
+    <div class="flex-1 max-w-screen-2xl w-full mx-auto flex flex-col md:flex-row px-8 md:px-16 pt-8 gap-column-gap">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar-container">
+    <h2 class="font-headline-md text-xl text-primary mb-2">시설 카테고리</h2>
+    <div class="gold-divider mb-4 w-12"></div>
+    <nav class="flex flex-col gap-1">
+    <a class="flex items-center gap-2 text-secondary dark:text-secondary-fixed-dim border-l-4 border-secondary pl-3 py-2 font-bold bg-surface-bright font-label-md text-xs translate-x-1 transition-transform duration-200" href="#">
+    <span class="material-symbols-outlined text-sm">business_center</span>
+    <span>창업지원단</span>
+    </a>
+    <a class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant pl-3 py-2 font-label-md text-xs hover:bg-surface-container-highest dark:hover:bg-surface-container-high transition-colors" href="#">
+    <span class="material-symbols-outlined text-sm">school</span>
+    <span>학생처</span>
+    </a>
+    <a class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant pl-3 py-2 font-label-md text-xs hover:bg-surface-container-highest dark:hover:bg-surface-container-high transition-colors" href="#">
+    <span class="material-symbols-outlined text-sm">account_balance</span>
+    <span>소속 학과</span>
+    </a>
+    <a class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant pl-3 py-2 font-label-md text-xs hover:bg-surface-container-highest dark:hover:bg-surface-container-high transition-colors" href="#">
+    <span class="material-symbols-outlined text-sm">sports_soccer</span>
+    <span>풋살장</span>
+    </a>
+    </nav>
+    </aside>
+    <!-- Main Content Canvas -->
+    <main class="flex-1 pb-16">
+    <!-- Hero Header -->
+    <div class="mb-8">
+    <h1 class="font-display-lg-mobile md:font-display-lg text-3xl md:text-4xl text-primary mb-2">시설예약</h1>
+    <p class="font-body-lg text-sm text-on-surface-variant">캠퍼스 내 주요 시설을 편리하게 예약하고 이용하세요.</p>
+    <div class="gold-divider mt-6 w-24"></div>
+    </div>
+    <!-- Content Area: 창업지원단 -->
+    <div class="space-y-6">
+    <h3 class="font-headline-md text-2xl text-on-surface">창업지원단 공간</h3>
+    <!-- Facility Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Card 1 -->
+    <div class="facility-card">
+    <div>
+    <div class="flex justify-between items-start mb-2">
+    <h4 class="font-headline-md text-lg text-primary">코워킹 스페이스</h4>
+    <span class="bg-primary-fixed text-on-primary-fixed font-label-md text-xs px-2 py-1 rounded-full border border-primary">예약 가능</span>
+    </div>
+    <p class="font-body-md text-xs text-on-surface-variant mb-4">다양한 팀이 함께 아이디어를 나누고 작업할 수 있는 오픈 스페이스입니다.</p>
+    <ul class="space-y-1 mb-6 font-body-md text-xs">
+    <li class="flex items-center gap-1 text-on-surface-variant">
+    <span class="material-symbols-outlined text-outline text-[12px]">groups</span>
+    <span>수용 인원: 20명</span>
+    </li>
+    <li class="flex items-center gap-1 text-on-surface-variant">
+    <span class="material-symbols-outlined text-outline text-[12px]">wifi</span>
+    <span>구비 시설: 초고속 와이파이, 화이트보드, 공용 복합기</span>
+    </li>
+    </ul>
+    </div>
+    <button class="book-now-btn">예약하기</button>
+    </div>
+    <!-- Card 2 -->
+    <div class="facility-card opacity-80">
+    <div>
+    <div class="flex justify-between items-start mb-2">
+    <h4 class="font-headline-md text-lg text-primary">회의실 A</h4>
+    <span class="bg-surface-variant text-on-surface-variant font-label-md text-xs px-2 py-1 rounded-full border border-outline">예약 완료</span>
+    </div>
+    <p class="font-body-md text-xs text-on-surface-variant mb-4">소규모 팀 회의 및 프레젠테이션 연습에 적합한 독립된 회의 공간입니다.</p>
+    <ul class="space-y-1 mb-6 font-body-md text-xs">
+    <li class="flex items-center gap-1 text-on-surface-variant">
+    <span class="material-symbols-outlined text-outline text-[12px]">groups</span>
+    <span>수용 인원: 6명</span>
+    </li>
+    <li class="flex items-center gap-1 text-on-surface-variant">
+    <span class="material-symbols-outlined text-outline text-[12px]">tv</span>
+    <span>구비 시설: 대형 모니터, HDMI 케이블, 화이트보드</span>
+    </li>
+    </ul>
+    </div>
+    <button class="book-unavailable-btn">다음 가능 시간 확인</button>
+    </div>
+    <!-- Card 3 -->
+    <div class="facility-card">
+    <div>
+    <div class="flex justify-between items-start mb-2">
+    <h4 class="font-headline-md text-lg text-primary">세미나실</h4>
+    <span class="bg-primary-fixed text-on-primary-fixed font-label-md text-xs px-2 py-1 rounded-full border border-primary">예약 가능</span>
+    </div>
+    <p class="font-body-md text-xs text-on-surface-variant mb-4">특강, 워크숍, 대규모 발표를 위한 계단식 또는 평면 세미나 공간입니다.</p>
+    <ul class="space-y-1 mb-6 font-body-md text-xs">
+    <li class="flex items-center gap-1 text-on-surface-variant">
+    <span class="material-symbols-outlined text-outline text-[12px]">groups</span>
+    <span>수용 인원: 40명</span>
+    </li>
+    <li class="flex items-center gap-1 text-on-surface-variant">
+    <span class="material-symbols-outlined text-outline text-[12px]">videocam</span>
+    <span>구비 시설: 빔 프로젝터, 음향 장비, 단상</span>
+    </li>
+    </ul>
+    </div>
+    <button class="book-now-btn">예약하기</button>
+    </div>
+    </div>
+    </div>
+    </main>
+    </div>
+    <!-- Footer -->
+    <footer class="site-footer">
+    <div class="w-full py-8 px-8 md:px-16 flex flex-col md:flex-row justify-between items-center gap-4 max-w-screen-2xl mx-auto">
+    <span class="font-headline-md text-lg text-on-primary">BAEKSEOK UNIVERSITY</span>
+    <nav class="flex gap-4 flex-wrap justify-center">
+    <a class="font-label-md text-xs text-primary-fixed-dim opacity-80 hover:text-tertiary-fixed hover:opacity-100 transition-opacity" href="#">이용약관</a>
+    <a class="font-label-md text-xs text-primary-fixed-dim opacity-80 hover:text-tertiary-fixed hover:opacity-100 transition-opacity" href="#">개인정보처리방침</a>
+    <a class="font-label-md text-xs text-primary-fixed-dim opacity-80 hover:text-tertiary-fixed hover:opacity-100 transition-opacity" href="#">대학본부</a>
+    <a class="font-label-md text-xs text-primary-fixed-dim opacity-80 hover:text-tertiary-fixed hover:opacity-100 transition-opacity" href="#">학사일정</a>
+    </nav>
+    <span class="font-body-md text-xs text-primary-fixed-dim opacity-80">© 2024 Baekseok University. All Rights Reserved.</span>
+    </div>
+    </footer>
+    </body></html>

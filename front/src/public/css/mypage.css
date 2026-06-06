@@ -1,0 +1,21 @@
+/* --- mypage.css --- */
+.mypage-hero {
+  border-bottom: 1px solid var(--accent-gold);
+}
+
+.mypage-metric {
+  border-top: 1px solid var(--accent-gold);
+}
+
+.mypage-card {
+  border-color: var(--accent-gold);
+}
+
+.ge-table-wrap,
+.semester-sidebar-list {
+  -webkit-overflow-scrolling: touch;
+}
+
+.semester-sidebar-nav {
+  min-height: 2.5rem;
+}

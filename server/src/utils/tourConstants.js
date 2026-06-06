@@ -1,0 +1,14 @@
+/** 백석대학교 학생복지동 기준 (카카오 장소 검색 좌표, x=경도 y=위도) */
+const TOUR_SEARCH_CENTER = { lat: 36.8406135, lng: 127.1824946 };
+const TOUR_SEARCH_RADIUS_M = 500;
+const TOUR_VERIFY_INTERVAL_DAYS = 30;
+const TOUR_TOP_TAG_COUNT = 7;
+const CAMPUS_TOUR_BOARD_CATEGORY = 'campus_tour';
+
+module.exports = {
+  TOUR_SEARCH_CENTER,
+  TOUR_SEARCH_RADIUS_M,
+  TOUR_VERIFY_INTERVAL_DAYS,
+  TOUR_TOP_TAG_COUNT,
+  CAMPUS_TOUR_BOARD_CATEGORY,
+};

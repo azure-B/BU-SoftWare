@@ -1,0 +1,309 @@
+<!DOCTYPE html><html lang="ko"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>백석 학생 허브</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            "primary": "#001e59",
+                            "primary-container": "#0d337f",
+                            "secondary": "#1d5abc",
+                            "secondary-container": "#6899fe",
+                            "tertiary-container": "#483516",
+                            "surface-variant": "#e0e3e5",
+                            "on-surface-variant": "#444651",
+                            "on-background": "#181c1e",
+                            "outline": "#747682",
+                            "surface-container-lowest": "#ffffff",
+                            "surface-container": "#ebeef0",
+                        },
+                        spacing: {
+                            "margin-desktop": "64px",
+                            "margin-mobile": "20px",
+                        },
+                        fontFamily: {
+                            "display-lg": ["Libre Caslon Text", "serif"],
+                            "headline-lg": ["Libre Caslon Text", "serif"],
+                            "headline-md": ["Libre Caslon Text", "serif"],
+                            "body-lg": ["Inter", "sans-serif"],
+                            "body-md": ["Inter", "sans-serif"],
+                            "label-md": ["Inter", "sans-serif"],
+                        }
+                    }
+                }
+            }
+        </script>
+    <style>
+            /* --- common.css --- */
+            :root {
+                --brand-navy: #0d337f;
+                --accent-gold: #C5A880;
+                --surface-bg: #F7FAFC;
+                --font-primary: 'Libre Caslon Text', serif;
+                --font-secondary: 'Inter', sans-serif;
+            }
+            
+            body {
+                background-color: var(--surface-bg);
+                color: #181c1e;
+                font-family: var(--font-secondary);
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+    
+            .container-shared {
+                max-width: 1280px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+    
+            .header-shared {
+                height: 80px;
+                position: sticky;
+                top: 0;
+                z-index: 50;
+            }
+    
+            .footer-shared {
+                background-color: var(--brand-navy);
+                color: #ffffff;
+            }
+    
+            /* Shared Editorial Components */
+            .gold-divider {
+                border-color: var(--accent-gold);
+            }
+            
+            .gold-divider-b {
+                border-bottom: 1px solid var(--accent-gold);
+            }
+            
+            .gold-divider-t {
+                border-top: 1px solid var(--accent-gold);
+            }
+            
+            .gold-divider-l {
+                border-left: 1px solid var(--accent-gold);
+            }
+    
+            .text-gold {
+                color: var(--accent-gold);
+            }
+    
+            /* --- main.css --- */
+            .dashboard-layout {
+                display: grid;
+                grid-template-columns: 65fr 35fr;
+                gap: 32px;
+            }
+            
+            @media (max-width: 768px) {
+                .dashboard-layout {
+                    grid-template-columns: 1fr;
+                }
+            }
+            
+            .metric-card {
+                background-color: rgba(255, 255, 255, 0.8);
+                backdrop-filter: blur(4px);
+                padding: 2rem;
+                border: 1px solid var(--accent-gold);
+            }
+    
+            .campus-digest-item {
+                border-bottom: 1px solid var(--surface-variant, #e0e3e5);
+                padding-bottom: 1.5rem;
+            }
+        </style>
+    </head>
+    <body class="min-h-screen flex flex-col relative">
+    <!-- Background Watermark -->
+    <div class="absolute inset-0 z-[-1] flex items-start justify-center pt-32 opacity-[0.03] pointer-events-none">
+    <img alt="Background Logo" class="w-[600px] h-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzIdSBGR-5t0ZVEjmD2-XUirQCNThCdyro-X06CwzDj5UsLrqBF0r1GMrDiiQpVmmqKs4Q_nUsqwwh3gFA1ogiHtte8iCFnTEwSj-93WFkeeILQAsIOtT6gYNM7EkhuPgPCmi-0-wR4K8zzidcFTMgCw6N_D1OarzL3YV15juTcdbtSJHd-pFkJQDLP7uxYLAZwXiSVpR0ujHFs_QjVLZy-OdlYfnpU4bd66K9RnqzaEIK_mNI5vp8lNVHr2e69uL67OA-p1Ik4g">
+    </div>
+    <!-- TopNavBar Component -->
+    <header class="bg-surface-container-lowest/90 backdrop-blur-sm text-primary flex justify-between items-center px-margin-desktop w-full border-b border-surface-variant header-shared">
+    <div class="flex items-center gap-4">
+    <img alt="Baekseok University Logo" class="h-10 w-10 rounded-full shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzIdSBGR-5t0ZVEjmD2-XUirQCNThCdyro-X06CwzDj5UsLrqBF0r1GMrDiiQpVmmqKs4Q_nUsqwwh3gFA1ogiHtte8iCFnTEwSj-93WFkeeILQAsIOtT6gYNM7EkhuPgPCmi-0-wR4K8zzidcFTMgCw6N_D1OarzL3YV15juTcdbtSJHd-pFkJQDLP7uxYLAZwXiSVpR0ujHFs_QjVLZy-OdlYfnpU4bd66K9RnqzaEIK_mNI5vp8lNVHr2e69uL67OA-p1Ik4g">
+    <div class="font-display-lg text-2xl text-primary">백석 학생 허브</div>
+    </div>
+    <nav class="hidden md:flex gap-8 font-label-md text-sm tracking-widest uppercase font-semibold">
+    <a class="text-secondary border-b-2 border-accent-gold pb-1" href="#">대시보드</a>
+    <a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">학생광장</a>
+    <a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">학과광장</a>
+    <a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">시설예약</a>
+    </nav>
+    <div class="flex items-center gap-4">
+    <span class="material-symbols-outlined hover:text-secondary transition-colors cursor-pointer text-2xl">account_circle</span>
+    </div>
+    </header>
+    <!-- Main Dashboard Component -->
+    <main class="flex-grow px-margin-mobile md:px-margin-desktop py-12 flex flex-col gap-20 z-10 relative container-shared w-full">
+    <!-- Section: Welcome & Metrics -->
+    <section class="dashboard-layout">
+    <div class="flex flex-col justify-center">
+    <h1 class="font-display-lg text-4xl md:text-6xl text-primary-container mb-4" style="font-family: var(--font-primary);">Welcome, 김백석</h1>
+    <p class="font-body-lg text-lg text-on-surface-variant border-l-2 border-primary-container pl-4">
+                        202612345<br>
+                        컴퓨터공학부 / 소프트웨어 전공
+                    </p>
+    </div>
+    <div class="metric-card">
+    <h2 class="font-headline-md text-2xl text-primary-container mb-6 gold-divider-b pb-2">학적 및 성적 요약</h2>
+    <div class="flex flex-col gap-4">
+    <div class="flex justify-between items-end border-b border-surface-variant pb-2">
+    <span class="font-label-md text-sm uppercase tracking-widest text-on-surface-variant font-semibold">평점평균</span>
+    <span class="font-headline-md text-2xl text-primary-container">4.25 <span class="text-base font-body-md text-outline">/ 4.5</span></span>
+    </div>
+    <div class="flex justify-between items-end">
+    <span class="font-label-md text-sm uppercase tracking-widest text-on-surface-variant font-semibold">이수학점</span>
+    <span class="font-headline-md text-2xl text-primary-container">95 <span class="text-base font-body-md text-outline">/ 140</span></span>
+    </div>
+    </div>
+    </div>
+    </section>
+    <!-- Section: Campus Digest & Student Square -->
+    <section class="dashboard-layout gold-divider-t pt-12">
+    <!-- Campus Digest List -->
+    <div>
+    <h2 class="font-headline-lg text-3xl md:text-4xl text-primary-container mb-8">Campus Digest</h2>
+    <div class="flex flex-col gap-6">
+    <article class="campus-digest-item">
+    <span class="font-label-md text-sm text-secondary uppercase tracking-widest font-semibold mb-2 block">중요 공지</span>
+    <h3 class="font-headline-md text-2xl text-on-background mb-2">2026학년도 1학기 수강신청 일정 안내</h3>
+    <p class="font-body-md text-base text-on-surface-variant">수강신청 기간은 2월 10일부터 2월 14일까지입니다. 전공 필수 과목을 우선적으로 확인하시기 바랍니다.</p>
+    </article>
+    <article class="campus-digest-item border-b-0 pb-0">
+    <span class="font-label-md text-sm text-secondary uppercase tracking-widest font-semibold mb-2 block">시설 현황</span>
+    <h3 class="font-headline-md text-2xl text-on-background mb-4">스터디룸 예약 현황</h3>
+    <div class="flex flex-col gap-2 gold-divider-l pl-4">
+    <div class="flex gap-4 items-center">
+    <span class="font-label-md text-sm w-16 text-outline font-semibold">09:00</span>
+    <span class="font-body-md text-base text-on-background">도서관 스터디룸 A (사용중)</span>
+    </div>
+    <div class="flex gap-4 items-center">
+    <span class="font-label-md text-sm w-16 text-outline font-semibold">11:00</span>
+    <span class="font-body-md text-base text-primary-container font-bold">IT센터 랩실 3 (예약가능)</span>
+    </div>
+    <div class="flex gap-4 items-center">
+    <span class="font-label-md text-sm w-16 text-outline font-semibold">14:00</span>
+    <span class="font-body-md text-base text-on-background">학생회관 동아리실 C (예약됨)</span>
+    </div>
+    </div>
+    </article>
+    </div>
+    </div>
+    <!-- Student Square List -->
+    <div class="gold-divider-l pl-0 md:pl-8 lg:pl-12 pt-8 md:pt-0">
+    <h2 class="font-headline-md text-2xl text-primary-container mb-8">학생 광장</h2>
+    <div class="flex gap-6 border-b border-surface-variant mb-6 pb-2 font-label-md text-sm uppercase tracking-widest font-semibold">
+    <span class="text-secondary border-b-2 border-accent-gold pb-2 cursor-pointer">장학 공고</span>
+    <span class="text-outline hover:text-secondary cursor-pointer transition-colors">커뮤니티</span>
+    <span class="text-outline hover:text-secondary cursor-pointer transition-colors">과사무실 공지</span>
+    </div>
+    <ul class="flex flex-col gap-6">
+    <li class="campus-digest-item">
+    <span class="font-label-md text-sm text-secondary uppercase tracking-widest font-semibold mb-1 block">[장학공고]</span>
+    <h4 class="font-headline-md text-xl text-on-background mb-1">2026학년도 1학기 백석 사랑 장학금</h4>
+    <p class="font-body-md text-base text-on-surface-variant">학업 성적이 우수한 학생을 위한 장학금 안내입니다.</p>
+    </li>
+    <li class="campus-digest-item">
+    <span class="font-label-md text-sm text-secondary uppercase tracking-widest font-semibold mb-1 block">[커뮤니티]</span>
+    <h4 class="font-headline-md text-xl text-on-background mb-1">제2회 백석 대학생 창업 아이디어 챌린지</h4>
+    <p class="font-body-md text-base text-on-surface-variant">창업 아이디어 경진대회. 최대 500만원 지원.</p>
+    </li>
+    <li class="campus-digest-item border-b-0 pb-0">
+    <span class="font-label-md text-sm text-secondary uppercase tracking-widest font-semibold mb-1 block">[과사무실 공지]</span>
+    <h4 class="font-headline-md text-xl text-on-background mb-1">2026학년도 1학기 과사무실 국가 장학금 신청</h4>
+    <p class="font-body-md text-base text-on-surface-variant">과사무실 고지 사항: 국가장학금 신청 기간 및 방법 가이드.</p>
+    </li>
+    </ul>
+    </div>
+    </section>
+    <!-- Section: Credits & Enrollment -->
+    <section class="border-t border-primary-container pt-12">
+    <h2 class="font-headline-lg text-3xl md:text-4xl text-primary-container mb-8 text-center md:text-left">학점 및 수강 현황</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <div>
+    <h3 class="font-headline-md text-2xl text-on-background mb-6 gold-divider-b pb-2">이수 학점 현황</h3>
+    <div class="flex flex-col gap-6">
+    <div>
+    <div class="flex justify-between items-end mb-2">
+    <span class="font-label-md text-sm uppercase tracking-widest text-on-surface-variant font-semibold">전공 필수/선택</span>
+    <span class="font-body-md text-base text-primary-container font-bold">54 <span class="text-outline font-normal">/ 66</span></span>
+    </div>
+    <div class="w-full bg-surface-variant rounded-full h-2">
+    <div class="bg-primary-container h-2 rounded-full" style="width: 81%"></div>
+    </div>
+    </div>
+    <div>
+    <div class="flex justify-between items-end mb-2">
+    <span class="font-label-md text-sm uppercase tracking-widest text-on-surface-variant font-semibold">교양 필수/선택</span>
+    <span class="font-body-md text-base text-primary-container font-bold">32 <span class="text-outline font-normal">/ 40</span></span>
+    </div>
+    <div class="w-full bg-surface-variant rounded-full h-2">
+    <div class="bg-secondary h-2 rounded-full" style="width: 80%"></div>
+    </div>
+    </div>
+    <div>
+    <div class="flex justify-between items-end mb-2">
+    <span class="font-label-md text-sm uppercase tracking-widest text-on-surface-variant font-semibold">일반 선택</span>
+    <span class="font-body-md text-base text-primary-container font-bold">9 <span class="text-outline font-normal">/ 34</span></span>
+    </div>
+    <div class="w-full bg-surface-variant rounded-full h-2">
+    <div class="bg-tertiary-container h-2 rounded-full" style="width: 26%"></div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div>
+    <h3 class="font-headline-md text-2xl text-on-background mb-6 gold-divider-b pb-2">이번 학기 수강 과목</h3>
+    <ul class="flex flex-col gap-4">
+    <li class="flex justify-between items-center pb-4 border-b border-surface-variant">
+    <div>
+    <span class="font-label-md text-sm text-secondary font-semibold block mb-1">전공필수 • 3학점</span>
+    <span class="font-body-lg text-lg text-on-background font-bold">소프트웨어공학</span>
+    </div>
+    <span class="px-3 py-1 bg-surface-container text-on-background font-label-md text-sm font-semibold rounded-full">수강중</span>
+    </li>
+    <li class="flex justify-between items-center pb-4 border-b border-surface-variant">
+    <div>
+    <span class="font-label-md text-sm text-secondary font-semibold block mb-1">전공선택 • 3학점</span>
+    <span class="font-body-lg text-lg text-on-background font-bold">인공지능기초</span>
+    </div>
+    <span class="px-3 py-1 bg-surface-container text-on-background font-label-md text-sm font-semibold rounded-full">수강중</span>
+    </li>
+    <li class="flex justify-between items-center pb-4 border-b border-surface-variant">
+    <div>
+    <span class="font-label-md text-sm text-tertiary-container font-semibold block mb-1">교양필수 • 2학점</span>
+    <span class="font-body-lg text-lg text-on-background font-bold">기독교의 이해</span>
+    </div>
+    <span class="px-3 py-1 bg-surface-container text-on-background font-label-md text-sm font-semibold rounded-full">수강중</span>
+    </li>
+    </ul>
+    </div>
+    </div>
+    </section>
+    </main>
+    <!-- Footer Component -->
+    <footer class="footer-shared border-t border-primary-container flex flex-col md:flex-row justify-between items-center py-12 px-margin-desktop w-full mt-20 z-10 relative">
+    <div class="container-shared flex flex-col md:flex-row justify-between w-full items-center">
+    <div class="font-display-lg text-2xl mb-6 md:mb-0" style="font-family: var(--font-primary);">Baekseok University</div>
+    <nav class="flex flex-wrap gap-6 justify-center md:justify-end mb-6 md:mb-0 font-body-md text-base">
+    <a class="text-secondary-container hover:text-accent-gold transition-colors" href="#">Privacy Policy</a>
+    <a class="text-secondary-container hover:text-accent-gold transition-colors" href="#">Terms of Service</a>
+    <a class="text-secondary-container hover:text-accent-gold transition-colors" href="#">Campus Directory</a>
+    <a class="text-secondary-container hover:text-accent-gold transition-colors" href="#">Contact Support</a>
+    </nav>
+    <div class="font-label-md text-sm text-secondary-container text-center md:text-right font-semibold">
+                © 2024 Baekseok University. All rights reserved. Intellectual Rigour &amp; Academic Excellence.
+            </div>
+    </div>
+    </footer>
+    </body></html>

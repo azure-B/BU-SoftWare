@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- common.css (shared across pages) --- */
+:root {
+  --brand-navy: #0d337f;
+  --accent-gold: #c5a880;
+  --surface-bg: #f7fafc;
+  --font-primary: 'Libre Caslon Text', serif;
+  --font-secondary: 'Hanken Grotesk', sans-serif;
+}
+
+body {
+  background-color: var(--surface-bg);
+  color: #181c1e;
+  font-family: var(--font-secondary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.container-shared {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header-shared {
+  height: 80px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.gold-divider {
+  border-bottom: 1px solid var(--accent-gold);
+}
+
+.gold-divider-b {
+  border-bottom: 1px solid var(--accent-gold);
+}
+
+.gold-divider-t {
+  border-top: 1px solid var(--accent-gold);
+}
+
+.gold-divider-l {
+  border-left: 1px solid var(--accent-gold);
+}
+
+.text-gold {
+  color: var(--accent-gold);
+}
+
+/* 단일 패널 전환: 페이드아웃 → 콘텐츠 교체 → 페이드인 */
+.panel-main-fade {
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  transition: opacity 0.2s ease;
+}
+
+.panel-fade-visible {
+  opacity: 1;
+}
+
+.panel-fade-hidden {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel-main-fade {
+    transition: none;
+  }
+}
+

@@ -1,0 +1,128 @@
+/* --- reservation.css (from publish/reservation.html) --- */
+
+.reservation-layout {
+  align-items: flex-start;
+}
+
+.reservation-sidebar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.reservation-sidebar-sticky {
+  position: sticky;
+  top: 5rem;
+  max-height: calc(100vh - 5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.reservation-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: left;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  color: var(--on-surface-variant, #444651);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.reservation-sidebar-item:hover {
+  background-color: #e0e3e5;
+}
+
+.reservation-sidebar-item--active {
+  color: #1d5abc;
+  font-weight: 500;
+  border-left-color: #1d5abc;
+  background-color: #f7fafc;
+}
+
+.facility-card {
+  border: 1px solid var(--accent-gold);
+  background-color: #ffffff;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.book-now-btn {
+  width: 100%;
+  background-color: #001e59;
+  color: #ffffff;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  transition: background-color 0.3s;
+}
+
+.book-now-btn:hover {
+  background-color: #1d5abc;
+}
+
+.book-unavailable-btn {
+  width: 100%;
+  background-color: #e0e3e5;
+  color: #444651;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  cursor: not-allowed;
+}
+
+/* 목록 ↔ 예약 신청 ↔ 내 예약: 단일 패널 opacity 전환 (이전 화면 겹침 방지) */
+.reservation-main-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 카테고리 전환: 세부 콘텐츠만 opacity 페이드 */
+.reservation-content-fade {
+  transition: opacity 0.2s ease;
+}
+
+.reservation-content-visible {
+  opacity: 1;
+}
+
+.reservation-content-hidden {
+  opacity: 0;
+}
+
+.my-reservation-card {
+  border: 1px solid var(--accent-gold);
+  background-color: #ffffff;
+  padding: 1.25rem;
+}
+
+.my-reservation-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #001849;
+  background-color: #dbe1ff;
+  border: 1px solid #1d5abc;
+  border-radius: 9999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reservation-content-fade {
+    transition: none;
+  }
+}

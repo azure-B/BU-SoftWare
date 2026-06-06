@@ -1,0 +1,14 @@
+---
+description: Prevent hallucinated APIs, silent failures, and over-refactoring
+alwaysApply: true
+---
+
+# Anti-hallucination
+
+- NEVER invent npm packages, env vars, or API routes — verify in `package.json`, `.env.example`, or `server/sub.md`
+- NEVER assume files exist; read or search before importing
+- NEVER empty `catch` blocks; log or rethrow with context
+- NEVER rewrite unrelated files in the same task
+- If unsure about a signature, open the defining file first
+
+When the user says a path or command failed, diagnose from terminal output — do not guess fixes.

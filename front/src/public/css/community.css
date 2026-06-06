@@ -1,0 +1,173 @@
+.community-page {
+  background-color: #f8fbfd;
+}
+
+/* 레이아웃: 메인 높이 변화가 사이드바 위치에 영향 주지 않도록 */
+.community-layout {
+  align-items: flex-start;
+}
+
+.community-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 사이드바: sticky 고정 — 게시글 수가 바뀌어도 메뉴 위치 유지 */
+.community-sidebar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.community-sidebar-sticky {
+  position: sticky;
+  top: 5rem;
+  max-height: calc(100vh - 5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.community-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 1rem 0.75rem 1rem;
+  border-left: 4px solid transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: left;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  color: var(--on-surface-variant, #444651);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.community-sidebar-item:hover {
+  background-color: #e0e3e5;
+}
+
+.community-sidebar-item--active {
+  color: #1d5abc;
+  font-weight: 500;
+  border-left-color: #1d5abc;
+  background-color: #f7fafc;
+}
+
+/* 커뮤니티 하위 탭: 접힘 시 공간 없음 → 펼침 시 부드럽게 확장 */
+.community-sidebar-children {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+
+.community-sidebar-children--open {
+  grid-template-rows: 1fr;
+}
+
+.community-sidebar-children-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 0;
+  overflow: hidden;
+  padding-left: 3rem;
+  border-left: 4px solid transparent;
+  opacity: 0;
+  transition: opacity 0.22s ease 0.04s;
+}
+
+.community-sidebar-children--open .community-sidebar-children-inner {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  opacity: 1;
+}
+
+.community-sidebar-child {
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: left;
+  color: #444651;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.community-sidebar-child:hover {
+  color: #1d5abc;
+}
+
+.community-sidebar-child--active {
+  color: #1d5abc;
+}
+
+.community-square-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.community-post {
+  border-bottom: 1px solid var(--accent-gold);
+}
+
+.community-header {
+  border-bottom: 1px solid var(--accent-gold);
+}
+
+.community-filter-bar {
+  border-bottom: 1px solid var(--brand-navy);
+}
+
+.community-faq-card {
+  border: 1px solid var(--accent-gold);
+}
+
+.community-faq-title {
+  border-bottom: 1px solid var(--brand-navy);
+}
+
+.community-search {
+  border-bottom: 1px solid var(--brand-navy);
+}
+
+.community-search:focus {
+  border-bottom-width: 2px;
+  border-color: #1d5abc;
+}
+
+.community-hover-title:hover {
+  color: #1455b7;
+}
+
+.community-quick-link:hover {
+  background-color: #1455b7;
+}
+
+/* 게시판 전환: 헤더·목록·필터만 opacity 페이드 (이동 없음) */
+.community-content-fade {
+  transition: opacity 0.2s ease;
+}
+
+.community-content-visible {
+  opacity: 1;
+}
+
+.community-content-hidden {
+  opacity: 0;
+}
+
+.community-post-list-panel {
+  min-height: 4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .community-content-fade {
+    transition: none;
+  }
+}

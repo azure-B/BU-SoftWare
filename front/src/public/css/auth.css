@@ -1,0 +1,136 @@
+/* --- auth.css (auth shell + app view transitions) --- */
+.app-transition,
+.auth-flow {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 로그인 ↔ 회원가입: 배경·푸터 고정, 카드·사이드만 전환 */
+.auth-flow__panels {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  z-index: 10;
+  transition: min-height 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-panel-card {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.auth-panel-card__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.auth-panel {
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0.38s;
+}
+
+.auth-panel--visible {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+  height: 100%;
+  min-height: inherit;
+}
+
+.auth-panel:not(.auth-panel--visible) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.auth-panel--login:not(.auth-panel--visible) {
+  transform: translateX(-14px);
+}
+
+.auth-panel--regi:not(.auth-panel--visible) {
+  transform: translateX(14px);
+}
+
+.auth-panel .login-card,
+.auth-panel .registration-card {
+  transition:
+    opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-panel-aside {
+  transition:
+    opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-panel:not(.auth-panel--visible) .auth-panel-aside {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* auth → dashboard: 셸 전체 퇴장 */
+.app-transition--to-dashboard.app-transition--exit .auth-flow {
+  animation: authExitToApp 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.app-transition--to-dashboard.app-transition--enter .app-main {
+  animation: dashboardEnterFromLogin 0.42s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+@keyframes authExitToApp {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+  }
+}
+
+@keyframes dashboardEnterFromLogin {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-flow__panels {
+    transition: none;
+  }
+
+  .auth-panel,
+  .auth-panel .login-card,
+  .auth-panel .registration-card,
+  .auth-panel-aside {
+    transition-duration: 0.01ms;
+  }
+
+  .app-transition--to-dashboard.app-transition--exit .auth-flow,
+  .app-transition--to-dashboard.app-transition--enter .app-main {
+    animation: none;
+  }
+}

@@ -1,0 +1,17 @@
+---
+description: Delivery workflow — minimal scope, verify, no unsolicited commits
+alwaysApply: false
+---
+
+# Workflow
+
+- Smallest correct diff; match existing style in the touched folder
+- After backend edits: `cd server && npm test` when tests exist
+- After frontend edits: note if `cd front && npm start` should be run manually
+- Do not create git commits unless the user asks
+- Do not add dependencies without stating why; prefer stdlib and existing stack
+- Explain breaking changes briefly when API or folder layout shifts
+
+Structure changes must update [AGENTS.md](mdc:AGENTS.md) and the relevant `sub.md` in the same task (`sub.md` does not auto-sync).
+
+When adding routes, pages, or top-level folders, update the matching `sub.md` before finishing.
