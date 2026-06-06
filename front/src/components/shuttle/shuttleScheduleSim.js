@@ -96,7 +96,7 @@ export function getShuttleStatusMessage(state) {
         : day === 5
           ? '하교 금 13:30~17:30'
           : '하교 13:30~18:00';
-    return `현재 운행 시간이 아닙니다`;
+    return `현재 운행 시간이 아닙니다 · ${afternoonNote}`;
   }
 
   const { period } = state;

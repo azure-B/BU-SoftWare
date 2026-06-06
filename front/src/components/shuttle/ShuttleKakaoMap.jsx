@@ -334,15 +334,20 @@ function ShuttleKakaoMap({
     });
   }
 
+  const showBoardingLocationRef = useRef(showBoardingLocation);
+  const showShuttleViewRef = useRef(showShuttleView);
+  showBoardingLocationRef.current = showBoardingLocation;
+  showShuttleViewRef.current = showShuttleView;
+
   useEffect(() => {
     if (!mapReady) return;
 
     if (viewMode === 'boarding' && boardingRouteId) {
-      showBoardingLocation(boardingRouteId);
+      showBoardingLocationRef.current(boardingRouteId);
       return;
     }
 
-    showShuttleView();
+    showShuttleViewRef.current();
   }, [viewMode, boardingRouteId, mapReady]);
 
   useEffect(() => {
