@@ -2,6 +2,16 @@
   border-color: var(--accent-gold);
 }
 
+.shuttle-rule-navy {
+  border-bottom: 1px solid #0d337f;
+}
+
+@media (min-width: 768px) {
+  .tour-page header.shuttle-rule-navy {
+    border-bottom-color: var(--accent-gold, #c5a880);
+  }
+}
+
 .tour-kakao-map {
   min-height: 100%;
   touch-action: pan-x pan-y;
@@ -103,14 +113,24 @@
     overscroll-behavior: contain;
   }
 
+  .tour-panel-body {
+    min-height: 0;
+  }
+
   .tour-post-list-panel-frame {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    overflow: hidden;
+  }
+
+  .tour-post-list-panel-toolbar {
+    flex-shrink: 0;
   }
 
   .tour-post-list-scroll {
-    flex: 1 1 auto;
+    flex: 1 1 0;
+    min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: contain;
@@ -121,7 +141,16 @@
     width: 100%;
     max-width: 100%;
     min-height: 0;
-    overflow-x: hidden;
+    overflow: visible;
+  }
+
+  /* Community 고정 행 높이 규칙과 분리 — 해시태그 wrap 시 이중 스크롤 방지 */
+  .tour-post-list-panel-frame .community-post-list-item,
+  .tour-post-list-scroll .community-post-list-item {
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
   }
 
   .tour-post-list-scroll .community-post {

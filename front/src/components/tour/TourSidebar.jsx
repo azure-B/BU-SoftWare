@@ -12,19 +12,25 @@ function TourSidebar({
 
   return (
     <aside className="md:col-span-4 flex flex-col gap-8 tour-sidebar p-6 border-l border-outline-variant h-full">
-      <div>
-        <h3 className="font-headline-md text-headline-md text-primary mb-4">인기 태그</h3>
-        <div className="flex flex-wrap gap-3">
-          {filterOptions.map((tag) => (
+      <div className="tour-tag-panel">
+        <h3 className="tour-tag-panel__title font-headline-md text-headline-md text-primary mb-4">
+          인기 태그
+        </h3>
+        <div className="flex flex-wrap gap-3 tour-tag-panel__scroll">
+          {filterOptions.map((tag, index) => (
             <button
               key={tag}
               type="button"
               onClick={() => onTagChange?.(tag)}
-              className={
+              className={[
+                'px-4 py-2 border font-label-md text-sm transition-colors bg-transparent cursor-pointer',
+                index > 5 ? 'hidden md:inline-flex' : '',
                 activeTag === tag
-                  ? 'px-4 py-2 border tour-filter-active font-label-md text-sm transition-colors bg-transparent cursor-pointer'
-                  : 'px-4 py-2 border border-outline-variant text-on-surface-variant font-label-md text-sm hover:border-primary transition-colors bg-transparent cursor-pointer'
-              }
+                  ? 'tour-filter-active'
+                  : 'border-outline-variant text-on-surface-variant hover:border-primary',
+              ]
+                .filter(Boolean)
+                .join(' ')}
             >
               {tag === '전체' ? '전체' : `#${tag}`}
             </button>
@@ -32,9 +38,9 @@ function TourSidebar({
         </div>
       </div>
 
-      <div className="border-b border-tertiary tour-divider my-2" />
+      <div className="tour-sidebar__divider border-b border-tertiary tour-divider my-2" />
 
-      <div>
+      <div className="tour-popular-panel">
         <h3 className="font-headline-md text-headline-md text-primary mb-4 flex items-center gap-2">
           <span className="material-symbols-outlined text-gold">trending_up</span>
           {activeTag === '전체' ? '인기 음식점' : `#${activeTag} 인기 음식점`}
@@ -76,7 +82,7 @@ function TourSidebar({
         )}
       </div>
 
-      <div className="mt-8 pt-8 border-t border-outline-variant">
+      <div className="tour-notice-panel mt-8 pt-8 border-t border-outline-variant">
         <p className="font-label-md text-label-md text-on-surface-variant uppercase mb-2">안내</p>
         <p className="font-body-md text-sm text-primary">
           학생복지동 기준 500m 이내 음식점입니다. 리뷰와 같이밥 모집 글을 남기고 #태그로

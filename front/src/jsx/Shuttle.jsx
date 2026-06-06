@@ -146,7 +146,7 @@ function CommuterRouteCard({ route, expanded, onToggle, onViewBoarding, boarding
 }
 
 function Shuttle() {
-  const [expandedRouteId, setExpandedRouteId] = useState(COMMUTER_ROUTES[0]?.id ?? null);
+  const [expandedRouteId, setExpandedRouteId] = useState(null);
   const [mapViewMode, setMapViewMode] = useState('shuttle');
   const [boardingRouteId, setBoardingRouteId] = useState(null);
   const mapSectionRef = useRef(null);
@@ -179,10 +179,10 @@ function Shuttle() {
     <main className="flex-grow px-margin-mobile md:px-margin-desktop py-12 z-10 relative container-shared w-full">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-column-gap">
         <header className="col-span-1 md:col-span-12 mb-12 shuttle-rule-navy pb-8">
-          <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4 page-main-title">
+          <h1 className="text-3xl md:text-4xl font-display-lg-mobile md:font-display-lg text-primary mb-2">
             셔틀버스 · 통학버스
           </h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-3xl page-main-desc">
+          <p className="font-body-lg text-sm text-on-surface-variant max-w-3xl">
             백석대학교 캠퍼스 셔틀버스 및 통학버스 운행 시간표입니다.
           </p>
         </header>

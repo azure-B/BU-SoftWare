@@ -27,6 +27,12 @@
   min-height: 100%;
 }
 
+@media (min-width: 768px) {
+  .shuttle-kakao-map__canvas {
+    touch-action: none;
+  }
+}
+
 .shuttle-kakao-map__loading,
 .shuttle-kakao-map__status {
   pointer-events: none;

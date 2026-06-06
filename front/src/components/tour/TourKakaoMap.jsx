@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { KAKAO_MAP_APP_KEY } from '../constants';
 import { loadKakaoMapSdk } from '../../utils/loadKakaoMapSdk';
+import {
+  addKakaoListener,
+  clearKakaoMapContainer,
+  removeKakaoListener,
+  removeKakaoListeners,
+} from '../../utils/kakaoMapEvent';
 import { TOUR_MAP_CENTER, TOUR_MAP_LEVEL, TOUR_SELECTED_PLACE_LEVEL } from './tourData';
 import { clusterPlaces } from './tourMapClusters';
 import {
@@ -36,7 +42,7 @@ function TourKakaoMap({
   const markerImagesRef = useRef(null);
   const clusterImagesRef = useRef(new Map());
   const onPlaceClickRef = useRef(onPlaceClick);
-  const mapClickListenerRef = useRef(null);
+  const mapClickListenerRef = useRef([]);
   const [error, setError] = useState(null);
   const [mapReady, setMapReady] = useState(false);
   const [clusterMenu, setClusterMenu] = useState(null);
@@ -112,6 +118,7 @@ function TourKakaoMap({
     let cancelled = false;
     let resizeHandler = null;
     const clusterImages = clusterImagesRef.current;
+    const container = containerRef.current;
 
     async function initMap() {
       try {
@@ -139,10 +146,11 @@ function TourKakaoMap({
         mapRef.current = map;
         applyTourMapInteraction(map);
 
+        const closeClusterMenu = () => setClusterMenu(null);
         mapClickListenerRef.current = [
-          kakao.maps.event.addListener(map, 'click', () => setClusterMenu(null)),
-          kakao.maps.event.addListener(map, 'dragstart', () => setClusterMenu(null)),
-        ];
+          addKakaoListener(map, 'click', closeClusterMenu),
+          addKakaoListener(map, 'dragstart', closeClusterMenu),
+        ].filter(Boolean);
 
         resizeHandler = () => {
           map.relayout();
@@ -168,20 +176,15 @@ function TourKakaoMap({
       cancelled = true;
       setMapReady(false);
       if (resizeHandler) window.removeEventListener('resize', resizeHandler);
-      if (mapClickListenerRef.current) {
-        mapClickListenerRef.current.forEach((listener) => {
-          window.kakao?.maps.event.removeListener(listener);
-        });
-        mapClickListenerRef.current = null;
-      }
+      removeKakaoListeners(mapClickListenerRef.current);
+      mapClickListenerRef.current = [];
       markersRef.current.forEach((entry) => {
         entry.marker.setMap(null);
-        if (entry.listener) {
-          window.kakao?.maps.event.removeListener(entry.marker, 'click', entry.listener);
-        }
+        removeKakaoListener({ target: entry.marker, type: 'click', handler: entry.listener });
       });
       markersRef.current = [];
       clusterImages.clear();
+      clearKakaoMapContainer(container);
       mapRef.current = null;
       markerImagesRef.current = null;
     };
@@ -194,9 +197,7 @@ function TourKakaoMap({
 
     markersRef.current.forEach((entry) => {
       entry.marker.setMap(null);
-      if (entry.listener) {
-        window.kakao.maps.event.removeListener(entry.marker, 'click', entry.listener);
-      }
+      removeKakaoListener({ target: entry.marker, type: 'click', handler: entry.listener });
     });
     markersRef.current = [];
 

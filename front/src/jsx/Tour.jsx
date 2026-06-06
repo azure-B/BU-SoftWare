@@ -3,11 +3,13 @@ import CommunityPostList from '../components/community/CommunityPostList';
 import { fetchPostDetail } from '../components/community/postData';
 import RestaurantCard from '../components/tour/RestaurantCard';
 import TourKakaoMap from '../components/tour/TourKakaoMap';
+import TourMobilePostSection from '../components/tour/TourMobilePostSection';
 import TourPostForm from '../components/tour/TourPostForm';
 import TourPostPanel from '../components/tour/TourPostPanel';
 import TourSidebar from '../components/tour/TourSidebar';
 import { TOUR_SECTION_TABS } from '../components/tour/tourData';
 import { usePanelTransition } from '../hooks/usePanelTransition';
+import { useMobileViewport } from '../hooks/useMobileViewport';
 import {
   attachPlaceNames,
   fetchAllPlacePosts,
@@ -36,6 +38,7 @@ function parseTourPanelKey(key) {
 }
 
 function Tour({ session = {} }) {
+  const isMobile = useMobileViewport();
   const [places, setPlaces] = useState([]);
   const [topTags, setTopTags] = useState([]);
   const [placesLoading, setPlacesLoading] = useState(true);
@@ -69,6 +72,12 @@ function Tour({ session = {} }) {
         if (parseTourPanelKey(nextKey).view !== 'post') {
           setPostDetail(null);
         }
+      },
+      shouldAnimate: (nextKey, prevKey) => {
+        const next = parseTourPanelKey(nextKey);
+        const prev = parseTourPanelKey(prevKey);
+        if (next.view === 'list' && prev.view !== 'list') return false;
+        return true;
       },
     },
   );
@@ -172,6 +181,12 @@ function Tour({ session = {} }) {
     return filterPostsBySearch(byTag, searchQuery);
   }, [recruitPosts, activeTag, searchQuery]);
 
+  const mobileRecruitPosts = useMemo(() => {
+    const place = places.find((item) => item.id === shownPanel.placeId);
+    if (!place?.boardId) return displayedRecruitPosts;
+    return displayedRecruitPosts.filter((post) => post.boardId === place.boardId);
+  }, [displayedRecruitPosts, shownPanel.placeId, places]);
+
   const recruitWritePlace = useMemo(
     () => places.find((place) => place.id === recruitWritePlaceId) ?? filteredPlaces[0] ?? null,
     [places, recruitWritePlaceId, filteredPlaces],
@@ -198,6 +213,23 @@ function Tour({ session = {} }) {
     setPanelView('list');
     loadPosts(selectedPlace.boardId);
   }, [sectionTab, selectedPlace?.boardId, loadPosts]);
+
+  useEffect(() => {
+    if (!isMobile || filteredPlaces.length === 0) return;
+    const isSelectedVisible = filteredPlaces.some((place) => place.id === selectedPlaceId);
+    if (!isSelectedVisible) {
+      setSelectedPlaceId(filteredPlaces[0].id);
+    }
+  }, [isMobile, filteredPlaces, selectedPlaceId]);
+
+  const handleMobilePlaceChange = useCallback(
+    (placeId) => {
+      setSelectedPlaceId(placeId);
+      setRecruitWritePlaceId(placeId);
+      setPanelView('list');
+    },
+    [],
+  );
 
   const handleSelectPlace = useCallback((place) => {
     setSelectedPlaceId(place.id);
@@ -277,17 +309,18 @@ function Tour({ session = {} }) {
   }, [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places]);
 
   return (
-    <main className="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop pb-24">
-      <header className="py-16">
-        <h1 className="font-display-lg text-display-lg text-primary mb-6">학생 광장</h1>
-        <p className="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mb-8">
-          학생복지동 주변 음식점에서 리뷰를 남기거나, 같이 밥 먹을 사람을 모집해 보세요.
-        </p>
-        <div className="w-full border-b border-tertiary tour-divider" />
-      </header>
+    <main className="flex-grow px-margin-mobile md:px-margin-desktop py-12 z-10 relative container-shared w-full">
+      <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-column-gap items-start">
+        <header className="col-span-1 md:col-span-12 mb-12 shuttle-rule-navy pb-8">
+          <h1 className="text-3xl md:text-4xl font-display-lg-mobile md:font-display-lg text-primary mb-2">
+            학생 광장
+          </h1>
+          <p className="font-body-lg text-sm text-on-surface-variant max-w-3xl">
+            학생복지동 주변 음식점에서 리뷰를 남기거나, 같이 밥 먹을 사람을 모집해 보세요.
+          </p>
+        </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-column-gap items-start">
-        <div className="md:col-span-8 flex flex-col gap-12">
+        <div className="col-span-1 md:col-span-8 flex flex-col gap-12">
           <div className="tour-map-section relative w-full h-[500px] border border-outline-variant bg-surface-container-high rounded-lg overflow-hidden">
             <TourKakaoMap
               className="w-full h-full"
@@ -350,9 +383,9 @@ function Tour({ session = {} }) {
                 {placesError}
               </p>
             ) : shownSectionTab === 'recruit' ? (
-              <div className={`flex flex-col gap-4 min-h-[16rem] tour-section-body ${sectionFadeClass} ${panelFadeClass}`}>
+              <div className={`flex flex-col gap-4 min-h-[16rem] tour-section-body ${sectionFadeClass}`}>
                 {shownPanel.view === 'write' && recruitWritePlace ? (
-                  <>
+                  <div className={`tour-mobile-stage-panel md:contents flex flex-col gap-4 min-h-0 ${panelFadeClass}`}>
                     <label className="flex flex-col gap-1">
                       <span className="font-label-md text-label-md text-on-surface-variant">
                         모집할 음식점
@@ -378,103 +411,9 @@ function Tour({ session = {} }) {
                       onCancel={() => setPanelView('list')}
                       onCreated={handlePostCreated}
                     />
-                  </>
-                ) : shownPanel.view === 'post' && postDetail ? (
-                  <TourPostPanel
-                    detail={postDetail}
-                    placeName={postPlaceName}
-                    token={session.token}
-                    currentUserId={session.id}
-                    onBack={() => setPanelView('list')}
-                    onPostUpdated={handlePostUpdated}
-                    onPostDeleted={handlePostDeleted}
-                  />
-                ) : (
-                  <div className="tour-post-list-panel-frame">
-                    <div className="flex flex-col gap-3 border-b border-outline-variant pb-3">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <h3 className="font-headline-md text-headline-md text-primary">
-                            같이밥 모집
-                          </h3>
-                          <p className="text-sm text-on-surface-variant">
-                            전체 {recruitPosts.length}건 · #태그로 필터링
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (filteredPlaces.length && !recruitWritePlaceId) {
-                              setRecruitWritePlaceId(filteredPlaces[0].id);
-                            }
-                            setPanelView('write');
-                          }}
-                          disabled={!session.token || filteredPlaces.length === 0}
-                          className="px-4 py-2 bg-primary text-white font-label-md text-sm hover:bg-secondary transition-colors disabled:opacity-50 shrink-0"
-                        >
-                          모집글 작성
-                        </button>
-                      </div>
-                      <input
-                        type="search"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="제목, 내용, 음식점, #태그 검색"
-                        className="w-full border border-outline-variant px-3 py-2 font-body-md text-sm bg-surface-container-lowest"
-                      />
-                    </div>
-                    <div className="tour-post-list-scroll">
-                      <CommunityPostList
-                        posts={displayedRecruitPosts}
-                        loading={recruitPostsLoading}
-                        error={recruitPostsError}
-                        emptyMessage={
-                          searchQuery.trim() || activeTag !== '전체'
-                            ? '검색 결과가 없습니다.'
-                            : '아직 같이밥 모집글이 없습니다. 첫 모집글을 남겨 보세요.'
-                        }
-                        onPostClick={handleOpenRecruitPost}
-                      />
-                    </div>
                   </div>
-                )}
-              </div>
-            ) : (
-              <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 items-start tour-section-body ${sectionFadeClass}`}>
-                <div className="tour-place-list-scroll flex flex-col gap-3 pr-1">
-                  {filteredPlaces.length === 0 ? (
-                    <p className="text-on-surface-variant text-sm">
-                      {activeTag === '전체'
-                        ? '표시할 음식점이 없습니다.'
-                        : `#${activeTag} 태그가 있는 음식점이 없습니다.`}
-                    </p>
-                  ) : (
-                    filteredPlaces.map((place) => (
-                      <RestaurantCard
-                        key={place.id}
-                        place={place}
-                        selected={place.id === selectedPlaceId}
-                        activeTag={activeTag}
-                        onSelect={handleSelectPlace}
-                      />
-                    ))
-                  )}
-                </div>
-
-                <div className={`flex flex-col gap-4 min-h-[16rem] tour-panel-body ${panelFadeClass}`}>
-                  {!shownSelectedPlace ? (
-                    <p className="text-on-surface-variant font-body-md">
-                      음식점을 선택하면 게시판이 열립니다.
-                    </p>
-                  ) : shownPanel.view === 'write' ? (
-                    <TourPostForm
-                      boardId={shownSelectedPlace.boardId}
-                      placeName={shownSelectedPlace.name}
-                      token={session.token}
-                      onCancel={() => setPanelView('list')}
-                      onCreated={handlePostCreated}
-                    />
-                  ) : shownPanel.view === 'post' && postDetail ? (
+                ) : shownPanel.view === 'post' && postDetail ? (
+                  <div className={`tour-mobile-stage-panel md:contents min-h-0 ${panelFadeClass}`}>
                     <TourPostPanel
                       detail={postDetail}
                       placeName={postPlaceName}
@@ -484,48 +423,222 @@ function Tour({ session = {} }) {
                       onPostUpdated={handlePostUpdated}
                       onPostDeleted={handlePostDeleted}
                     />
-                  ) : (
-                    <div className="tour-post-list-panel-frame">
-                      <div className="flex flex-col gap-3 border-b border-outline-variant pb-3">
+                  </div>
+                ) : (
+                  <>
+                    <TourMobilePostSection
+                      filteredPlaces={filteredPlaces}
+                      selectedPlaceId={selectedPlaceId}
+                      onPlaceChange={handleMobilePlaceChange}
+                      searchQuery={searchQuery}
+                      onSearchChange={setSearchQuery}
+                      posts={mobileRecruitPosts}
+                      loading={recruitPostsLoading}
+                      error={recruitPostsError}
+                      emptyMessage={
+                        searchQuery.trim() || activeTag !== '전체'
+                          ? '검색 결과가 없습니다.'
+                          : '아직 같이밥 모집글이 없습니다. 첫 모집글을 남겨 보세요.'
+                      }
+                      onPostClick={handleOpenRecruitPost}
+                      writeLabel="모집글 작성"
+                      onWrite={() => {
+                        if (filteredPlaces.length && !recruitWritePlaceId) {
+                          setRecruitWritePlaceId(filteredPlaces[0].id);
+                        }
+                        setPanelView('write');
+                      }}
+                      writeDisabled={!session.token}
+                      placeSelectLabel="모집 음식점"
+                      searchPlaceholder="제목, 내용, #태그 검색"
+                      scrollFadeClass={panelFadeClass}
+                    />
+                    <div className="hidden md:flex tour-post-list-panel-frame flex-col gap-3">
+                      <div className="tour-post-list-panel-toolbar flex flex-col gap-3 border-b border-outline-variant pb-3">
                         <div className="flex items-center justify-between gap-3">
                           <div>
                             <h3 className="font-headline-md text-headline-md text-primary">
-                              {shownSelectedPlace.name}
+                              같이밥 모집
                             </h3>
-                            <p className="text-sm text-on-surface-variant">리뷰 · 같이밥 모집</p>
+                            <p className="text-sm text-on-surface-variant">
+                              전체 {recruitPosts.length}건 · #태그로 필터링
+                            </p>
                           </div>
                           <button
                             type="button"
-                            onClick={() => setPanelView('write')}
-                            disabled={!session.token}
+                            onClick={() => {
+                              if (filteredPlaces.length && !recruitWritePlaceId) {
+                                setRecruitWritePlaceId(filteredPlaces[0].id);
+                              }
+                              setPanelView('write');
+                            }}
+                            disabled={!session.token || filteredPlaces.length === 0}
                             className="px-4 py-2 bg-primary text-white font-label-md text-sm hover:bg-secondary transition-colors disabled:opacity-50 shrink-0"
                           >
-                            글 작성
+                            모집글 작성
                           </button>
                         </div>
                         <input
                           type="search"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          placeholder="제목, 내용, #태그 검색"
+                          placeholder="제목, 내용, 음식점, #태그 검색"
                           className="w-full border border-outline-variant px-3 py-2 font-body-md text-sm bg-surface-container-lowest"
                         />
                       </div>
                       <div className="tour-post-list-scroll">
                         <CommunityPostList
-                          posts={displayedPosts}
-                          loading={postsLoading}
-                          error={postsError}
+                          posts={displayedRecruitPosts}
+                          loading={recruitPostsLoading}
+                          error={recruitPostsError}
                           emptyMessage={
-                            searchQuery.trim()
+                            searchQuery.trim() || activeTag !== '전체'
                               ? '검색 결과가 없습니다.'
-                              : '아직 글이 없습니다. 리뷰나 같이밥 모집을 남겨 보세요.'
+                              : '아직 같이밥 모집글이 없습니다. 첫 모집글을 남겨 보세요.'
                           }
-                          onPostClick={handleOpenPost}
+                          onPostClick={handleOpenRecruitPost}
+                          enableEnterAnimation={false}
                         />
                       </div>
                     </div>
-                  )}
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className={`flex flex-col gap-4 min-h-[16rem] tour-section-body ${sectionFadeClass}`}>
+                {shownPanel.view === 'write' && shownSelectedPlace ? (
+                  <div className={`tour-mobile-stage-panel md:hidden min-h-0 ${panelFadeClass}`}>
+                    <TourPostForm
+                      boardId={shownSelectedPlace.boardId}
+                      placeName={shownSelectedPlace.name}
+                      token={session.token}
+                      onCancel={() => setPanelView('list')}
+                      onCreated={handlePostCreated}
+                    />
+                  </div>
+                ) : shownPanel.view === 'post' && postDetail ? (
+                  <div className={`tour-mobile-stage-panel md:hidden min-h-0 ${panelFadeClass}`}>
+                    <TourPostPanel
+                      detail={postDetail}
+                      placeName={postPlaceName}
+                      token={session.token}
+                      currentUserId={session.id}
+                      onBack={() => setPanelView('list')}
+                      onPostUpdated={handlePostUpdated}
+                      onPostDeleted={handlePostDeleted}
+                    />
+                  </div>
+                ) : (
+                  <TourMobilePostSection
+                    filteredPlaces={filteredPlaces}
+                    selectedPlaceId={selectedPlaceId}
+                    onPlaceChange={handleMobilePlaceChange}
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    posts={displayedPosts}
+                    loading={postsLoading}
+                    error={postsError}
+                    emptyMessage={
+                      searchQuery.trim()
+                        ? '검색 결과가 없습니다.'
+                        : '아직 글이 없습니다. 리뷰나 같이밥 모집을 남겨 보세요.'
+                    }
+                    onPostClick={handleOpenPost}
+                    writeLabel="글 작성"
+                    onWrite={() => setPanelView('write')}
+                    writeDisabled={!session.token || !shownSelectedPlace}
+                    scrollFadeClass={panelFadeClass}
+                  />
+                )}
+
+                <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-6 items-start tour-places-grid">
+                  <div className="tour-place-list-scroll flex flex-col gap-3 pr-1">
+                    {filteredPlaces.length === 0 ? (
+                      <p className="text-on-surface-variant text-sm">
+                        {activeTag === '전체'
+                          ? '표시할 음식점이 없습니다.'
+                          : `#${activeTag} 태그가 있는 음식점이 없습니다.`}
+                      </p>
+                    ) : (
+                      filteredPlaces.map((place) => (
+                        <RestaurantCard
+                          key={place.id}
+                          place={place}
+                          selected={place.id === selectedPlaceId}
+                          activeTag={activeTag}
+                          onSelect={handleSelectPlace}
+                        />
+                      ))
+                    )}
+                  </div>
+
+                  <div className={`flex flex-col gap-4 min-h-[16rem] tour-panel-body ${panelFadeClass}`}>
+                    {shownPanel.view === 'write' && shownSelectedPlace ? (
+                      <TourPostForm
+                        boardId={shownSelectedPlace.boardId}
+                        placeName={shownSelectedPlace.name}
+                        token={session.token}
+                        onCancel={() => setPanelView('list')}
+                        onCreated={handlePostCreated}
+                      />
+                    ) : shownPanel.view === 'post' && postDetail ? (
+                      <TourPostPanel
+                        detail={postDetail}
+                        placeName={postPlaceName}
+                        token={session.token}
+                        currentUserId={session.id}
+                        onBack={() => setPanelView('list')}
+                        onPostUpdated={handlePostUpdated}
+                        onPostDeleted={handlePostDeleted}
+                      />
+                    ) : !shownSelectedPlace ? (
+                      <p className="text-on-surface-variant font-body-md">
+                        음식점을 선택하면 게시판이 열립니다.
+                      </p>
+                    ) : (
+                      <div className="tour-post-list-panel-frame">
+                        <div className="tour-post-list-panel-toolbar flex flex-col gap-3 border-b border-outline-variant pb-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <div>
+                              <h3 className="font-headline-md text-headline-md text-primary">
+                                {shownSelectedPlace.name}
+                              </h3>
+                              <p className="text-sm text-on-surface-variant">리뷰 · 같이밥 모집</p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => setPanelView('write')}
+                              disabled={!session.token}
+                              className="px-4 py-2 bg-primary text-white font-label-md text-sm hover:bg-secondary transition-colors disabled:opacity-50 shrink-0"
+                            >
+                              글 작성
+                            </button>
+                          </div>
+                          <input
+                            type="search"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="제목, 내용, #태그 검색"
+                            className="w-full border border-outline-variant px-3 py-2 font-body-md text-sm bg-surface-container-lowest"
+                          />
+                        </div>
+                        <div className="tour-post-list-scroll">
+                          <CommunityPostList
+                            posts={displayedPosts}
+                            loading={postsLoading}
+                            error={postsError}
+                            emptyMessage={
+                              searchQuery.trim()
+                                ? '검색 결과가 없습니다.'
+                                : '아직 글이 없습니다. 리뷰나 같이밥 모집을 남겨 보세요.'
+                            }
+                            onPostClick={handleOpenPost}
+                            enableEnterAnimation={false}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

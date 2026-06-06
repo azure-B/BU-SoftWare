@@ -3,7 +3,7 @@ import '../public/css/reservation.css';
 
 function MyReservations({ reservations }) {
   return (
-    <main className="flex-1 pb-16">
+    <main className="reservation-main flex-1 pb-16">
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-display-lg-mobile md:font-display-lg text-primary mb-2">
           내 예약 조회

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { KAKAO_MAP_APP_KEY } from '../constants';
 import { loadKakaoMapSdk } from '../../utils/loadKakaoMapSdk';
+import { clearKakaoMapContainer } from '../../utils/kakaoMapEvent';
+import { useMobileViewport } from '../../hooks/useMobileViewport';
 import {
   SHUTTLE_MAP_CENTER,
   SHUTTLE_MAP_LEVEL,
@@ -84,8 +86,8 @@ function createRoutePolyline(kakao, path, strokeColor) {
   });
 }
 
-function applyShuttleMapInteraction(map) {
-  if (isMobileShuttleMap()) {
+function applyShuttleMapInteraction(map, isMobile) {
+  if (isMobile) {
     map.setDraggable(true);
     map.setZoomable(true);
     return;
@@ -140,6 +142,9 @@ function ShuttleKakaoMap({
   const [mapReady, setMapReady] = useState(false);
   const [statusText, setStatusText] = useState('');
   const [boardingZoomedIn, setBoardingZoomedIn] = useState(false);
+  const isMobile = useMobileViewport();
+  const isMobileRef = useRef(isMobile);
+  isMobileRef.current = isMobile;
 
   viewModeRef.current = viewMode;
   boardingRouteIdRef.current = boardingRouteId;
@@ -152,7 +157,12 @@ function ShuttleKakaoMap({
   }
 
   function clearBoardingMarkers() {
-    boardingMarkersRef.current.forEach(({ overlay }) => overlay.setMap(null));
+    boardingMarkersRef.current.forEach(({ overlay, content, clickHandler }) => {
+      overlay.setMap(null);
+      if (content && clickHandler) {
+        content.removeEventListener('click', clickHandler);
+      }
+    });
     boardingMarkersRef.current = [];
     boardingOverviewRef.current = null;
     setBoardingZoomedIn(false);
@@ -190,7 +200,7 @@ function ShuttleKakaoMap({
     map.setCenter(new kakao.maps.LatLng(stop.lat, stop.lng));
     map.setLevel(stop.focusLevel ?? location.focusLevel ?? BOARDING_STOP_FOCUS_LEVEL);
     map.relayout();
-    applyShuttleMapInteraction(map);
+    applyShuttleMapInteraction(map, isMobileRef.current);
     updateBoardingMarkerSelection(stopIndex);
     setBoardingZoomedIn(true);
     setStatusText(`${stop.label} · 확대 보기 (마커 클릭)`);
@@ -204,7 +214,7 @@ function ShuttleKakaoMap({
 
     applyBoardingOverview(overview);
     map.relayout();
-    applyShuttleMapInteraction(map);
+    applyShuttleMapInteraction(map, isMobileRef.current);
     updateBoardingMarkerSelection(null);
     setBoardingZoomedIn(false);
     setStatusText(`${overview.stops.length}곳 승차 위치 · 마커를 클릭하면 해당 위치로 확대됩니다`);
@@ -219,23 +229,22 @@ function ShuttleKakaoMap({
     if (!location?.stops?.length) return;
 
     clearShuttleVisuals();
-    boardingMarkersRef.current.forEach(({ overlay }) => overlay.setMap(null));
-    boardingMarkersRef.current = [];
+    clearBoardingMarkers();
 
     const canFocusStops = location.stops.length > 1;
     boardingOverviewRef.current = location;
 
-    const bounds = new kakao.maps.LatLngBounds();
     boardingMarkersRef.current = location.stops.map((stop, index) => {
       const position = new kakao.maps.LatLng(stop.lat, stop.lng);
-      bounds.extend(position);
 
       const content = createStopMarkerContent(stop.label, { clickable: canFocusStops });
+      let clickHandler = null;
       if (canFocusStops) {
-        content.addEventListener('click', (event) => {
+        clickHandler = (event) => {
           event.stopPropagation();
           focusBoardingStop(stop, index, location);
-        });
+        };
+        content.addEventListener('click', clickHandler);
       }
 
       const overlay = new kakao.maps.CustomOverlay({
@@ -246,12 +255,12 @@ function ShuttleKakaoMap({
         yAnchor: 0,
         zIndex: 5,
       });
-      return { overlay, stop, index, content };
+      return { overlay, stop, index, content, clickHandler };
     });
 
     applyBoardingOverview(location);
     map.relayout();
-    applyShuttleMapInteraction(map);
+    applyShuttleMapInteraction(map, isMobileRef.current);
     setBoardingZoomedIn(false);
     setStatusText(
       canFocusStops
@@ -268,7 +277,7 @@ function ShuttleKakaoMap({
     clearBoardingMarkers();
     applyShuttleOverview(map, kakao);
     map.relayout();
-    applyShuttleMapInteraction(map);
+    applyShuttleMapInteraction(map, isMobileRef.current);
     activePeriodRef.current = '';
     syncSimulationVisuals(getShuttleSimulationState(new Date()), true);
   }
@@ -337,8 +346,15 @@ function ShuttleKakaoMap({
   }, [viewMode, boardingRouteId, mapReady]);
 
   useEffect(() => {
+    const map = mapRef.current;
+    if (!mapReady || !map) return;
+    applyShuttleMapInteraction(map, isMobile);
+  }, [mapReady, isMobile]);
+
+  useEffect(() => {
     let cancelled = false;
     let resizeHandler = null;
+    const container = containerRef.current;
 
     async function initMap() {
       try {
@@ -348,7 +364,7 @@ function ShuttleKakaoMap({
         ]);
         if (cancelled || !containerRef.current) return;
 
-        const mobileMap = isMobileShuttleMap();
+        const mobileMap = isMobileRef.current;
         const map = new kakao.maps.Map(containerRef.current, {
           center: new kakao.maps.LatLng(SHUTTLE_MAP_CENTER.lat, SHUTTLE_MAP_CENTER.lng),
           level: SHUTTLE_MAP_LEVEL,
@@ -359,7 +375,7 @@ function ShuttleKakaoMap({
           keyboardShortcuts: false,
         });
         applyShuttleOverview(map, kakao);
-        applyShuttleMapInteraction(map);
+        applyShuttleMapInteraction(map, isMobileRef.current);
         mapRef.current = map;
         kakaoRef.current = kakao;
         routePathsRef.current = routePaths;
@@ -379,7 +395,7 @@ function ShuttleKakaoMap({
           if (viewModeRef.current === 'shuttle') {
             applyShuttleOverview(map, kakao);
           }
-          applyShuttleMapInteraction(map);
+          applyShuttleMapInteraction(map, isMobileRef.current);
         };
         window.addEventListener('resize', resizeHandler);
         requestAnimationFrame(() => map.relayout());
@@ -395,8 +411,10 @@ function ShuttleKakaoMap({
 
     return () => {
       cancelled = true;
-      setMapReady(false);
-      if (moveTimerRef.current) window.clearInterval(moveTimerRef.current);
+      if (moveTimerRef.current) {
+        window.clearInterval(moveTimerRef.current);
+        moveTimerRef.current = null;
+      }
       if (resizeHandler) window.removeEventListener('resize', resizeHandler);
       busOverlaysRef.current.forEach(({ overlay }) => overlay.setMap(null));
       busOverlaysRef.current = [];
@@ -407,6 +425,8 @@ function ShuttleKakaoMap({
       mapRef.current = null;
       kakaoRef.current = null;
       activePeriodRef.current = 'idle';
+      clearKakaoMapContainer(container);
+      setMapReady(false);
     };
   }, []);
 

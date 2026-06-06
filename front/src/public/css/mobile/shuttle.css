@@ -32,7 +32,7 @@
   }
 
   .shuttle-kakao-map__canvas {
-    touch-action: none;
+    touch-action: pan-x pan-y;
   }
 
   .shuttle-kakao-map__status {
@@ -55,11 +55,9 @@
 
   .shuttle-boarding-btn {
     min-height: 2.25rem;
-    font-size: 0.6875rem;
   }
 
   .shuttle-trip-table {
     min-width: 640px;
-    font-size: 0.8125rem;
   }
 }
