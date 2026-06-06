@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import AuthShell from './components/auth/AuthShell';
 import './public/css/auth.css';
 import './public/css/app-nav.css';
@@ -11,6 +11,12 @@ import AppLayout from './components/layout/AppLayout';
 import { fetchPostDetail } from './components/community/postData';
 import { getAppPageMeta, isAppView, isAuthView } from './components/layout/appNavConfig';
 import { usePanelTransition } from './hooks/usePanelTransition';
+import {
+  clearStoredAuth,
+  getEmptySession,
+  getInitialAppState,
+  saveStoredAuth,
+} from './utils/authSession';
 
 const SQUARE_CONTENT_VIEWS = new Set(['square', 'post', 'new_post', 'edit_post']);
 
@@ -21,18 +27,19 @@ function getAppShell(view) {
 }
 
 function App() {
-  const [activeView, setActiveView] = useState('login');
+  const [activeView, setActiveView] = useState(() => getInitialAppState().activeView);
   const [focusLoginStudentId, setFocusLoginStudentId] = useState(false);
   const [postDetail, setPostDetail] = useState(null);
   const openingPostRef = useRef(false);
-  const [session, setSession] = useState({
-    id: null,
-    studentId: '',
-    name: '',
-    departmentId: null,
-    departmentName: '',
-    token: null,
-  });
+  const [session, setSession] = useState(() => getInitialAppState().session);
+
+  useEffect(() => {
+    if (session.token) {
+      saveStoredAuth({ session, activeView });
+      return;
+    }
+    clearStoredAuth();
+  }, [session, activeView]);
 
   const { shownValue: shownView, fadeClass } = usePanelTransition(activeView, {
     shouldAnimate: (next, current) => getAppShell(next) !== getAppShell(current),
@@ -55,17 +62,11 @@ function App() {
   };
 
   const handleLogout = () => {
+    clearStoredAuth();
     setFocusLoginStudentId(false);
     setPostDetail(null);
     setActiveView('login');
-    setSession({
-      id: null,
-      studentId: '',
-      name: '',
-      departmentId: null,
-      departmentName: '',
-      token: null,
-    });
+    setSession(getEmptySession());
   };
 
   const handleNavSelect = (navId) => {

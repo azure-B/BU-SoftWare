@@ -4,12 +4,9 @@ const nodemailer = require('nodemailer');
 let transporter = null;
 
 /** Render 등 IPv6 미지원 환경에서 smtp.gmail.com → ENETUNREACH 방지 */
-function ipv4Lookup(hostname, options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
-  dns.lookup(hostname, { ...options, family: 4 }, callback);
+async function resolveSmtpHost(host) {
+  const records = await dns.promises.lookup(host, { family: 4 });
+  return records.address;
 }
 
 function normalizeSmtpPass(pass) {
@@ -43,28 +40,32 @@ function resolveFromAddress() {
   return `"${label}" <${user}>`;
 }
 
-function getTransporter() {
+async function getTransporter() {
   if (transporter) return transporter;
   if (!isMailConfigured()) return null;
 
   const port = Number(process.env.SMTP_PORT || 587);
   const secure = resolveSecure(port);
+  const smtpHost = process.env.SMTP_HOST;
+  const resolvedHost = await resolveSmtpHost(smtpHost);
 
   transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
+    host: resolvedHost,
     port,
     secure,
     connectionTimeout: 15_000,
     greetingTimeout: 15_000,
     socketTimeout: 20_000,
-    lookup: ipv4Lookup,
     auth: {
       user: process.env.SMTP_USER,
       pass: normalizeSmtpPass(process.env.SMTP_PASS),
     },
+    tls: {
+      minVersion: 'TLSv1.2',
+      servername: smtpHost,
+    },
     ...(port === 587 && {
       requireTLS: true,
-      tls: { minVersion: 'TLSv1.2' },
     }),
   });
 
@@ -81,7 +82,7 @@ async function sendVerificationEmail(to, code) {
     <p>5분 이내에 입력해 주세요.</p>
   `;
 
-  const transport = getTransporter();
+  const transport = await getTransporter();
   if (!transport) {
     if (process.env.NODE_ENV === 'development') {
       console.log(`[DEV mail] To: ${to} | Code: ${code}`);

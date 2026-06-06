@@ -8,7 +8,7 @@ async function run() {
   console.log('SMTP_PORT:', port, '| secure:', resolveSecure(port));
   console.log('SMTP_FROM:', resolveFromAddress());
 
-  const transport = getTransporter();
+  const transport = await getTransporter();
   if (!transport) {
     console.error('SMTP not configured');
     process.exit(1);
