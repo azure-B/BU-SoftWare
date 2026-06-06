@@ -24,8 +24,29 @@ const { startTourMaintenanceJob } = require('./jobs/tourMaintenanceJob');
 const app = express();
 
 // ── CORS ───────────────────────────────────────────
-// CORS_ORIGIN=* 이면 전체 허용, 아니면 .env 값만 허용
-const corsOrigin = process.env.CORS_ORIGIN || '*';
+// CORS_ORIGIN=* → 전체 허용
+// CORS_ORIGIN=https://bustudent.netlify.app,http://localhost:3000 → 복수 origin (쉼표 구분)
+function resolveCorsOrigin() {
+  const raw = process.env.CORS_ORIGIN || '*';
+  if (raw === '*') return '*';
+
+  const allowed = raw
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  if (allowed.length <= 1) return allowed[0] || '*';
+
+  return (origin, callback) => {
+    if (!origin || allowed.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+    callback(null, false);
+  };
+}
+
+const corsOrigin = resolveCorsOrigin();
 app.use(cors({
   origin: corsOrigin,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
