@@ -68,8 +68,13 @@
   transform: translateX(14px);
 }
 
+.auth-panel--find:not(.auth-panel--visible) {
+  transform: translateX(14px);
+}
+
 .auth-panel .login-card,
-.auth-panel .registration-card {
+.auth-panel .registration-card,
+.auth-panel .find-card {
   transition:
     opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
@@ -125,6 +130,7 @@
   .auth-panel,
   .auth-panel .login-card,
   .auth-panel .registration-card,
+  .auth-panel .find-card,
   .auth-panel-aside {
     transition-duration: 0.01ms;
   }

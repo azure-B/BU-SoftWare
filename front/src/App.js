@@ -213,6 +213,7 @@ function App() {
             setFocusLoginStudentId(false);
             navigateTo('login');
           }}
+          onGoToFind={() => navigateTo('find')}
           onRegiComplete={() => {
             setFocusLoginStudentId(true);
             navigateTo('login');

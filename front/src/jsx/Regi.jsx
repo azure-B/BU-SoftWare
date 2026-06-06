@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { API_BASE_URL, LOGO_LOGIN } from '../components/constants';
-import { DEPARTMENT_OPTIONS } from '../components/regi/regiData';
+import { fetchRegisterDepartments } from '../components/community/communityData';
+import DepartmentCombobox from '../components/regi/DepartmentCombobox';
 
 const PASSWORD_HINT = '8자 이상, 특수문자 1개 이상 포함';
 const SPECIAL_CHAR = /[!@#$%^&*(),.?":{}|[\]\\/_+\-=~`';<>]/;
@@ -106,7 +107,10 @@ function FieldFeedback({ feedback }) {
 function Regi({ onGoToLogin, onRegiComplete }) {
   const [name, setName] = useState('');
   const [studentId, setStudentId] = useState('');
-  const [department, setDepartment] = useState('');
+  const [departmentId, setDepartmentId] = useState('');
+  const [departmentOptions, setDepartmentOptions] = useState([]);
+  const [departmentsLoading, setDepartmentsLoading] = useState(true);
+  const [departmentsError, setDepartmentsError] = useState('');
   const [emailLocal, setEmailLocal] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [password, setPassword] = useState('');
@@ -132,7 +136,7 @@ function Regi({ onGoToLogin, onRegiComplete }) {
   const autoFocusedBasicRef = useRef({ studentId: false, department: false });
   const autoFocusedConfirmPasswordRef = useRef(false);
 
-  const basicComplete = Boolean(name.trim() && studentId.trim() && department);
+  const basicComplete = Boolean(name.trim() && studentId.trim() && departmentId);
   const showEmail = basicComplete;
   const showVerification = codeSent;
   const showPasswordStep = emailVerified;
@@ -157,7 +161,7 @@ function Regi({ onGoToLogin, onRegiComplete }) {
 
   const handleStudentIdBlur = () => {
     checkDuplicate('studentId');
-    if (!studentId.trim() || department || autoFocusedBasicRef.current.department) return;
+    if (!studentId.trim() || departmentId || autoFocusedBasicRef.current.department) return;
     autoFocusedBasicRef.current.department = true;
     focusRegiField(departmentRef.current);
   };
@@ -169,6 +173,30 @@ function Regi({ onGoToLogin, onRegiComplete }) {
     autoFocusedConfirmPasswordRef.current = true;
     return focusRegiField(confirmPasswordRef.current, { delay: 200, scrollDelay: 100 });
   }, [passwordValid, showPasswordStep]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      setDepartmentsLoading(true);
+      setDepartmentsError('');
+      try {
+        const data = await fetchRegisterDepartments();
+        if (!cancelled) setDepartmentOptions(data);
+      } catch (err) {
+        if (!cancelled) {
+          setDepartmentOptions([]);
+          setDepartmentsError(err.message || '학과 목록을 불러오지 못했습니다.');
+        }
+      } finally {
+        if (!cancelled) setDepartmentsLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const resetEmailFlow = () => {
     setCodeSent(false);
@@ -193,6 +221,7 @@ function Regi({ onGoToLogin, onRegiComplete }) {
 
   const resolveSubmitFeedbackField = (message) => {
     if (!message) return 'submit';
+    if (message.includes('학과')) return 'department';
     if (message.includes('학번')) return 'studentId';
     if (message.includes('이메일') || message.includes('인증')) return 'email';
     if (message.includes('비밀번호')) return 'password';
@@ -306,7 +335,7 @@ function Regi({ onGoToLogin, onRegiComplete }) {
           verificationToken,
           name: name.trim(),
           studentId: studentId.trim(),
-          department,
+          departmentId: Number(departmentId),
           emailLocal: emailLocal.trim().toLowerCase(),
           password: password.trim(),
           confirmPassword: confirmPassword.trim(),
@@ -404,22 +433,22 @@ function Regi({ onGoToLogin, onRegiComplete }) {
                 <label htmlFor="department" className="font-label-md text-label-md uppercase tracking-wider text-primary mb-1">
                   학과 (DEPARTMENT)
                 </label>
-                <select
+                <DepartmentCombobox
                   ref={departmentRef}
                   id="department"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  className="form-input-border font-body-md text-body-md w-full appearance-none"
-                >
-                  <option disabled value="">
-                    학과를 선택하세요
-                  </option>
-                  {DEPARTMENT_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                  className="regi-dept-picker"
+                  value={departmentId}
+                  onChange={(nextId) => {
+                    setDepartmentId(nextId);
+                    clearFeedback('department');
+                  }}
+                  options={departmentOptions}
+                  loading={departmentsLoading}
+                  error={departmentsError}
+                  placeholder="학과 검색·선택"
+                  emptyMessage="검색 결과가 없습니다"
+                />
+                <FieldFeedback feedback={feedback.department} />
               </div>
             </div>
 
@@ -430,7 +459,7 @@ function Regi({ onGoToLogin, onRegiComplete }) {
                   이메일 (EMAIL)
                 </label>
                 <div className="relative flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                  <div className="flex-grow flex items-center border-b border-primary min-w-[140px]">
+                  <div className="regi-email-row">
                     <input
                       ref={emailRef}
                       id="email"

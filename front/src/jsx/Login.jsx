@@ -1,9 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { API_BASE_URL, LOGO_LOGIN } from '../components/constants';
+import { openFreshmanGuideInNewWindow } from '../utils/freshmanGuideNav';
 
 const LOGIN_PANEL_TRANSITION_MS = 400;
 
-function Login({ onLogin, onGoToRegister, focusStudentId, onFocusStudentIdHandled }) {
+function Login({
+  onLogin,
+  onGoToRegister,
+  onGoToFind,
+  focusStudentId,
+  onFocusStudentIdHandled,
+}) {
   const studentIdInputRef = useRef(null);
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
@@ -134,19 +141,21 @@ function Login({ onLogin, onGoToRegister, focusStudentId, onFocusStudentIdHandle
 
         <div className="auth-panel-card__bottom mt-auto">
           <div className="mt-10 flex items-center justify-center space-x-6">
-            <a
-              className="font-label-md text-label-md text-outline hover:text-primary transition-colors border-b border-transparent hover:border-decoration-gold pb-1"
-              href="#find-account"
+            <button
+              type="button"
+              className="font-label-md text-label-md text-outline hover:text-primary transition-colors border-b border-transparent hover:border-decoration-gold pb-1 bg-transparent border-x-0 border-t-0 p-0 cursor-pointer"
+              onClick={onGoToFind}
             >
               아이디/비밀번호 찾기
-            </a>
+            </button>
             <span className="w-px h-3 bg-outline-variant" />
-            <a
-              className="font-label-md text-label-md text-outline hover:text-primary transition-colors border-b border-transparent hover:border-decoration-gold pb-1"
-              href="#freshman-guide"
+            <button
+              type="button"
+              className="font-label-md text-label-md text-outline hover:text-primary transition-colors border-b border-transparent hover:border-decoration-gold pb-1 bg-transparent border-x-0 border-t-0 p-0 cursor-pointer"
+              onClick={openFreshmanGuideInNewWindow}
             >
               신입생 가이드
-            </a>
+            </button>
           </div>
 
           {onGoToRegister && (

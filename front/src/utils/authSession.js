@@ -1,4 +1,5 @@
-import { isAppView } from '../components/layout/appNavConfig';
+import { isAppView, isAuthView } from '../components/layout/appNavConfig';
+import { FRESHMAN_GUIDE_VIEW, isFreshmanGuideStandaloneUrl } from './freshmanGuideNav';
 
 const STORAGE_KEY = 'bu_hub_auth';
 
@@ -23,7 +24,10 @@ export function getEmptySession() {
 }
 
 export function resolveRestoredView(activeView, hasSession) {
-  if (!hasSession) return 'login';
+  if (!hasSession) {
+    if (isAuthView(activeView)) return activeView;
+    return 'login';
+  }
   if (!isAppView(activeView)) return 'dashboard';
   if (VIEWS_NEEDING_POST.has(activeView)) return 'square';
   return activeView;
@@ -79,11 +83,18 @@ let cachedInitialAppState;
 
 export function getInitialAppState() {
   if (!cachedInitialAppState) {
-    const stored = loadStoredAuth();
-    cachedInitialAppState = {
-      activeView: stored?.activeView ?? 'login',
-      session: stored?.session ?? getEmptySession(),
-    };
+    if (isFreshmanGuideStandaloneUrl()) {
+      cachedInitialAppState = {
+        activeView: FRESHMAN_GUIDE_VIEW,
+        session: getEmptySession(),
+      };
+    } else {
+      const stored = loadStoredAuth();
+      cachedInitialAppState = {
+        activeView: stored?.activeView ?? 'login',
+        session: stored?.session ?? getEmptySession(),
+      };
+    }
   }
   return cachedInitialAppState;
 }

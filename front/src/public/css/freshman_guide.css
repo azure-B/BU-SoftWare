@@ -1,12 +1,4 @@
 /* --- freshman_guide.css (from publish/freshman_guide.html) --- */
-.freshman-guide-header {
-  border-bottom: 1px solid #312004;
-}
-
-.freshman-guide-nav-link--active {
-  border-bottom: 2px solid #312004;
-}
-
 .freshman-guide-step-card,
 .freshman-guide-tip-card,
 .freshman-guide-support-card {
@@ -15,22 +7,6 @@
 
 .freshman-guide-tip-card:hover {
   background-color: #f1f4f6;
-}
-
-.freshman-guide-quick-links {
-  border: 1px solid #0d337f;
-}
-
-.freshman-guide-quick-link {
-  border-bottom: 1px solid #0d337f;
-}
-
-.freshman-guide-quick-link:hover {
-  color: #c5a880;
-}
-
-.freshman-guide-quick-links-panel {
-  border: 1px solid #0d337f;
 }
 
 .freshman-guide-support-panel {

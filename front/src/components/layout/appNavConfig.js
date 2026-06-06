@@ -12,7 +12,7 @@ export const APP_VIEWS = [
   'mypage',
 ];
 
-export const AUTH_VIEWS = ['login', 'regi'];
+export const AUTH_VIEWS = ['login', 'regi', 'find', 'freshman_guide'];
 
 export function isAppView(view) {
   return APP_VIEWS.includes(view);

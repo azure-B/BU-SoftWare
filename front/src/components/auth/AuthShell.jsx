@@ -2,14 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import AppFooter from '../layout/AppFooter';
 import Login from '../../jsx/Login';
 import Regi from '../../jsx/Regi';
+import Find from '../../jsx/Find';
+import FreshmanGuide from '../../jsx/FreshmanGuide';
 import '../../public/css/login.css';
 import '../../public/css/regi.css';
+import '../../public/css/find.css';
+import '../../public/css/freshman_guide.css';
 
 function AuthShell({
   view,
   onLogin,
   onGoToRegister,
   onGoToLogin,
+  onGoToFind,
   onRegiComplete,
   focusLoginStudentId,
   onFocusLoginStudentIdHandled,
@@ -23,6 +28,8 @@ function AuthShell({
   }, []);
 
   useEffect(() => {
+    if (view === 'freshman_guide') return undefined;
+
     const root = panelsRef.current;
     if (!root) return undefined;
 
@@ -39,12 +46,11 @@ function AuthShell({
     };
 
     const measure = () => {
-      const loginCard = root.querySelector('.auth-panel--login .auth-panel-card');
-      const regiCard = root.querySelector('.auth-panel--regi .auth-panel-card');
-      const nextHeight = Math.max(
-        measureNaturalHeight(loginCard),
-        measureNaturalHeight(regiCard),
-      );
+      const visibleCard = root.querySelector('.auth-panel--visible .auth-panel-card');
+      const cards = visibleCard
+        ? [visibleCard]
+        : root.querySelectorAll('.auth-panel-card');
+      const nextHeight = Math.max(0, ...Array.from(cards, measureNaturalHeight));
       if (nextHeight > 0) {
         setPanelsMinHeight((prev) => (prev === nextHeight ? prev : nextHeight));
       }
@@ -52,12 +58,22 @@ function AuthShell({
 
     measure();
 
+    const cards = root.querySelectorAll('.auth-panel-card');
     const observer = new ResizeObserver(measure);
     observer.observe(root);
-    root.querySelectorAll('.auth-panel-card').forEach((el) => observer.observe(el));
+    cards.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
+  }, [view]);
+
+  if (view === 'freshman_guide') {
+    return (
+      <div className="freshman-guide-page auth-flow min-h-screen flex flex-col overflow-x-hidden">
+        <FreshmanGuide />
+        <AppFooter variant="login" />
+      </div>
+    );
+  }
 
   return (
     <div className="auth-flow login-page min-h-screen flex flex-col overflow-x-hidden">
@@ -79,6 +95,7 @@ function AuthShell({
             <Login
               onLogin={onLogin}
               onGoToRegister={onGoToRegister}
+              onGoToFind={onGoToFind}
               focusStudentId={focusLoginStudentId}
               onFocusStudentIdHandled={onFocusLoginStudentIdHandled}
             />
@@ -88,6 +105,12 @@ function AuthShell({
             aria-hidden={view !== 'regi'}
           >
             <Regi onGoToLogin={onGoToLogin} onRegiComplete={onRegiComplete} />
+          </div>
+          <div
+            className={`auth-panel auth-panel--find ${view === 'find' ? 'auth-panel--visible' : ''}`}
+            aria-hidden={view !== 'find'}
+          >
+            <Find onGoToLogin={onGoToLogin} onGoToRegister={onGoToRegister} />
           </div>
         </div>
       </main>

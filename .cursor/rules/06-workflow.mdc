@@ -5,6 +5,8 @@ alwaysApply: true
 
 # Workflow
 
+> **⛔ PC FROZEN (mobile phase)** — PC base CSS·`main`/`div` 레이아웃·`md:*` **수정 금지**. 모바일은 `mobile/*.css`만. → [09-pc-frozen-mobile-only.mdc](mdc:.cursor/rules/09-pc-frozen-mobile-only.mdc)
+
 - Smallest correct diff; match existing style in the touched folder
 - **Implement only what the user asked for in the current message.** Do not add, remove, or refactor unrelated behavior (mobile CSS/JSX, pagination, animation, docs, tests, rule files) unless explicitly requested.
 - If a fix suggests a related improvement, mention it briefly and wait for approval — do not implement proactively.

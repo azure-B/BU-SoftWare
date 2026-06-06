@@ -46,18 +46,7 @@ const CAMPUS_TIPS = [
   },
 ];
 
-const QUICK_LINKS = [
-  '학사 일정',
-  '캠퍼스 지도',
-  'IT 헬프데스크',
-  '학자금 지원',
-];
-
-function FreshmanGuide({ onGoToLogin, onGoToRegister }) {
-  const handleQuickLink = () => {
-    window.alert('해당 링크는 준비 중입니다.');
-  };
-
+function FreshmanGuide() {
   const handleBookAppointment = () => {
     window.alert('상담 예약 기능은 준비 중입니다.');
   };
@@ -70,27 +59,9 @@ function FreshmanGuide({ onGoToLogin, onGoToRegister }) {
     <>
       <header className="freshman-guide-header bg-surface text-primary font-body-lg text-body-lg w-full sticky top-0 z-50 transition-colors duration-300">
         <div className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-7xl mx-auto">
-          <div className="flex items-center gap-4 md:gap-8 min-w-0">
-            <span className="freshman-guide-nav-link--active font-headline-md text-headline-md text-secondary font-bold tracking-tight shrink-0">
-              신입생 가이드
-            </span>
-            <nav className="hidden md:flex gap-6 items-center">
-              <button
-                type="button"
-                className="text-on-surface-variant hover:text-secondary transition-colors duration-200 active:opacity-70"
-                onClick={onGoToRegister}
-              >
-                회원가입
-              </button>
-              <button
-                type="button"
-                className="text-on-surface-variant hover:text-secondary transition-colors duration-200 active:opacity-70"
-                onClick={onGoToLogin}
-              >
-                로그인
-              </button>
-            </nav>
-          </div>
+          <span className="freshman-guide-nav-link--active font-headline-md text-headline-md text-secondary font-bold tracking-tight shrink-0">
+            신입생 가이드
+          </span>
           <button
             type="button"
             className="hidden md:block bg-primary-container text-surface-container-lowest font-label-md text-label-md px-6 py-3 hover:bg-secondary transition-colors duration-200 uppercase tracking-widest rounded-none shrink-0"
@@ -173,26 +144,6 @@ function FreshmanGuide({ onGoToLogin, onGoToRegister }) {
         </div>
 
         <aside className="w-full md:w-1/3 flex flex-col gap-12">
-          <div className="freshman-guide-quick-links-panel bg-primary text-on-primary p-8">
-            <h3 className="font-headline-md text-headline-md mb-6 border-b border-decoration-gold pb-2">
-              바로가기
-            </h3>
-            <ul className="space-y-4 font-body-md text-body-md">
-              {QUICK_LINKS.map((label) => (
-                <li key={label} className="freshman-guide-quick-link pb-2 transition-colors">
-                  <button
-                    type="button"
-                    className="flex justify-between items-center w-full text-left"
-                    onClick={handleQuickLink}
-                  >
-                    {label}
-                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           <div
             id="freshman-guide-support"
             className="freshman-guide-support-panel freshman-guide-support-card p-8 bg-surface-container-lowest"
@@ -240,15 +191,6 @@ function FreshmanGuide({ onGoToLogin, onGoToRegister }) {
               상담 예약
             </button>
           </div>
-
-          <button
-            type="button"
-            className="md:hidden font-label-md text-label-md text-primary-container hover:text-secondary flex items-center justify-center transition-colors"
-            onClick={onGoToLogin}
-          >
-            <span className="material-symbols-outlined text-sm mr-1">arrow_back</span>
-            로그인으로 돌아가기
-          </button>
         </aside>
       </main>
     </>

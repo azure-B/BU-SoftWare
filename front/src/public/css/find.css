@@ -1,20 +1,7 @@
-/* --- find.css (from publish/find.html) --- */
+/* --- find.css (account recovery — aligned with login.css) --- */
 .find-card {
   border: 1px solid #c5a880;
   background: #ffffff;
-  max-width: 650px;
-}
-
-.find-editorial-line {
-  height: 1px;
-  background-color: #c5a880;
-  width: 100%;
-}
-
-.find-input:focus {
-  outline: none;
-  border-bottom-width: 2px !important;
-  border-color: #1d5abc !important;
 }
 
 .find-tabs {
@@ -37,20 +24,22 @@
 }
 
 .find-tab-btn {
-  color: #444651;
+  color: #747682;
   transition: color 0.24s ease;
 }
 
 .find-tab-btn--active {
-  color: #0d337f;
+  color: #001e59;
+  font-weight: 600;
 }
 
 .find-tab-btn:hover {
-  color: #0d337f;
+  color: #001e59;
 }
 
 .find-tab-panels {
   display: grid;
+  position: relative;
 }
 
 .find-tab-panel {
@@ -63,28 +52,34 @@
     transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.find-tab-panel:not(.find-tab-panel--visible) {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+}
+
 .find-tab-panel--visible {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+  visibility: visible;
 }
 
 .find-field-msg {
   margin-top: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   line-height: 1.4;
+  text-align: left;
 }
 
 .find-field-msg--error {
-  color: #ba1a1a;
+  color: #b3261e;
 }
 
 .find-field-msg--info {
-  color: #444651;
-}
-
-.find-step-reveal {
-  animation: findStepReveal 0.34s cubic-bezier(0, 0, 0.2, 1) both;
+  color: #1d5abc;
 }
 
 .find-result-box {
@@ -92,17 +87,7 @@
   background: #f7fafc;
   padding: 1rem 1.25rem;
   text-align: center;
-}
-
-@keyframes findStepReveal {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  margin-top: 1rem;
 }
 
 .find-quote-aside {
@@ -110,7 +95,16 @@
   width: 275px;
   right: calc(100% + 2rem);
   left: auto;
+  transform: translateY(-50%);
+  will-change: top;
+  transition:
+    top 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1);
   animation: findQuoteFadeIn 0.7s cubic-bezier(0, 0, 0.2, 1) 0.15s both;
+}
+
+.find-quote-aside.find-quote-aside--positioned {
+  animation: none;
 }
 
 .find-quote-aside p {
@@ -145,10 +139,15 @@
   }
 }
 
+@media (max-width: 768px) {
+  .find-tab-btn {
+    font-size: 0.8125rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .find-tabs__indicator,
   .find-tab-panel,
-  .find-step-reveal,
   .find-quote-aside,
   .auth-panel--find.auth-panel--visible .find-card {
     animation: none;

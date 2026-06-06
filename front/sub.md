@@ -1,6 +1,11 @@
 # front/ — React (this project only)
 
-Parent context: [../AGENTS.md](../AGENTS.md). Rules: `.cursor/rules/01-react-frontend.mdc`, `04-css-architecture.mdc`, `08-mobile-css-pc-safety.mdc`.
+Parent context: [../AGENTS.md](../AGENTS.md). Rules: `.cursor/rules/01-react-frontend.mdc`, `04-css-architecture.mdc`, **`09-pc-frozen-mobile-only.mdc`** (always), `08-mobile-css-pc-safety.mdc`.
+
+> **⛔ PC BASELINE FROZEN (mobile phase)**  
+> PC **완성**. 모바일 작업 중 **절대 수정 금지**: PC base CSS (`public/css/*.css`, `mobile/` 제외), PC **`main`/`div`/레이아웃 JSX**, `md:*`·grid/flex.  
+> 모바일만: `public/css/mobile/*.css`, `mobile-common.css`, `@media (max-width: 767px)`.  
+> 마무리 전: `git diff --name-only HEAD -- front/src/public/css` → `mobile/` 밖 파일 없어야 함.
 
 > **Maintenance:** This file is manual. It does not auto-update when you edit code. Ask the agent to refresh it after folder or convention changes, or update it yourself.
 
@@ -102,6 +107,7 @@ Skill: `@html-publish-to-react` · Rule: `.cursor/rules/07-publish-to-jsx.mdc`
 
 ## Do not
 
+- **⛔ PC FROZEN:** While doing **mobile-only** work, do not edit PC base CSS or PC **`main`/`div`/layout JSX** (see `09-pc-frozen-mobile-only.mdc`).
 - Put app CSS in CRA `public/` (that folder is static assets only)
 - Duplicate theme colors outside `tailwind.config.js` unless necessary
 - Commit API secrets in frontend code
