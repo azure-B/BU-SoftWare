@@ -1,6 +1,20 @@
+const dns = require('dns');
 const nodemailer = require('nodemailer');
 
 let transporter = null;
+
+/** Render 등 IPv6 미지원 환경에서 smtp.gmail.com → ENETUNREACH 방지 */
+function ipv4Lookup(hostname, options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  dns.lookup(hostname, { ...options, family: 4 }, callback);
+}
+
+function normalizeSmtpPass(pass) {
+  return String(pass || '').replace(/\s+/g, '');
+}
 
 function isMailConfigured() {
   return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
@@ -43,9 +57,10 @@ function getTransporter() {
     connectionTimeout: 15_000,
     greetingTimeout: 15_000,
     socketTimeout: 20_000,
+    lookup: ipv4Lookup,
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      pass: normalizeSmtpPass(process.env.SMTP_PASS),
     },
     ...(port === 587 && {
       requireTLS: true,
@@ -105,6 +120,11 @@ async function sendVerificationEmail(to, code) {
       message =
         'SMTP 서버 연결 시간 초과입니다. SMTP_HOST·PORT·SMTP_SECURE 값과 '
         + 'Render 환경 변수 설정을 확인해 주세요.';
+    }
+    if (smtpErr.includes('ENETUNREACH')) {
+      message =
+        'SMTP 서버에 연결할 수 없습니다(IPv6 네트워크 오류). '
+        + '서버를 재배포한 뒤 다시 시도해 주세요.';
     }
 
     const wrapped = new Error(message);
