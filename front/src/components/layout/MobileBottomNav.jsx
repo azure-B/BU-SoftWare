@@ -1,7 +1,12 @@
+import { createPortal } from 'react-dom';
 import { MOBILE_BOTTOM_NAV } from '../constants';
 
 function MobileBottomNav({ activeNav, onNavSelect }) {
-  return (
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  return createPortal(
     <nav className="mobile-bottom-nav" aria-label="모바일 주 메뉴">
       {MOBILE_BOTTOM_NAV.map((item) => {
         const isActive = activeNav === item.id;
@@ -24,7 +29,8 @@ function MobileBottomNav({ activeNav, onNavSelect }) {
           </button>
         );
       })}
-    </nav>
+    </nav>,
+    document.body,
   );
 }
 

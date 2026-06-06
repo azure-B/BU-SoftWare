@@ -59,9 +59,22 @@
   text-overflow: unset;
 }
 
+.post-title-row,
+.post-comment-header {
+  align-items: flex-end;
+}
+
 .post-action-group {
   align-items: flex-end;
   gap: 0.625rem;
+}
+
+.post-action-group .post-action-btn {
+  animation: postActionEnter 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.post-action-group .post-action-btn:nth-child(2) {
+  animation-delay: 45ms;
 }
 
 .post-action-btn {
@@ -80,7 +93,13 @@
   text-transform: uppercase;
   border-radius: 0.125rem;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.24s ease,
+    border-color 0.24s ease,
+    color 0.24s ease,
+    opacity 0.24s ease,
+    transform 0.24s ease,
+    box-shadow 0.24s ease;
 }
 
 .post-action-btn:disabled {
@@ -97,6 +116,7 @@
 .post-action-btn--primary:hover:not(:disabled) {
   background-color: #1455b7;
   border-color: #1455b7;
+  transform: translateY(-1px);
 }
 
 .post-action-btn--danger {
@@ -109,6 +129,68 @@
   background-color: #1d5abc;
   border-color: #1d5abc;
   color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.post-comment-body {
+  overflow: hidden;
+}
+
+.post-comment-edit {
+  margin-top: 0;
+  background-color: #ebeef0;
+  padding: 1rem;
+  border: 1px solid var(--outline-variant, #c4c6d3);
+  border-radius: 0.25rem;
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.post-comment-edit:focus-within {
+  border-color: #1d5abc;
+  box-shadow: 0 0 0 1px rgba(29, 90, 188, 0.12);
+}
+
+.post-interactive-surface {
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.post-interactive-surface:focus-within {
+  border-color: #1d5abc;
+  box-shadow: 0 0 0 1px rgba(29, 90, 188, 0.12);
+}
+
+.post-interactive-enter {
+  animation: postInteractiveEnter 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes postInteractiveEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes postActionEnter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .post-comment-edit-textarea {
@@ -119,16 +201,13 @@
   padding: 0;
   border: 0;
   field-sizing: content;
+  transition: color 0.24s ease, opacity 0.24s ease;
 }
 
 @supports not (field-sizing: content) {
   .post-comment-edit-textarea {
     overflow: hidden;
   }
-}
-
-.post-comment-edit {
-  margin-top: -0.125rem;
 }
 
 .post-comment-form {
@@ -142,16 +221,28 @@
   line-height: 1.6;
   border: 0;
   border-bottom: 1px solid var(--brand-navy);
-  transition: border-color 0.2s, border-width 0.2s;
-}
-
-.post-comment-action:hover {
-  text-decoration: underline;
+  transition:
+    border-color 0.24s ease,
+    border-width 0.24s ease,
+    color 0.24s ease,
+    opacity 0.24s ease;
 }
 
 .post-comment-textarea:focus {
   border-bottom-width: 2px;
   border-color: #1d5abc;
+}
+
+.post-submit-btn {
+  transition:
+    background-color 0.24s ease,
+    color 0.24s ease,
+    transform 0.24s ease,
+    opacity 0.24s ease;
+}
+
+.post-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
 }
 
 .post-list-btn:hover {
@@ -162,6 +253,22 @@
 
 .post-submit-btn:hover {
   background-color: #1d5abc;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-interactive-enter,
+  .post-action-group .post-action-btn {
+    animation: none;
+  }
+
+  .post-action-btn,
+  .post-comment-textarea,
+  .post-comment-edit-textarea,
+  .post-submit-btn,
+  .post-comment-edit,
+  .post-interactive-surface {
+    transition: none;
+  }
 }
 
 .post-body-html strong {

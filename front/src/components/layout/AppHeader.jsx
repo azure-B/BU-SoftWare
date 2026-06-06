@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { LOGO_APP, NAV_ITEMS, SITE_TITLE } from '../constants';
 
 function NavLink({ item, activeNav, onNavSelect }) {
@@ -34,10 +35,31 @@ function AppHeader({
   onLogout,
   onNavSelect,
   onProfileClick,
+  onMenuClick,
 }) {
-  return (
-    <header className="app-header bg-surface-container-lowest/90 backdrop-blur-sm text-primary flex justify-between items-center px-margin-desktop w-full border-b border-surface-variant header-shared">
-      <div className="flex items-center gap-4">
+  const renderHeaderContent = () => (
+    <>
+      <button
+        type="button"
+        className="app-header__menu-btn md:hidden"
+        aria-label="메뉴 열기"
+        onClick={onMenuClick}
+      >
+        <span className="material-symbols-outlined" aria-hidden="true">
+          menu
+        </span>
+      </button>
+
+      <button
+        type="button"
+        className="app-header__brand--mobile app-header__brand-logo md:hidden"
+        aria-label={SITE_TITLE}
+        onClick={() => onNavSelect?.('dashboard')}
+      >
+        BAEKSEOK
+      </button>
+
+      <div className="app-header__brand--desktop flex items-center gap-4">
         <img alt="Baekseok University Logo" className="h-10 w-10 rounded-full shadow-sm" src={LOGO_APP} />
         <div className="font-display-lg text-2xl text-primary">{SITE_TITLE}</div>
       </div>
@@ -48,12 +70,12 @@ function AppHeader({
         ))}
       </nav>
 
-      <div className="flex items-center gap-4">
+      <div className="app-header__actions flex items-center gap-4">
         {onLogout && (
           <button
             type="button"
             onClick={onLogout}
-            className="font-label-md text-sm text-on-surface-variant hover:text-secondary uppercase tracking-widest bg-transparent border-0 cursor-pointer"
+            className="app-header__logout font-label-md text-sm text-on-surface-variant hover:text-secondary uppercase tracking-widest bg-transparent border-0 cursor-pointer"
           >
             로그아웃
           </button>
@@ -63,7 +85,7 @@ function AppHeader({
           onClick={onProfileClick}
           aria-label="마이페이지"
           className={[
-            'material-symbols-outlined hover:text-secondary transition-colors cursor-pointer text-2xl bg-transparent border-0 p-0',
+            'app-header__profile material-symbols-outlined hover:text-secondary transition-colors cursor-pointer text-2xl bg-transparent border-0 p-0',
             profileActive
               ? 'text-secondary border-b-2 border-tertiary-container pb-1'
               : '',
@@ -72,8 +94,31 @@ function AppHeader({
           account_circle
         </button>
       </div>
+    </>
+  );
+
+  const desktopHeader = (
+    <header className="app-header app-header--desktop bg-surface-container-lowest/90 backdrop-blur-sm text-primary flex justify-between items-center px-margin-desktop w-full border-b border-surface-variant header-shared">
+      {renderHeaderContent()}
     </header>
   );
+
+  const mobileHeader = (
+    <header className="app-header app-header--mobile bg-surface-container-lowest/90 backdrop-blur-sm text-primary flex justify-between items-center px-margin-desktop w-full border-b border-surface-variant header-shared">
+      {renderHeaderContent()}
+    </header>
+  );
+
+  if (typeof document !== 'undefined') {
+    return (
+      <>
+        {desktopHeader}
+        {createPortal(mobileHeader, document.body)}
+      </>
+    );
+  }
+
+  return desktopHeader;
 }
 
 export default AppHeader;

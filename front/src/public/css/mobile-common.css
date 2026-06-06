@@ -5,6 +5,10 @@
   --mobile-header-h: 4rem;
   --mobile-bottom-nav-h: 4rem;
   --mobile-page-pad-x: 1.25rem;
+  --mobile-vv-top: 0px;
+  --mobile-vv-left: 0px;
+  --mobile-vv-width: 100vw;
+  --mobile-vv-height: 100dvh;
   --mobile-safe-top: env(safe-area-inset-top, 0px);
   --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
   --mobile-safe-left: env(safe-area-inset-left, 0px);
@@ -16,11 +20,78 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    font-size: 80%;
+    /* Fluid rem: 320px ≈ 12.5px, 767px ≈ 15px */
+    font-size: clamp(12.5px, calc(12.5px + (100vw - 320px) * 0.005592), 15px);
   }
 
   body {
     min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  #root {
+    min-height: 100dvh;
+    overflow: visible !important;
+  }
+
+  /* Document scroll only — avoid nested flex scroll traps (Community 등) */
+  .app-layout {
+    padding-bottom: calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom));
+    min-height: 100dvh;
+    overflow: visible !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .app-main,
+  .panel-main-fade {
+    flex: 1 0 auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .community-page,
+  .community-layout,
+  .community-square-content,
+  .community-main {
+    overflow: visible !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .app-header {
+    position: fixed !important;
+    top: var(--mobile-vv-top) !important;
+    left: var(--mobile-vv-left) !important;
+    right: auto !important;
+    z-index: 1000;
+    display: grid !important;
+    flex-shrink: 0;
+    width: var(--mobile-vv-width) !important;
+    min-width: var(--mobile-vv-width) !important;
+    max-width: var(--mobile-vv-width) !important;
+    height: var(--mobile-header-h);
+    min-height: var(--mobile-header-h);
+    max-height: none;
+    padding-top: var(--mobile-safe-top);
+    padding-left: calc(var(--mobile-page-pad-x) + var(--mobile-safe-left));
+    padding-right: calc(var(--mobile-page-pad-x) + var(--mobile-safe-right));
+    padding-bottom: 0;
+    background: #ffffff;
+    border-bottom: 1px solid var(--brand-navy, #0d337f);
+    backdrop-filter: none;
+    grid-template-columns: var(--mobile-touch-min) 1fr var(--mobile-touch-min);
+    align-items: center;
+    gap: 0.5rem;
+    transform: none;
+    will-change: auto;
+  }
+
+  .app-header--desktop {
+    display: none !important;
   }
 
   /* Horizontal scroll tabs (community, dashboard, etc.) */
@@ -56,32 +127,6 @@
     touch-action: manipulation;
   }
 
-  /* App shell: fixed header + bottom nav clearance */
-  .app-layout {
-    padding-bottom: calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom));
-  }
-
-  .app-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    height: var(--mobile-header-h);
-    min-height: var(--mobile-header-h);
-    padding-top: var(--mobile-safe-top);
-    padding-left: calc(var(--mobile-page-pad-x) + var(--mobile-safe-left));
-    padding-right: calc(var(--mobile-page-pad-x) + var(--mobile-safe-right));
-    padding-bottom: 0;
-    background: #ffffff;
-    border-bottom: 1px solid var(--brand-navy, #0d337f);
-    backdrop-filter: none;
-    display: grid;
-    grid-template-columns: var(--mobile-touch-min) 1fr var(--mobile-touch-min);
-    align-items: center;
-    gap: 0.5rem;
-  }
-
   .app-header > nav.hidden {
     display: none !important;
   }
@@ -109,7 +154,12 @@
   }
 
   .app-header.header-shared {
+    position: fixed !important;
+    top: var(--mobile-vv-top) !important;
+    left: var(--mobile-vv-left) !important;
+    right: auto !important;
     height: calc(var(--mobile-header-h) + var(--mobile-safe-top));
+    min-height: calc(var(--mobile-header-h) + var(--mobile-safe-top));
   }
 
   .app-header__brand--mobile {
@@ -172,9 +222,49 @@
     padding-top: calc(var(--mobile-header-h) + var(--mobile-safe-top));
   }
 
-  /* Compact footer on mobile */
+  /* Mobile footer — scrolls with content (not fixed) */
   .app-footer--app.footer-shared {
-    display: none;
+    display: flex !important;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2.5rem !important;
+    padding: 2rem var(--mobile-page-pad-x) 1.5rem;
+    text-align: center;
+    border-top: 1px solid rgba(186, 157, 118, 0.45);
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .app-footer--app.footer-shared .container-shared {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .app-footer--app.footer-shared .font-display-lg {
+    font-size: 1.125rem;
+    line-height: 1.3;
+    margin-bottom: 0 !important;
+  }
+
+  .app-footer--app.footer-shared nav {
+    justify-content: center;
+    margin-bottom: 0 !important;
+    gap: 1.5rem;
+  }
+
+  .app-footer--app.footer-shared nav a {
+    font-size: 0.8125rem;
+  }
+
+  .app-footer--app.footer-shared .font-label-md {
+    font-size: 0.75rem;
+    line-height: 1.45;
+    opacity: 0.9;
   }
 
   /* Floating actions: above bottom nav */
@@ -183,14 +273,27 @@
     bottom: calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom) + 0.75rem);
   }
 
-  /* Bottom navigation — 글자 크기 html 80% 영향 롤백 */
+  /* Bottom navigation — always visible (portaled to body) */
   .mobile-bottom-nav {
-    display: flex;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 100;
+    display: flex !important;
+    position: fixed !important;
+    top: calc(
+      var(--mobile-vv-top) + var(--mobile-vv-height) - var(--mobile-bottom-nav-h) -
+        var(--mobile-safe-bottom)
+    ) !important;
+    left: var(--mobile-vv-left) !important;
+    right: auto !important;
+    bottom: auto !important;
+    z-index: 1000;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: var(--mobile-vv-width) !important;
+    min-width: var(--mobile-vv-width) !important;
+    max-width: var(--mobile-vv-width) !important;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     height: calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom));
     padding-bottom: var(--mobile-safe-bottom);
     padding-left: var(--mobile-safe-left);
@@ -248,7 +351,7 @@
   .mobile-nav-drawer {
     position: fixed;
     inset: 0;
-    z-index: 200;
+    z-index: 1200;
     pointer-events: none;
     visibility: hidden;
   }
@@ -362,15 +465,13 @@
     cursor: pointer;
   }
 
-  /* Sticky horizontal category bar (sidebars → tabs) */
+  /* Horizontal category bar (sidebars → tabs) */
   .mobile-category-bar {
-    position: sticky;
-    top: calc(var(--mobile-header-h) + var(--mobile-safe-top));
-    z-index: 40;
+    position: static;
     box-sizing: border-box;
     width: auto;
-    margin: 0 0 1rem;
-    padding: 0.75rem 0.5rem;
+    margin: 1rem 0 1rem;
+    padding: 0 0.5rem 0.75rem;
     background: #f7fafc;
     border-bottom: 1px solid #c4c6d3;
   }
@@ -386,7 +487,8 @@
     -ms-overflow-style: none;
     flex: 1 1 auto;
     min-width: 0;
-    padding-block: 2px;
+    padding-top: 0;
+    padding-bottom: 2px;
     scroll-padding-inline: 0.5rem;
   }
 
@@ -478,9 +580,23 @@
   p.page-main-desc.text-sm {
     font-size: calc(14px * 0.7) !important;
   }
+
+  /* 페이지 헤더 — display-lg / body-lg (margin·max-width 클래스 무관) */
+  h1.font-display-lg.text-display-lg.text-primary,
+  h2.font-display-lg.text-display-lg.text-primary {
+    font-size: calc(64px * 0.6) !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.01em;
+  }
+
+  p.font-body-lg.text-body-lg.text-on-surface-variant {
+    font-size: calc(18px * 0.6) !important;
+    line-height: 1.5 !important;
+  }
 }
 
 @media (min-width: 768px) {
+  .app-header--mobile,
   .app-header__brand--mobile,
   .app-header__menu-btn,
   .mobile-bottom-nav,

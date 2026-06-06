@@ -22,6 +22,7 @@ import {
 } from '../components/tour/tourApi';
 import '../public/css/tour.css';
 import '../public/css/community.css';
+import '../public/css/mobile/tour.css';
 
 const TOUR_TRANSITION_MS = 320;
 
@@ -42,7 +43,7 @@ function Tour({ session = {} }) {
   const [activeTag, setActiveTag] = useState('전체');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
-  const [showAllPins, setShowAllPins] = useState(false);
+  const [showAllPins, setShowAllPins] = useState(true);
   const [posts, setPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(false);
   const [postsError, setPostsError] = useState(null);
@@ -200,7 +201,6 @@ function Tour({ session = {} }) {
 
   const handleSelectPlace = useCallback((place) => {
     setSelectedPlaceId(place.id);
-    setShowAllPins(false);
     setPanelView('list');
   }, []);
 
@@ -288,9 +288,9 @@ function Tour({ session = {} }) {
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-column-gap items-start">
         <div className="md:col-span-8 flex flex-col gap-12">
-          <div className="relative w-full h-[500px] border border-outline-variant bg-surface-container-high rounded-lg overflow-hidden">
+          <div className="tour-map-section relative w-full h-[500px] border border-outline-variant bg-surface-container-high rounded-lg overflow-hidden">
             <TourKakaoMap
-              className="w-full h-full tour-kakao-map"
+              className="w-full h-full"
               places={filteredPlaces}
               selectedPlaceId={selectedPlaceId}
               showAllPins={showAllPins}

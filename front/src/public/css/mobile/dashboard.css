@@ -39,10 +39,18 @@
   }
 
   /* 시설 예약 현황 · 학과 광장: 금색 좌측 border 제거 */
-  .dashboard-page .dashboard-facility-status.gold-divider-l,
-  .dashboard-page .dashboard-square-section.gold-divider-l {
+  .dashboard-square-column.gold-divider-l {
+    border-left: none !important;
+  }
+
+  .dashboard-facility-body .gold-divider-l {
     border-left: none !important;
     padding-left: 0 !important;
+  }
+
+  .dashboard-facility-time-label {
+    white-space: nowrap;
+    line-height: 1.25;
   }
 
   .dashboard-square-post-item {

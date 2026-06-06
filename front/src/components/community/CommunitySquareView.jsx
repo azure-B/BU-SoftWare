@@ -9,7 +9,9 @@ import Post from '../../jsx/Post';
 import QnaBoard from '../../jsx/QnaBoard';
 import QnaPost from '../../jsx/QnaPost';
 import NewQnaPost from '../../jsx/NewQnaPost';
+import MobileCommunityNav from './MobileCommunityNav';
 import '../../public/css/community.css';
+import '../../public/css/mobile/community.css';
 
 function CommunitySquareView({
   view,
@@ -200,7 +202,8 @@ function CommunitySquareView({
   };
 
   return (
-    <div className="community-layout flex flex-1 items-start max-w-screen-2xl mx-auto w-full pt-4 relative z-10">
+    <div className="community-layout community-layout--with-sidebar flex flex-1 items-start max-w-screen-2xl mx-auto w-full pt-4 relative z-10">
+      <MobileCommunityNav activeBoard={sidebarBoard} onSelectBoard={handleSidebarSelect} />
       <CommunitySidebar activeBoard={sidebarBoard} onSelectBoard={handleSidebarSelect} />
 
       <div className="community-square-content flex-1 min-w-0">

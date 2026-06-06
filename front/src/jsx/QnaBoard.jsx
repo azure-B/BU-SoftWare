@@ -3,6 +3,7 @@ import QnaPostList from '../components/community/QnaPostList';
 import CommunitySquareSidebar from '../components/community/CommunitySquareSidebar';
 import { fetchQnaPosts, filterQnaPosts, paginateItems } from '../components/community/qnaData';
 import '../public/css/community.css';
+import '../public/css/mobile/qna.css';
 
 const QNA_LIST_PAGE_SIZE = 3;
 

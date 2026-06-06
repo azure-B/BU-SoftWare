@@ -1,29 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import FaqChatbot from '../chat/FaqChatbot';
 import { COMMUNITY_QUICK_LINKS } from '../community/communityData';
 import '../../public/css/mobile-floating-hub.css';
 
 const OPEN_MY_RESERVATIONS_EVENT = 'app:open-my-reservations';
-const MOBILE_MAX_WIDTH = '(max-width: 767px)';
-
-function useMobileViewport() {
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia(MOBILE_MAX_WIDTH).matches,
-  );
-
-  useEffect(() => {
-    const media = window.matchMedia(MOBILE_MAX_WIDTH);
-    const sync = () => setIsMobile(media.matches);
-    sync();
-    media.addEventListener('change', sync);
-    return () => media.removeEventListener('change', sync);
-  }, []);
-
-  return isMobile;
-}
 
 function MobileFloatingHub({ activeNav }) {
-  const isMobile = useMobileViewport();
   const [hubOpen, setHubOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
 
@@ -88,13 +71,13 @@ function MobileFloatingHub({ activeNav }) {
     setHubOpen((prev) => !prev);
   }, [chatOpen]);
 
-  if (!isMobile) {
+  if (typeof document === 'undefined') {
     return null;
   }
 
   const fabDimmed = hubOpen || chatOpen;
 
-  return (
+  return createPortal(
     <div className={`mobile-floating-hub${hubOpen ? ' mobile-floating-hub--open' : ''}${chatOpen ? ' mobile-floating-hub--chat-open' : ''}`}>
       <FaqChatbot
         open={chatOpen}
@@ -168,7 +151,8 @@ function MobileFloatingHub({ activeNav }) {
           {hubOpen && !chatOpen ? 'close' : 'add'}
         </span>
       </button>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

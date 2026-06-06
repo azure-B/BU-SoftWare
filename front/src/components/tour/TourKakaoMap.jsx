@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { KAKAO_MAP_APP_KEY } from '../constants';
 import { loadKakaoMapSdk } from '../../utils/loadKakaoMapSdk';
-import { TOUR_MAP_CENTER, TOUR_MAP_LEVEL } from './tourData';
+import { TOUR_MAP_CENTER, TOUR_MAP_LEVEL, TOUR_SELECTED_PLACE_LEVEL } from './tourData';
 import { clusterPlaces } from './tourMapClusters';
 import {
-  TOUR_CAMPUS_MARKER_SIZE,
   TOUR_MARKER_IMAGES,
   TOUR_MARKER_SELECTED_SIZE,
   TOUR_MARKER_SIZE,
@@ -19,6 +18,11 @@ function createMarkerImage(kakao, src, size) {
   );
 }
 
+function applyTourMapInteraction(map) {
+  map.setDraggable(true);
+  map.setZoomable(true);
+}
+
 function TourKakaoMap({
   className = '',
   places = [],
@@ -29,10 +33,10 @@ function TourKakaoMap({
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
-  const centerMarkerRef = useRef(null);
   const markerImagesRef = useRef(null);
   const clusterImagesRef = useRef(new Map());
   const onPlaceClickRef = useRef(onPlaceClick);
+  const mapClickListenerRef = useRef(null);
   const [error, setError] = useState(null);
   const [mapReady, setMapReady] = useState(false);
   const [clusterMenu, setClusterMenu] = useState(null);
@@ -75,6 +79,36 @@ function TourKakaoMap({
   }, [selectedPlaceId, showAllPins, places]);
 
   useEffect(() => {
+    const map = mapRef.current;
+    if (!mapReady || !map || !window.kakao?.maps || selectedPlaceId == null) return;
+
+    const place = places.find((item) => item.id === selectedPlaceId);
+    if (!place || place.lat == null || place.lng == null) return;
+
+    const position = new window.kakao.maps.LatLng(place.lat, place.lng);
+    map.panTo(position);
+    if (map.getLevel() > TOUR_SELECTED_PLACE_LEVEL) {
+      map.setLevel(TOUR_SELECTED_PLACE_LEVEL);
+    }
+  }, [mapReady, selectedPlaceId, places]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const container = containerRef.current;
+    if (!mapReady || !map || !container) return undefined;
+
+    const relayout = () => {
+      map.relayout();
+    };
+
+    const observer = new ResizeObserver(relayout);
+    observer.observe(container);
+    requestAnimationFrame(relayout);
+
+    return () => observer.disconnect();
+  }, [mapReady]);
+
+  useEffect(() => {
     let cancelled = false;
     let resizeHandler = null;
     const clusterImages = clusterImagesRef.current;
@@ -91,30 +125,35 @@ function TourKakaoMap({
             TOUR_MARKER_IMAGES.restaurantSelected,
             TOUR_MARKER_SELECTED_SIZE,
           ),
-          campus: createMarkerImage(kakao, TOUR_MARKER_IMAGES.campus, TOUR_CAMPUS_MARKER_SIZE),
         };
 
         const campusPosition = new kakao.maps.LatLng(TOUR_MAP_CENTER.lat, TOUR_MAP_CENTER.lng);
         const map = new kakao.maps.Map(containerRef.current, {
           center: campusPosition,
           level: TOUR_MAP_LEVEL,
+          draggable: true,
+          scrollwheel: true,
+          disableDoubleClick: false,
+          disableDoubleClickZoom: false,
         });
         mapRef.current = map;
+        applyTourMapInteraction(map);
 
-        centerMarkerRef.current = new kakao.maps.Marker({
-          map,
-          position: campusPosition,
-          title: '학생복지동',
-          image: markerImagesRef.current.campus,
-          zIndex: 3,
-        });
+        mapClickListenerRef.current = [
+          kakao.maps.event.addListener(map, 'click', () => setClusterMenu(null)),
+          kakao.maps.event.addListener(map, 'dragstart', () => setClusterMenu(null)),
+        ];
 
         resizeHandler = () => {
           map.relayout();
+          applyTourMapInteraction(map);
           setClusterMenu(null);
         };
         window.addEventListener('resize', resizeHandler);
-        requestAnimationFrame(() => map.relayout());
+        requestAnimationFrame(() => {
+          map.relayout();
+          requestAnimationFrame(() => map.relayout());
+        });
         setMapReady(true);
       } catch (err) {
         if (!cancelled) {
@@ -129,6 +168,12 @@ function TourKakaoMap({
       cancelled = true;
       setMapReady(false);
       if (resizeHandler) window.removeEventListener('resize', resizeHandler);
+      if (mapClickListenerRef.current) {
+        mapClickListenerRef.current.forEach((listener) => {
+          window.kakao?.maps.event.removeListener(listener);
+        });
+        mapClickListenerRef.current = null;
+      }
       markersRef.current.forEach((entry) => {
         entry.marker.setMap(null);
         if (entry.listener) {
@@ -137,8 +182,6 @@ function TourKakaoMap({
       });
       markersRef.current = [];
       clusterImages.clear();
-      if (centerMarkerRef.current) centerMarkerRef.current.setMap(null);
-      centerMarkerRef.current = null;
       mapRef.current = null;
       markerImagesRef.current = null;
     };
@@ -181,7 +224,10 @@ function TourKakaoMap({
           zIndex: isSelected ? 2 : 1,
         });
 
-        const listener = () => handlePlaceSelect(place.id);
+        const listener = () => {
+          window.kakao.maps.event.preventMap();
+          handlePlaceSelect(place.id);
+        };
         window.kakao.maps.event.addListener(marker, 'click', listener);
         markersRef.current.push({ marker, listener });
         continue;
@@ -204,7 +250,10 @@ function TourKakaoMap({
         zIndex: hasSelected ? 2 : 1,
       });
 
-      const listener = () => openClusterMenu(cluster, marker);
+      const listener = () => {
+        window.kakao.maps.event.preventMap();
+        openClusterMenu(cluster, marker);
+      };
       window.kakao.maps.event.addListener(marker, 'click', listener);
       markersRef.current.push({ marker, listener });
     }
@@ -222,48 +271,44 @@ function TourKakaoMap({
   }
 
   return (
-    <div className={`relative ${className}`}>
-      <div ref={containerRef} className="w-full h-full tour-kakao-map" aria-label="백석대학교 학생복지동 주변 지도" />
+    <div className={`tour-kakao-map relative w-full h-full ${className}`}>
+      <div
+        ref={containerRef}
+        className="tour-kakao-map__canvas w-full h-full"
+        aria-label="백석대학교 학생복지동 주변 지도"
+      />
       {clusterMenu && (
-        <>
-          <button
-            type="button"
-            className="absolute inset-0 z-10 cursor-default"
-            aria-label="음식점 목록 닫기"
-            onClick={() => setClusterMenu(null)}
-          />
-          <div
-            className="absolute z-20 w-[220px] max-h-60 overflow-y-auto rounded-lg border border-primary bg-surface-container-lowest shadow-lg tour-map-cluster-menu"
-            style={{
-              left: clusterMenu.x,
-              top: clusterMenu.y,
-              transform: 'translate(-50%, -100%)',
-            }}
-            role="menu"
-          >
-            <p className="px-3 py-2 border-b border-outline-variant font-label-md text-xs text-on-surface-variant">
-              근처 음식점 {clusterMenu.places.length}곳
-            </p>
-            <ul>
-              {clusterMenu.places.map((place) => (
-                <li key={place.id}>
-                  <button
-                    type="button"
-                    role="menuitem"
-                    className={`w-full px-3 py-2 text-left font-body-md text-sm hover:bg-surface-container-highest transition-colors ${
-                      place.id === selectedPlaceId
-                        ? 'bg-primary-container text-on-primary-container font-semibold'
-                        : 'text-on-surface'
-                    }`}
-                    onClick={() => handlePlaceSelect(place.id)}
-                  >
-                    {place.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </>
+        <div
+          className="absolute z-20 w-[220px] max-h-60 overflow-y-auto rounded-lg border border-primary bg-surface-container-lowest shadow-lg tour-map-cluster-menu pointer-events-auto"
+          style={{
+            left: clusterMenu.x,
+            top: clusterMenu.y,
+            transform: 'translate(-50%, -100%)',
+          }}
+          role="menu"
+        >
+          <p className="px-3 py-2 border-b border-outline-variant font-label-md text-xs text-on-surface-variant">
+            근처 음식점 {clusterMenu.places.length}곳
+          </p>
+          <ul>
+            {clusterMenu.places.map((place) => (
+              <li key={place.id}>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className={`w-full px-3 py-2 text-left font-body-md text-sm hover:bg-surface-container-highest transition-colors ${
+                    place.id === selectedPlaceId
+                      ? 'bg-primary-container text-on-primary-container font-semibold'
+                      : 'text-on-surface'
+                  }`}
+                  onClick={() => handlePlaceSelect(place.id)}
+                >
+                  {place.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

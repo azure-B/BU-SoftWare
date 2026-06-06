@@ -8,6 +8,7 @@ import {
   updatePostComment,
 } from '../components/community/postData';
 import '../public/css/post.css';
+import '../public/css/mobile/post.css';
 
 function resizeTextarea(node) {
   if (!node) return;
@@ -283,76 +284,86 @@ function Post({ detail, token, currentUserId, onBack, onEditPost, onPostDeleted 
                   key={item.id}
                   className="post-comment-item p-4 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT"
                 >
-                  <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
-                    <div className="flex flex-wrap items-center gap-3 font-label-md text-label-md text-on-surface-variant">
+                  <div className="post-comment-header post-title-row flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 mb-2">
+                    <div className="flex flex-wrap items-center gap-3 font-label-md text-label-md text-on-surface-variant min-w-0">
                       <span className="text-on-surface">{item.authorName}</span>
                       <span>{formatPostDate(item.createdAt)}</span>
                     </div>
-                    {isCommentOwner && !isEditing && (
-                      <div className="flex gap-2 shrink-0">
-                        <button
-                          type="button"
-                          onClick={() => handleStartEditComment(item)}
-                          className="post-comment-action font-label-md text-label-md text-secondary bg-transparent border-0 p-0 cursor-pointer"
-                        >
-                          수정
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteComment(item.id)}
-                          disabled={deletingCommentId === item.id}
-                          className="post-comment-action font-label-md text-label-md text-error bg-transparent border-0 p-0 cursor-pointer disabled:opacity-50"
-                        >
-                          {deletingCommentId === item.id ? '삭제 중…' : '삭제'}
-                        </button>
+                    {isCommentOwner && (
+                      <div className="post-action-group flex shrink-0">
+                        {isEditing ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={handleCancelEditComment}
+                              disabled={savingCommentId === item.id}
+                              className="post-action-btn post-action-btn--danger"
+                            >
+                              취소
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleSaveEditComment}
+                              disabled={savingCommentId === item.id}
+                              className="post-action-btn post-action-btn--primary"
+                            >
+                              {savingCommentId === item.id ? '저장 중…' : '저장'}
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => handleStartEditComment(item)}
+                              className="post-action-btn post-action-btn--primary"
+                            >
+                              수정
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteComment(item.id)}
+                              disabled={deletingCommentId === item.id}
+                              className="post-action-btn post-action-btn--danger"
+                            >
+                              {deletingCommentId === item.id ? '삭제 중…' : '삭제'}
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
 
-                  {isEditing ? (
-                    <div className="post-comment-edit space-y-2">
-                      <textarea
-                        id={`post-comment-edit-${item.id}`}
-                        className="post-comment-edit-textarea w-full bg-transparent outline-none resize-none font-body-md text-body-md text-on-surface"
-                        rows={1}
-                        value={editingCommentText}
-                        onChange={(e) => {
-                          setEditingCommentText(e.target.value);
-                          resizeTextarea(e.target);
-                        }}
-                        disabled={savingCommentId === item.id}
-                      />
-                      <div className="flex justify-end gap-3">
-                        <button
-                          type="button"
-                          onClick={handleCancelEditComment}
+                  <div className="post-comment-body">
+                    {isEditing ? (
+                      <div key={`edit-${item.id}`} className="post-comment-edit post-interactive-enter">
+                        <textarea
+                          id={`post-comment-edit-${item.id}`}
+                          className="post-comment-edit-textarea w-full bg-transparent outline-none resize-none font-body-md text-body-md text-on-surface"
+                          rows={1}
+                          value={editingCommentText}
+                          onChange={(e) => {
+                            setEditingCommentText(e.target.value);
+                            resizeTextarea(e.target);
+                          }}
                           disabled={savingCommentId === item.id}
-                          className="post-comment-action font-label-md text-label-md text-on-surface-variant bg-transparent border-0 p-0 cursor-pointer"
-                        >
-                          취소
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleSaveEditComment}
-                          disabled={savingCommentId === item.id}
-                          className="post-comment-action font-label-md text-label-md text-secondary bg-transparent border-0 p-0 cursor-pointer disabled:opacity-50"
-                        >
-                          {savingCommentId === item.id ? '저장 중…' : '저장'}
-                        </button>
+                        />
                       </div>
-                    </div>
-                  ) : (
-                    <p className="font-body-md text-body-md text-on-surface whitespace-pre-wrap">
-                      {item.content}
-                    </p>
-                  )}
+                    ) : (
+                      <p
+                        key={`read-${item.id}`}
+                        className="post-comment-text post-interactive-enter font-body-md text-body-md text-on-surface whitespace-pre-wrap"
+                      >
+                        {item.content}
+                      </p>
+                    )}
+                  </div>
                 </li>
               );
             })}
           </ul>
         )}
 
-        <div className="post-comment-form bg-surface-container p-6 rounded-DEFAULT border border-outline-variant">
+        <div className="post-comment-form post-interactive-surface bg-surface-container p-6 rounded-DEFAULT border border-outline-variant">
           <textarea
             className="post-comment-textarea w-full bg-transparent outline-none resize-none font-body-md text-body-md text-on-surface mb-4"
             placeholder="Write a comment..."

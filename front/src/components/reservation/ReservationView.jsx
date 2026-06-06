@@ -4,6 +4,7 @@ import Reservation from '../../jsx/Reservation';
 import ReservationBooking from '../../jsx/ReservationBooking';
 import MyReservations from '../../jsx/MyReservations';
 import FacilitySidebar from './FacilitySidebar';
+import MobileFacilityTabs from './MobileFacilityTabs';
 import {
   BOOKING_LEAD_DAYS,
   FACILITY_CATEGORIES,
@@ -17,6 +18,9 @@ import {
   RESERVATIONS_UPDATED_EVENT,
 } from './reservationData';
 import '../../public/css/reservation.css';
+import '../../public/css/mobile/reservation.css';
+
+const OPEN_MY_RESERVATIONS_EVENT = 'app:open-my-reservations';
 
 function ReservationView() {
   const [activeSidebarId, setActiveSidebarId] = useState('startup');
@@ -45,6 +49,12 @@ function ReservationView() {
     setActiveSidebarId(sidebarId);
     setActiveView(sidebarId === MY_RESERVATIONS_ID ? 'my' : 'list');
   }, []);
+
+  useEffect(() => {
+    const openMyReservations = () => handleSidebarSelect(MY_RESERVATIONS_ID);
+    window.addEventListener(OPEN_MY_RESERVATIONS_EVENT, openMyReservations);
+    return () => window.removeEventListener(OPEN_MY_RESERVATIONS_EVENT, openMyReservations);
+  }, [handleSidebarSelect]);
 
   const handleBook = useCallback(
     (facility) => {
@@ -123,14 +133,19 @@ function ReservationView() {
   };
 
   return (
-    <div className="reservation-layout flex-1 max-w-screen-2xl w-full mx-auto flex flex-col md:flex-row px-8 md:px-16 pt-8 gap-column-gap">
+    <div className="reservation-layout reservation-layout--with-tabs flex-1 max-w-screen-2xl w-full mx-auto flex flex-col md:flex-row px-8 md:px-16 pt-8 gap-column-gap">
+      <MobileFacilityTabs
+        categories={FACILITY_CATEGORIES}
+        activeCategoryId={activeSidebarId}
+        onCategorySelect={handleSidebarSelect}
+      />
       <FacilitySidebar
         categories={FACILITY_CATEGORIES}
         activeCategoryId={activeSidebarId}
         onCategorySelect={handleSidebarSelect}
       />
 
-      <div className="reservation-main-content flex-1 min-w-0">
+      <div className="reservation-main-content reservation-square-content flex-1 min-w-0">
         <div className={`panel-main-fade ${fadeClass}`}>{renderShownPanel()}</div>
       </div>
     </div>

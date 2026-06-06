@@ -35,26 +35,46 @@
     gap: 1.5rem;
   }
 
-  /* 지도 — 본문과 동일 너비 */
-  .tour-map-section {
-    order: 1;
+  /* 지도 — flex 컬럼 최상단 (order:1 이면 본문 아래로 밀림) */
+  .tour-page main .grid > .md\:col-span-8 {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .tour-page .tour-map-section {
+    order: -1;
     width: 100%;
-    height: 16rem;
+    height: 16rem !important;
     min-height: 16rem;
+    max-height: 16rem;
     margin-left: 0;
     margin-right: 0;
     border-left: 1px solid var(--outline-variant, #c4c6d3);
     border-right: 1px solid var(--outline-variant, #c4c6d3);
     border-radius: 0;
+    overflow: hidden;
+    flex-shrink: 0;
   }
 
-  .tour-kakao-map {
-    min-height: 16rem;
-    height: 16rem;
+  .tour-page .md\:col-span-8 > section {
+    order: 0;
+  }
+
+  .tour-page .tour-map-section .tour-kakao-map {
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100%;
+  }
+
+  .tour-page .tour-map-section .tour-kakao-map__canvas {
+    width: 100%;
+    height: 100% !important;
+    min-height: 100% !important;
   }
 
   .tour-map-toggle {
-    font-size: calc(12px * 0.85);
+    font-size: calc(12px * 0.95);
     padding: 0.375rem 0.75rem;
   }
 
@@ -103,7 +123,7 @@
     white-space: nowrap;
     border-radius: 0.25rem;
     padding: 0.5rem 1rem;
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
   }
 
   .tour-tag-panel__scroll .tour-filter-active {
@@ -142,11 +162,11 @@
   }
 
   .tour-popular-panel .font-body-lg {
-    font-size: calc(16px * 0.85);
+    font-size: calc(16px * 0.95);
   }
 
   .tour-popular-panel .text-xs {
-    font-size: calc(12px * 0.85);
+    font-size: calc(12px * 0.95);
   }
 
   /* 안내 — 퍼블 notice */
@@ -163,7 +183,7 @@
   }
 
   .tour-notice-panel .font-body-md {
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
     line-height: 1.5;
     color: var(--on-surface-variant, #444651);
   }
@@ -175,7 +195,7 @@
   }
 
   .tour-places-section > div > p {
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
     line-height: 1.5;
   }
 
@@ -196,7 +216,7 @@
   .tour-section-tab {
     flex-shrink: 0;
     white-space: nowrap;
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
   }
 
   .tour-places-section .tour-divider {
@@ -216,7 +236,7 @@
   .tour-main .tour-place-picker .regi-combobox__input,
   .tour-main .tour-place-picker .regi-combobox__option,
   .tour-main .tour-place-picker .regi-combobox__empty {
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
     line-height: 1.5;
   }
 
@@ -259,7 +279,7 @@
   .tour-main .tour-panel-write-btn {
     align-self: flex-end;
     padding: 0.5rem 0.875rem;
-    font-size: calc(12px * 0.85);
+    font-size: calc(12px * 0.95);
     letter-spacing: 0.04em;
     white-space: nowrap;
     min-height: 2rem;
@@ -271,12 +291,12 @@
   }
 
   .tour-main .tour-panel-toolbar__desc {
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
     line-height: 1.5;
   }
 
   .tour-main .tour-place-select__label {
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
     letter-spacing: 0.04em;
   }
 
@@ -296,7 +316,7 @@
     min-height: 1.75rem;
     line-height: 1.25;
     box-sizing: border-box;
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
     color: var(--on-surface, #181c1e);
     outline: none;
     box-shadow: none;
@@ -345,16 +365,16 @@
 
   .tour-main .community-post p,
   .tour-main .community-post .text-sm {
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
     line-height: 1.5;
   }
 
   .tour-main .community-post .font-label-md {
-    font-size: calc(10px * 0.85);
+    font-size: calc(10px * 0.95);
   }
 
   .tour-main .community-post-list-panel .font-body-md {
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
   }
 
   .tour-places-grid .tour-panel-body {
@@ -379,7 +399,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: calc(14px * 0.7);
+    font-size: calc(14px * 0.8);
   }
 
   .tour-pager-nav button {

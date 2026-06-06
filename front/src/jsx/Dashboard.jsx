@@ -15,9 +15,23 @@ import {
 import { fetchDashboardFacilityStatuses } from '../components/dashboard/dashboardFacilityData';
 import { RESERVATIONS_UPDATED_EVENT } from '../components/reservation/reservationData';
 import '../public/css/dashboard.css';
+import '../public/css/mobile/dashboard.css';
 
 const COURSES_PER_PAGE = 2;
 const SQUARE_VISIBLE_POST_COUNT = 3;
+
+function formatFacilityMobileTimeLabel(facility) {
+  const isBooked = facility.status === 'booked' || facility.status === 'reserved';
+
+  if (isBooked && facility.sortTime) {
+    return new Date(facility.sortTime).toLocaleDateString('ko-KR', {
+      month: 'numeric',
+      day: 'numeric',
+    });
+  }
+
+  return facility.timeLabel;
+}
 
 function Dashboard({ session = {}, onOpenPost }) {
   const displayName = session.name || '김백석';
@@ -414,8 +428,9 @@ function Dashboard({ session = {}, onOpenPost }) {
                     ) : (
                       <div key={facilityIndex} className="w-full gold-divider-l pl-4 dashboard-content-enter">
                         <div className="flex gap-4 items-center">
-                          <span className="font-label-md text-sm w-16 text-outline font-semibold shrink-0">
-                            {displayedFacility.timeLabel}
+                          <span className="font-label-md text-sm w-16 text-outline font-semibold shrink-0 dashboard-facility-time-label">
+                            <span className="md:hidden">{formatFacilityMobileTimeLabel(displayedFacility)}</span>
+                            <span className="hidden md:inline">{displayedFacility.timeLabel}</span>
                           </span>
                           <span
                             className={

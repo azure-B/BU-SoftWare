@@ -6,6 +6,28 @@
 @media (max-width: 767px) {
   .mobile-floating-hub {
     display: block;
+    position: fixed;
+    top: calc(
+      var(--mobile-vv-top, 0px) + var(--mobile-vv-height, 100dvh) -
+        var(--mobile-bottom-nav-h, 4rem) - var(--mobile-safe-bottom, 0px) - 3rem - 0.75rem
+    );
+    left: calc(
+      var(--mobile-vv-left, 0px) + var(--mobile-vv-width, 100vw) -
+        var(--mobile-page-pad-x, 1.25rem) - var(--mobile-safe-right, 0px) - 3rem - 0.2rem
+    );
+    right: auto;
+    bottom: auto;
+    z-index: 1001;
+    width: 3rem;
+    height: 3rem;
+    pointer-events: none;
+  }
+
+  .mobile-floating-hub__fab,
+  .mobile-floating-hub__menu,
+  .mobile-floating-hub__chatbot,
+  .mobile-floating-hub__backdrop {
+    pointer-events: auto;
   }
 
   .mobile-floating-hub__chatbot.faq-chatbot--no-toggle {
@@ -27,7 +49,7 @@
   .mobile-floating-hub__backdrop {
     position: fixed;
     inset: 0;
-    z-index: 55;
+    z-index: 0;
     border: 0;
     padding: 0;
     background: rgba(13, 51, 127, 0.12);
@@ -38,7 +60,7 @@
     position: absolute;
     right: 0;
     bottom: calc(3rem + 0.75rem);
-    z-index: 56;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -126,7 +148,8 @@
 
   .mobile-floating-hub__fab {
     position: relative;
-    z-index: 57;
+    z-index: 3;
+    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;

@@ -4,6 +4,7 @@ import ProfileSidebar from '../components/mypage/ProfileSidebar';
 import { FALLBACK_MY_PAGE_PROFILE, fetchMyPageProfile } from '../components/mypage/mypageData';
 import { formatGpa } from '../components/dashboard/dashboardData';
 import '../public/css/mypage.css';
+import '../public/css/mobile/mypage.css';
 
 function MyPage({ session = {} }) {
   const name = session.name || '김백석';

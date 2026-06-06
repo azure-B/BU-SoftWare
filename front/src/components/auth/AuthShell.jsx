@@ -8,6 +8,7 @@ import '../../public/css/login.css';
 import '../../public/css/regi.css';
 import '../../public/css/find.css';
 import '../../public/css/freshman_guide.css';
+import '../../public/css/mobile/auth.css';
 
 function AuthShell({
   view,

@@ -29,6 +29,15 @@ export const NAV_ITEMS = [
   { id: 'shuttle', label: '셔틀버스' },
 ];
 
+/** Mobile bottom nav (Publish mobile_common.html) */
+export const MOBILE_BOTTOM_NAV = [
+  { id: 'dashboard', label: '홈', icon: 'home' },
+  { id: 'square', label: '학과광장', icon: 'forum' },
+  { id: 'dept', label: '학생광장', icon: 'groups' },
+  { id: 'reservation', label: '예약', icon: 'event_available' },
+  { id: 'shuttle', label: '셔틀', icon: 'directions_bus' },
+];
+
 export const FOOTER_LINKS_LOGIN = [
   { label: 'Privacy Policy', href: '#privacy' },
   { label: 'Terms of Service', href: '#terms' },

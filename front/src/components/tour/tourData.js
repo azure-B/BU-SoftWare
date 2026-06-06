@@ -2,6 +2,7 @@
 export const TOUR_MAP_CENTER = { lat: 36.8406135, lng: 127.1824946 };
 export const TOUR_MAP_KEYWORD = '백석대학교 학생복지동';
 export const TOUR_MAP_LEVEL = 3;
+export const TOUR_SELECTED_PLACE_LEVEL = 4;
 
 export const TOUR_POST_TAGS = ['맛집', '혼밥', '같이밥', '점심', '저녁', '카페', '추천', '학식'];
 
