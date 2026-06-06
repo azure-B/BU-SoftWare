@@ -85,7 +85,7 @@ function Login({
             학술적 우수성과 학생 중심의 디지털 경험
           </p>
 
-          <form className="w-full space-y-8" onSubmit={handleSubmit}>
+          <form className="login-form w-full space-y-8" onSubmit={handleSubmit}>
             <div className="relative w-full group">
               <label
                 htmlFor="student-id"

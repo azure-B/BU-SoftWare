@@ -4,6 +4,25 @@
   background: #ffffff;
 }
 
+.login-input {
+  color: #181c1e;
+  -webkit-text-fill-color: #181c1e;
+  caret-color: #181c1e;
+}
+
+.login-input::placeholder {
+  color: #747682;
+  opacity: 1;
+}
+
+.login-input:-webkit-autofill,
+.login-input:-webkit-autofill:hover,
+.login-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #181c1e;
+  box-shadow: 0 0 0 1000px #ffffff inset;
+  transition: background-color 9999s ease-out 0s;
+}
+
 .login-input:focus {
   outline: none;
   border-bottom: 2px solid #1d5abc !important;

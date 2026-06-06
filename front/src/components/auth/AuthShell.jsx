@@ -92,6 +92,7 @@ function AuthShell({
           <div
             className={`auth-panel auth-panel--login ${view === 'login' ? 'auth-panel--visible' : ''}`}
             aria-hidden={view !== 'login'}
+            inert={view !== 'login' ? true : undefined}
           >
             <Login
               onLogin={onLogin}
@@ -104,12 +105,14 @@ function AuthShell({
           <div
             className={`auth-panel auth-panel--regi ${view === 'regi' ? 'auth-panel--visible' : ''}`}
             aria-hidden={view !== 'regi'}
+            inert={view !== 'regi' ? true : undefined}
           >
             <Regi onGoToLogin={onGoToLogin} onRegiComplete={onRegiComplete} />
           </div>
           <div
             className={`auth-panel auth-panel--find ${view === 'find' ? 'auth-panel--visible' : ''}`}
             aria-hidden={view !== 'find'}
+            inert={view !== 'find' ? true : undefined}
           >
             <Find onGoToLogin={onGoToLogin} onGoToRegister={onGoToRegister} />
           </div>

@@ -10,6 +10,37 @@
     min-height: 100dvh;
   }
 
+  .auth-flow__main {
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    min-height: 0;
+  }
+
+  .auth-flow__panels {
+    max-width: none;
+  }
+
+  .auth-panel:not(.auth-panel--visible) {
+    display: none !important;
+  }
+
+  .auth-panel--visible {
+    position: relative;
+    height: auto;
+    min-height: 0;
+  }
+
+  .login-card.auth-panel-card,
+  .registration-card.auth-panel-card,
+  .find-card.auth-panel-card {
+    padding: 1.5rem 1rem;
+  }
+
   .auth-panel {
     width: 100%;
     max-width: none;
@@ -22,11 +53,24 @@
   }
 
   .login-form input,
+  .login-form input.login-input,
   .regi-form input,
   .regi-form select,
   .find-form input {
     font-size: 16px;
+    line-height: 1.4;
     min-height: var(--mobile-touch-min);
+    color: #181c1e;
+    -webkit-text-fill-color: #181c1e;
+    caret-color: #181c1e;
+    opacity: 1;
+  }
+
+  .login-form input::placeholder,
+  .find-form input::placeholder {
+    color: #747682;
+    opacity: 1;
+    -webkit-text-fill-color: #747682;
   }
 
   .login-form button[type='submit'],
