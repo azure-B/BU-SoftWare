@@ -90,6 +90,7 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
   const selectOption = (option) => {
     onChange(String(option.id));
     closeList();
+    inputRef.current?.blur();
   };
 
   const handleInputChange = (event) => {

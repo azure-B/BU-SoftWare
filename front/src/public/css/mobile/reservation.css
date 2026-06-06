@@ -13,22 +13,8 @@
   .reservation-layout--with-tabs > .mobile-category-bar {
     margin-left: calc(1rem + var(--mobile-page-pad-x));
     margin-right: calc(1rem + var(--mobile-page-pad-x));
-  }
-
-  .reservation-layout--with-tabs .mobile-category-bar__scroll {
-    justify-content: center;
-    align-items: center;
-  }
-
-  .reservation-layout--with-tabs .mobile-category-bar__tab {
-    justify-content: center;
-    align-items: center;
-  }
-
-  .reservation-layout--with-tabs .mobile-category-bar__tab .material-symbols-outlined {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    flex-shrink: 0;
+    overflow: visible;
   }
 
   .reservation-square-content {

@@ -30,6 +30,11 @@
     margin-right: var(--mobile-page-pad-x);
   }
 
+  .community-layout > .mobile-category-bar {
+    flex-shrink: 0;
+    overflow: visible;
+  }
+
   .community-main {
     padding: 0.75rem var(--mobile-page-pad-x) 1.5rem;
     width: 100%;

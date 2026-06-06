@@ -12,6 +12,7 @@ import AppLayout from './components/layout/AppLayout';
 import { fetchPostDetail } from './components/community/postData';
 import { getAppPageMeta, isAppView, isAuthView } from './components/layout/appNavConfig';
 import { usePanelTransition } from './hooks/usePanelTransition';
+import { useMobileKeyboardDismiss } from './hooks/useMobileKeyboardDismiss';
 import {
   clearStoredAuth,
   getEmptySession,
@@ -35,6 +36,7 @@ function getAppShell(view) {
 }
 
 function App() {
+  useMobileKeyboardDismiss();
   const [activeView, setActiveView] = useState(() => getInitialAppState().activeView);
   const [focusLoginStudentId, setFocusLoginStudentId] = useState(false);
   const [postDetail, setPostDetail] = useState(null);
