@@ -1,0 +1,21 @@
+/* mobile/post.css */
+@media (max-width: 767px) {
+  .post-page main {
+    padding: 1rem var(--mobile-page-pad-x) 2rem;
+  }
+
+  .post-page h1 {
+    font-size: 1.5rem;
+    line-height: 1.35;
+  }
+
+  .post-list-btn {
+    min-height: var(--mobile-touch-min);
+    width: 100%;
+  }
+
+  .post-page textarea {
+    font-size: 16px;
+    min-height: 5rem;
+  }
+}

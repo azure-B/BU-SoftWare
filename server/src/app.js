@@ -15,10 +15,12 @@ const postRouter    = require('./routes/postRouter');
 const counterRouter = require('./routes/counterRouter');
 const authRouter     = require('./routes/authRouter');
 const registerRouter = require('./routes/registerRouter');
+const recoverRouter = require('./routes/recoverRouter');
 const communityRouter  = require('./routes/communityRouter');
 const reservationRouter = require('./routes/reservationRouter');
 const dashboardRouter = require('./routes/dashboardRouter');
 const tourRouter = require('./routes/tourRouter');
+const faqRouter = require('./routes/faqRouter');
 const { startTourMaintenanceJob } = require('./jobs/tourMaintenanceJob');
 
 const app = express();
@@ -69,12 +71,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/',            homeRouter);
 app.use('/api/auth',        authRouter);
 app.use('/api/auth/register', registerRouter);
+app.use('/api/auth/recover', recoverRouter);
 app.use('/api/users',   userRouter);
 app.use('/api/posts',     postRouter);
 app.use('/api/community', communityRouter);
 app.use('/api/reservations', reservationRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/tour', tourRouter);
+app.use('/api/faq', faqRouter);
 app.use('/api/counter',   counterRouter);
 
 // ── Error ─────────────────────────────────────────

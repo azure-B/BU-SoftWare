@@ -2,7 +2,7 @@ const {
   validatePassword,
   buildCampusEmail,
   validateName,
-  validateDepartmentSlug,
+  validateDepartmentId,
   validateVerificationCode,
 } = require('../src/utils/registerValidation');
 
@@ -41,11 +41,16 @@ describe('registerValidation', () => {
     });
   });
 
-  describe('validateDepartmentSlug', () => {
-    it('등록된 학과 slug를 허용한다', () => {
-      const result = validateDepartmentSlug('computer_science');
+  describe('validateDepartmentId', () => {
+    it('양의 정수 departmentId를 허용한다', () => {
+      const result = validateDepartmentId('6');
       expect(result.ok).toBe(true);
-      expect(result.label).toBe('컴퓨터공학부');
+      expect(result.value).toBe(6);
+    });
+
+    it('잘못된 departmentId를 거부한다', () => {
+      expect(validateDepartmentId('abc').ok).toBe(false);
+      expect(validateDepartmentId(0).ok).toBe(false);
     });
   });
 

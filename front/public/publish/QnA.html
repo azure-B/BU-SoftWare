@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Q&amp;A Detail - Baekseok Student Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#003072",
+                        "tertiary-fixed-dim": "#e0c298",
+                        "surface-container-high": "#e5e9eb",
+                        "on-secondary-fixed-variant": "#004299",
+                        "tertiary-fixed": "#fedeb2",
+                        "on-tertiary-fixed": "#281800",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#001849",
+                        "secondary-fixed-dim": "#afc6ff",
+                        "background": "#f7fafc",
+                        "on-surface": "#181c1e",
+                        "outline": "#747682",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "on-tertiary-container": "#ba9d76",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#6899fe",
+                        "on-background": "#181c1e",
+                        "tertiary": "#312004",
+                        "on-secondary-fixed": "#001943",
+                        "on-primary-container": "#839ff1",
+                        "outline-variant": "#c4c6d3",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#eef1f3",
+                        "on-surface-variant": "#444651",
+                        "surface-container": "#ebeef0",
+                        "on-error": "#ffffff",
+                        "surface": "#f7fafc",
+                        "surface-dim": "#d7dadc",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#3d5ba8",
+                        "surface-container-highest": "#e0e3e5",
+                        "secondary": "#1d5abc",
+                        "primary-container": "#0d337f",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#483516",
+                        "primary-fixed": "#dbe1ff",
+                        "primary": "#001e59",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#584323",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-fixed-variant": "#22428e",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "surface-bright": "#f7fafc",
+                        "inverse-primary": "#b3c5ff",
+                        "surface-container-low": "#f1f4f6",
+                        "secondary-fixed": "#d9e2ff",
+                        "gold": "#C5A880",
+                        "navy": "#0D337F",
+                        "cobalt": "#1D5ABC"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "column-gap": "32px",
+                        "unit": "4px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Hanken Grotesk"],
+                        "display-lg-mobile": ["Libre Caslon Text"],
+                        "body-md": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Libre Caslon Text"],
+                        "headline-lg": ["Libre Caslon Text"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "headline-md": ["Libre Caslon Text"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "headline-lg": ["40px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #f7fafc; }
+        .gold-divider { border-bottom: 1px solid #C5A880; }
+        .navy-divider { border-bottom: 1px solid #0D337F; }
+        .border-gold { border-color: #C5A880; }
+        .border-navy { border-color: #0D337F; }
+    </style>
+</head>
+<body class="text-on-background min-h-screen flex flex-col font-body-md text-body-md antialiased selection:bg-tertiary-fixed selection:text-on-tertiary-fixed">
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest text-primary docked full-width top-0 border-b border-on-tertiary-container flat no shadows sticky z-50 flex justify-between items-center px-margin-desktop w-full max-w-7xl mx-auto h-16">
+<div class="font-headline-md text-headline-md font-bold text-primary">
+            Baekseok Student Hub
+        </div>
+<nav class="hidden md:flex gap-8 items-center h-full">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer h-full flex items-center" href="#">Dashboard</a>
+<a class="text-secondary border-b-2 border-on-tertiary-container pb-1 h-full flex items-center cursor-pointer transition-transform duration-150" href="#">Student Square</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer h-full flex items-center" href="#">Campus Tour</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer h-full flex items-center" href="#">Reservations</a>
+</nav>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-secondary transition-colors" data-icon="search">search</span>
+<button class="font-label-md text-label-md text-primary hover:text-secondary transition-colors duration-200 uppercase tracking-widest cursor-pointer">Sign Out</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-20 flex flex-col lg:flex-row gap-column-gap">
+<!-- Main Column (Left) -->
+<article class="w-full lg:w-8/12 flex flex-col gap-12">
+<!-- Breadcrumb & Back -->
+<div class="flex items-center justify-between gold-divider pb-4">
+<a class="flex items-center gap-2 text-primary hover:text-cobalt transition-colors group" href="#">
+<span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform" data-icon="arrow_back">arrow_back</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Back to List</span>
+</a>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Student Square / Q&amp;A</span>
+</div>
+<!-- Question Area -->
+<section class="flex flex-col gap-6">
+<header class="flex flex-col gap-4">
+<span class="font-label-md text-label-md text-primary uppercase tracking-widest bg-primary-fixed w-max px-3 py-1">학사/수강</span>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-navy font-bold leading-tight">수강신청 변경 기간은 언제인가요?</h1>
+<div class="flex items-center gap-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider gold-divider pb-6">
+<span>홍길동 (경영학부)</span>
+<span class="w-1 h-1 rounded-full bg-gold"></span>
+<span>2024. 02. 15</span>
+<span class="w-1 h-1 rounded-full bg-gold"></span>
+<span>조회수 128</span>
+</div>
+</header>
+<div class="font-body-lg text-body-lg leading-relaxed text-on-background py-4">
+<p>이번 학기 수강신청을 완료했는데, 일부 과목을 변경하고 싶습니다. 정확한 변경 기간과 방법이 궁금합니다. 전공 필수 과목과 교양 과목 변경 방법이 다른지도 알려주시면 감사하겠습니다.</p>
+</div>
+</section>
+<!-- Answer Area -->
+<section class="bg-surface-container border border-gold p-8 md:p-12 relative mt-8">
+<div class="absolute -top-6 -left-6 w-12 h-12 bg-navy text-on-primary flex items-center justify-center font-headline-md text-headline-md font-bold">A</div>
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-4 font-label-md text-label-md text-primary uppercase tracking-wider navy-divider pb-4">
+<span>학사지원팀 답변</span>
+<span class="w-1 h-1 rounded-full bg-navy"></span>
+<span>2024. 02. 16</span>
+</div>
+<div class="font-body-lg text-body-lg leading-relaxed text-on-background">
+<p class="mb-4">안녕하세요, 학사지원팀입니다.</p>
+<p class="mb-4">2026학년도 1학기 수강신청 변경 기간은 <strong>3월 2일(월)부터 3월 8일(일)까지</strong>입니다. 해당 기간 동안 종합정보시스템을 통해 온라인으로 직접 변경 신청이 가능합니다.</p>
+<p class="mb-4">전공 필수와 교양 과목 모두 동일한 시스템에서 변경 가능하며, 여석이 있는 경우에 한해 즉시 반영됩니다. 단, 폐강 위기 과목이거나 인원 제한이 엄격한 실습 과목의 경우 학과 사무실의 별도 승인이 필요할 수 있으니 수강신청 시스템의 비고란을 반드시 확인해주시기 바랍니다.</p>
+<p>추가 문의사항이 있으시면 학사지원팀(041-550-xxxx)으로 연락 주시기 바랍니다. 감사합니다.</p>
+</div>
+</div>
+</section>
+</article>
+<!-- Sidebar (Right) - Marginalia -->
+<aside class="w-full lg:w-4/12 flex flex-col gap-12 lg:pl-12 border-t lg:border-t-0 lg:border-l border-gold pt-12 lg:pt-0 mt-12 lg:mt-0">
+<!-- Related Q&A Widget -->
+<div class="flex flex-col gap-6">
+<h3 class="font-headline-md text-headline-md text-navy font-bold flex items-center gap-2 navy-divider pb-2">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+                    자주 묻는 질문(Q&amp;A)
+                </h3>
+<ul class="flex flex-col gap-0 border-t border-gold">
+<li class="border-b border-gold py-4 group">
+<a class="flex flex-col gap-1 group-hover:text-cobalt transition-colors" href="#">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-xs">장학/등록</span>
+<span class="font-body-md text-body-md line-clamp-2">국가장학금 신청 기간을 놓쳤습니다. 구제 방법이 있나요?</span>
+</a>
+</li>
+<li class="border-b border-gold py-4 group">
+<a class="flex flex-col gap-1 group-hover:text-cobalt transition-colors" href="#">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-xs">학사/수강</span>
+<span class="font-body-md text-body-md line-clamp-2">졸업 학점 기준이 어떻게 되나요?</span>
+</a>
+</li>
+<li class="border-b border-gold py-4 group">
+<a class="flex flex-col gap-1 group-hover:text-cobalt transition-colors" href="#">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-xs">시설/이용</span>
+<span class="font-body-md text-body-md line-clamp-2">도서관 스터디룸 예약은 어디서 하나요?</span>
+</a>
+</li>
+<li class="border-b border-gold py-4 group">
+<a class="flex flex-col gap-1 group-hover:text-cobalt transition-colors" href="#">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-xs">기타</span>
+<span class="font-body-md text-body-md line-clamp-2">학생증 재발급 절차 안내 부탁드립니다.</span>
+</a>
+</li>
+</ul>
+<button class="self-start text-primary border border-primary px-6 py-2 font-label-md text-label-md uppercase tracking-wider hover:bg-cobalt hover:text-on-primary hover:border-cobalt transition-colors duration-200">
+                    View All Q&amp;A
+                </button>
+</div>
+<!-- Quick Links -->
+<div class="flex flex-col gap-6 bg-surface-container-high p-6 border border-gold">
+<h3 class="font-headline-md text-headline-md text-navy font-bold gold-divider pb-2">Quick Links</h3>
+<nav class="flex flex-col gap-4">
+<a class="flex items-center justify-between text-on-surface-variant hover:text-cobalt transition-colors group" href="#">
+<span class="font-label-md text-label-md uppercase tracking-wider">종합정보시스템</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<a class="flex items-center justify-between text-on-surface-variant hover:text-cobalt transition-colors group" href="#">
+<span class="font-label-md text-label-md uppercase tracking-wider">학사일정</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<a class="flex items-center justify-between text-on-surface-variant hover:text-cobalt transition-colors group" href="#">
+<span class="font-label-md text-label-md uppercase tracking-wider">학생지원팀 안내</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</nav>
+</div>
+<!-- Ask New Question CTA -->
+<div class="bg-navy p-8 text-on-primary flex flex-col gap-4 items-start">
+<h4 class="font-headline-md text-headline-md font-bold">궁금한 점이 해결되지 않으셨나요?</h4>
+<p class="font-body-md text-body-md opacity-90">새로운 질문을 등록해주시면 담당 부서에서 신속하게 답변해 드립니다.</p>
+<button class="mt-2 bg-on-primary text-navy px-8 py-3 font-label-md text-label-md uppercase tracking-wider hover:bg-gold transition-colors duration-200">
+                    질문 등록하기
+                </button>
+</div>
+</aside>
+</main>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary w-full py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center border-t border-on-tertiary-container flat no shadows mt-20">
+<div class="font-headline-md text-headline-md text-on-primary font-bold mb-8 md:mb-0">
+            Baekseok Student Hub
+        </div>
+<nav class="flex flex-wrap gap-6 justify-center font-label-md text-label-md">
+<a class="text-on-primary opacity-80 hover:opacity-100 underline decoration-tertiary-fixed transition-opacity duration-200" href="#">Privacy Policy</a>
+<a class="text-on-primary opacity-80 hover:opacity-100 underline decoration-tertiary-fixed transition-opacity duration-200" href="#">Terms of Service</a>
+<a class="text-on-primary opacity-80 hover:opacity-100 underline decoration-tertiary-fixed transition-opacity duration-200" href="#">Campus Directory</a>
+<a class="text-on-primary opacity-80 hover:opacity-100 underline decoration-tertiary-fixed transition-opacity duration-200" href="#">Support</a>
+</nav>
+<div class="font-body-md text-body-md mt-8 md:mt-0 opacity-80">
+            © 2024 Baekseok Student Hub. All rights reserved.
+        </div>
+</footer>
+</body></html>

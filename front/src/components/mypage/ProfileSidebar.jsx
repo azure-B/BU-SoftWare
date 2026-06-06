@@ -55,12 +55,11 @@ function ProfileSidebar({ semesterGrades = [], loading = false }) {
               ))}
             </ul>
 
-            <div className="semester-sidebar-nav flex items-center justify-center mt-6 pt-4 border-t border-outline-variant/40 font-label-md text-sm">
+            <div className="semester-sidebar-nav pager-nav flex items-center justify-center mt-6 pt-4 border-t border-outline-variant/40 font-label-md text-sm">
               <button
                 type="button"
                 onClick={() => setSemesterIndex((index) => Math.min(semesterCount - 1, index + 1))}
                 disabled={!canGoPrev}
-                className="text-on-surface-variant hover:text-primary transition-colors disabled:opacity-40 bg-transparent border-0 cursor-pointer disabled:cursor-default px-2 py-1"
               >
                 ← Prev
               </button>
@@ -71,7 +70,6 @@ function ProfileSidebar({ semesterGrades = [], loading = false }) {
                 type="button"
                 onClick={() => setSemesterIndex((index) => Math.max(0, index - 1))}
                 disabled={!canGoNext}
-                className="text-on-surface-variant hover:text-primary transition-colors disabled:opacity-40 bg-transparent border-0 cursor-pointer disabled:cursor-default px-2 py-1"
               >
                 Next →
               </button>

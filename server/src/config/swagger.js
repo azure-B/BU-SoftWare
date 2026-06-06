@@ -37,7 +37,7 @@ const swaggerDefinition = {
           studentId: { type: 'string', example: '20240001' },
           name: { type: 'string', example: '김백석' },
           departmentId: { type: 'integer', example: 1 },
-          departmentName: { type: 'string', example: '컴퓨터공학과' },
+          departmentName: { type: 'string', example: '컴퓨터공학부' },
         },
       },
       LoginResponse: {

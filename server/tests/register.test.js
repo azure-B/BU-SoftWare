@@ -85,6 +85,24 @@ describe('Register API', () => {
     });
   });
 
+  describe('GET /api/auth/register/departments', () => {
+    it('학과 목록을 반환한다', async () => {
+      RegisterModel.listDepartments.mockResolvedValue([
+        { id: 6, name: '컴퓨터공학부' },
+        { id: 5, name: '첨단IT학부' },
+        { id: 3, name: '컴퓨터공학과' },
+      ]);
+
+      const res = await request(app).get('/api/auth/register/departments');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual([
+        { id: 6, name: '컴퓨터공학부' },
+        { id: 5, name: '첨단IT학부' },
+      ]);
+    });
+  });
+
   describe('POST /api/auth/register', () => {
     it('인증·검증을 통과하면 회원을 생성한다', async () => {
       const jwt = require('jsonwebtoken');
@@ -97,13 +115,13 @@ describe('Register API', () => {
       RegisterModel.findByStudentId.mockResolvedValue(null);
       RegisterModel.findByEmail.mockResolvedValue(null);
       RegisterModel.getLatestVerification.mockResolvedValue({ verified: true });
-      RegisterModel.ensureDepartment.mockResolvedValue({ id: 1, name: '컴퓨터공학부' });
+      RegisterModel.findDepartmentById.mockResolvedValue({ id: 6, name: '컴퓨터공학부' });
       RegisterModel.createUser.mockResolvedValue({
         id: 2,
         student_id: '20249999',
         name: '신규',
         email: 'newuser@bu.ac.kr',
-        department_id: 1,
+        department_id: 6,
       });
       AcademicModel.createDefaultProfile.mockResolvedValue({
         graduationSeeded: true,
@@ -116,7 +134,7 @@ describe('Register API', () => {
           verificationToken: token,
           name: '신규',
           studentId: '20249999',
-          department: 'computer_science',
+          departmentId: 6,
           emailLocal: 'newuser',
           password: 'pass1234!',
           confirmPassword: 'pass1234!',
@@ -140,7 +158,7 @@ describe('Register API', () => {
           verificationToken: token,
           name: '신규',
           studentId: '20249999',
-          department: 'computer_science',
+          departmentId: 6,
           emailLocal: 'newuser',
           password: '12345678',
           confirmPassword: '12345678',

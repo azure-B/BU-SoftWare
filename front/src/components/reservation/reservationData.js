@@ -9,6 +9,7 @@ export const RESERVATION_STATUS_LABEL = {
 };
 
 export const MY_RESERVATIONS_STORAGE_KEY = 'baekseok-my-reservations';
+export const RESERVATIONS_UPDATED_EVENT = 'baekseok-reservations-updated';
 
 export const BOOKING_LEAD_DAYS = 7;
 

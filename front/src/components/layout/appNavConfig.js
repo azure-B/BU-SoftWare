@@ -1,4 +1,16 @@
-export const APP_VIEWS = ['dashboard', 'square', 'post', 'new_post', 'edit_post', 'dept', 'reservation', 'mypage'];
+export const APP_VIEWS = [
+  'dashboard',
+  'square',
+  'post',
+  'new_post',
+  'edit_post',
+  'qna_board',
+  'new_qna_post',
+  'dept',
+  'reservation',
+  'shuttle',
+  'mypage',
+];
 
 export const AUTH_VIEWS = ['login', 'regi'];
 
@@ -29,6 +41,8 @@ export function getAppPageMeta(view) {
     case 'post':
     case 'new_post':
     case 'edit_post':
+    case 'qna_board':
+    case 'new_qna_post':
       return {
         pageClass: 'community-page',
         activeNav: 'square',
@@ -46,6 +60,13 @@ export function getAppPageMeta(view) {
       return {
         pageClass: 'reservation-page bg-background text-on-surface antialiased',
         activeNav: 'reservation',
+        profileActive: false,
+        showWatermark: false,
+      };
+    case 'shuttle':
+      return {
+        pageClass: 'shuttle-page text-on-surface antialiased',
+        activeNav: 'shuttle',
         profileActive: false,
         showWatermark: false,
       };

@@ -6,7 +6,7 @@ const { getServerClient } = require('../src/config/supabase');
 const STUDENT_ID = '20242644';
 const PASSWORD = '1234';
 const USER_NAME = '테스트학생';
-const DEPT_NAME = '컴퓨터공학과';
+const DEPT_NAME = '컴퓨터공학부';
 
 async function ensureDepartment(supabase) {
   const { data: existing } = await supabase

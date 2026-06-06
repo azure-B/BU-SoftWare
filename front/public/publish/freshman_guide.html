@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Freshmen Guide - Baekseok Student Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600&amp;family=Libre+Caslon+Text&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#483516",
+                        "on-secondary-fixed-variant": "#004299",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface-variant": "#444651",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#0d337f",
+                        "tertiary": "#312004",
+                        "surface-dim": "#d7dadc",
+                        "surface-container-low": "#f1f4f6",
+                        "secondary": "#1d5abc",
+                        "secondary-fixed": "#d9e2ff",
+                        "tertiary-fixed": "#fedeb2",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "on-secondary-container": "#003072",
+                        "on-primary-container": "#839ff1",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#22428e",
+                        "on-tertiary-container": "#ba9d76",
+                        "tertiary-fixed-dim": "#e0c298",
+                        "inverse-primary": "#b3c5ff",
+                        "surface-container-high": "#e5e9eb",
+                        "primary": "#001e59",
+                        "outline-variant": "#c4c6d3",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#584323",
+                        "background": "#f7fafc",
+                        "secondary-container": "#6899fe",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed": "#001943",
+                        "surface": "#f7fafc",
+                        "inverse-on-surface": "#eef1f3",
+                        "inverse-surface": "#2d3133",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#f7fafc",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#3d5ba8",
+                        "secondary-fixed-dim": "#afc6ff",
+                        "outline": "#747682",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-surface": "#181c1e",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#001849",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "surface-container": "#ebeef0",
+                        "on-tertiary-fixed": "#281800",
+                        "on-background": "#181c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "column-gap": "32px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Libre Caslon Text"],
+                        "headline-lg": ["Libre Caslon Text"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "label-md": ["Hanken Grotesk"],
+                        "display-lg-mobile": ["Libre Caslon Text"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "body-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "headline-lg": ["40px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg text-body-lg min-h-screen flex flex-col">
+<!-- Top Navigation Placeholder from JSON -->
+<header class="bg-surface text-primary font-body-lg text-body-lg w-full sticky top-0 z-50 transition-colors duration-300">
+<div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-7xl mx-auto border-b border-tertiary">
+<div class="font-headline-md text-headline-md text-primary tracking-tight">
+                Freshmen Guide
+            </div>
+<nav class="hidden md:flex gap-gutter items-center">
+<a class="text-secondary font-bold border-b-2 border-tertiary hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Registration</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Login</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Campus Life</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Resources</a>
+</nav>
+<button class="hidden md:block bg-primary-container text-surface-container-lowest font-label-md text-label-md px-6 py-3 hover:bg-secondary transition-colors duration-200 uppercase tracking-widest rounded-none">Support</button>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</header>
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-20 flex flex-col md:flex-row gap-12 md:gap-column-gap">
+<!-- Primary Content Column (8 columns equivalent) -->
+<div class="w-full md:w-2/3 flex flex-col gap-16">
+<header class="mb-8">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6">Welcome to Baekseok.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                    Your definitive guide to navigating the first weeks of university life. From academic registration to finding your way around campus, begin your journey here.
+                </p>
+</header>
+<section>
+<h2 class="font-headline-lg text-headline-lg text-primary-container pb-4 mb-8 border-b border-[#C5A880]">Registration &amp; Login Guide</h2>
+<div class="space-y-8">
+<div class="flex gap-6 border border-[#C5A880] p-6 bg-surface-container-lowest">
+<div class="font-headline-md text-headline-md text-[#C5A880] shrink-0">01</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Accessing the Student Hub</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Navigate to the main Baekseok portal. Ensure you have your temporary credentials provided in your admission letter. These credentials expire 30 days after issuance.</p>
+</div>
+</div>
+<div class="flex gap-6 border border-[#C5A880] p-6 bg-surface-container-lowest">
+<div class="font-headline-md text-headline-md text-[#C5A880] shrink-0">02</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Course Selection</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Log into the SIS (Student Information System). Review the prerequisite requirements before confirming your schedule. Consult with your academic advisor if necessary.</p>
+</div>
+</div>
+<div class="flex gap-6 border border-[#C5A880] p-6 bg-surface-container-lowest">
+<div class="font-headline-md text-headline-md text-[#C5A880] shrink-0">03</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Finalizing Registration</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Submit your chosen courses for approval. You will receive an email confirmation once your faculty registrar has processed your selection.</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2 class="font-headline-lg text-headline-lg text-primary-container pb-4 mb-8 border-b border-[#C5A880]">Campus Life Tips</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="border border-[#C5A880] p-6 group hover:bg-surface-container-low transition-colors duration-300">
+<span class="material-symbols-outlined text-[#C5A880] text-4xl mb-4 block" data-weight="fill">local_library</span>
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Library Access</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Your student ID grants 24/7 access to the main academic library. Reserve study rooms via the campus app.</p>
+</div>
+<div class="border border-[#C5A880] p-6 group hover:bg-surface-container-low transition-colors duration-300">
+<span class="material-symbols-outlined text-[#C5A880] text-4xl mb-4 block" data-weight="fill">restaurant</span>
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Dining Halls</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Three main dining facilities are available. Meal plans are loaded onto your student card automatically.</p>
+</div>
+<div class="border border-[#C5A880] p-6 group hover:bg-surface-container-low transition-colors duration-300">
+<span class="material-symbols-outlined text-[#C5A880] text-4xl mb-4 block" data-weight="fill">directions_bus</span>
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Shuttle Routes</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Inter-campus shuttles run every 15 minutes during peak hours. Track them live on the student portal.</p>
+</div>
+<div class="border border-[#C5A880] p-6 group hover:bg-surface-container-low transition-colors duration-300">
+<span class="material-symbols-outlined text-[#C5A880] text-4xl mb-4 block" data-weight="fill">health_and_safety</span>
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Health Center</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Located in Building B. Walk-ins are accepted for minor issues; appointments required for specialist consultations.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Secondary Content Column (4 columns equivalent) - Marginalia -->
+<aside class="w-full md:w-1/3 flex flex-col gap-12">
+<div class="bg-primary text-on-primary p-8 border border-primary-container">
+<h3 class="font-headline-md text-headline-md mb-6 border-b border-[#C5A880] pb-2">Quick Links</h3>
+<ul class="space-y-4 font-body-md text-body-md">
+<li class="border-b border-[#0D337F] pb-2 hover:text-[#C5A880] transition-colors"><a class="flex justify-between items-center w-full" href="#">Academic Calendar <span class="material-symbols-outlined text-sm">arrow_forward</span></a></li>
+<li class="border-b border-[#0D337F] pb-2 hover:text-[#C5A880] transition-colors"><a class="flex justify-between items-center w-full" href="#">Campus Map <span class="material-symbols-outlined text-sm">arrow_forward</span></a></li>
+<li class="border-b border-[#0D337F] pb-2 hover:text-[#C5A880] transition-colors"><a class="flex justify-between items-center w-full" href="#">IT Helpdesk <span class="material-symbols-outlined text-sm">arrow_forward</span></a></li>
+<li class="border-b border-[#0D337F] pb-2 hover:text-[#C5A880] transition-colors"><a class="flex justify-between items-center w-full" href="#">Financial Aid <span class="material-symbols-outlined text-sm">arrow_forward</span></a></li>
+</ul>
+</div>
+<div class="border border-[#C5A880] p-8 bg-surface-container-lowest">
+<h3 class="font-headline-md text-headline-md text-primary-container mb-4">Academic Support</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Need assistance with your schedule or have questions about major requirements?</p>
+<div class="space-y-4 font-body-md text-body-md">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#C5A880]">mail</span>
+<div>
+<p class="font-label-md text-label-md uppercase text-primary mb-1">Email</p>
+<a class="text-secondary hover:underline" href="mailto:advising@baekseok.edu">advising@baekseok.edu</a>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#C5A880]">phone</span>
+<div>
+<p class="font-label-md text-label-md uppercase text-primary mb-1">Phone</p>
+<p class="text-on-surface-variant">+82 2-1234-5678</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#C5A880]">location_on</span>
+<div>
+<p class="font-label-md text-label-md uppercase text-primary mb-1">Office</p>
+<p class="text-on-surface-variant">Main Administration Bldg, Room 204<br/>Mon-Fri, 9am - 5pm</p>
+</div>
+</div>
+</div>
+<button class="mt-8 w-full bg-surface-container-lowest border border-primary-container text-primary-container font-label-md text-label-md py-3 uppercase tracking-widest hover:bg-secondary hover:text-surface-container-lowest hover:border-secondary transition-colors duration-200">Book Appointment</button>
+</div>
+</aside>
+</main>
+<!-- Footer Placeholder from JSON -->
+<footer class="bg-primary text-on-primary font-label-md text-label-md mt-auto border-t border-tertiary">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-desktop py-12 gap-gutter max-w-7xl mx-auto">
+<div class="font-headline-md text-headline-md text-on-primary">
+                © 2024 University Institutional Press. All intellectual rights reserved.
+            </div>
+<div class="flex flex-wrap gap-6 justify-center">
+<a class="text-on-primary opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all duration-300" href="#">Privacy Policy</a>
+<a class="text-on-primary opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all duration-300" href="#">Terms of Service</a>
+<a class="text-on-primary opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all duration-300" href="#">Accessibility</a>
+<a class="text-on-primary opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all duration-300" href="#">Contact Office</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -12,7 +12,7 @@ const EMPTY_SESSION = {
 };
 
 /** 새로고침 시 postDetail 없이는 복원 불가 — 광장으로 */
-const VIEWS_NEEDING_POST = new Set(['post', 'new_post', 'edit_post']);
+const VIEWS_NEEDING_POST = new Set(['post', 'new_post', 'edit_post', 'new_qna_post']);
 
 function isValidSession(session) {
   return Boolean(session?.token && session?.id);

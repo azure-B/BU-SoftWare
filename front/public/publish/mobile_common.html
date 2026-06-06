@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Baekseok Student Hub - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#f1f4f6",
+                      "primary-fixed": "#dbe1ff",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "on-tertiary-fixed-variant": "#584323",
+                      "on-secondary": "#ffffff",
+                      "primary": "#001e59",
+                      "surface-container-high": "#e5e9eb",
+                      "on-tertiary-fixed": "#281800",
+                      "on-secondary-fixed-variant": "#004299",
+                      "primary-container": "#0d337f",
+                      "on-surface": "#181c1e",
+                      "outline-variant": "#c4c6d3",
+                      "inverse-surface": "#2d3133",
+                      "tertiary": "#312004",
+                      "tertiary-fixed": "#fedeb2",
+                      "surface-container": "#ebeef0",
+                      "on-tertiary-container": "#ba9d76",
+                      "on-primary-container": "#839ff1",
+                      "surface-dim": "#d7dadc",
+                      "on-secondary-fixed": "#001943",
+                      "outline": "#747682",
+                      "on-primary-fixed": "#001849",
+                      "surface-tint": "#3d5ba8",
+                      "on-primary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed": "#d9e2ff",
+                      "surface-variant": "#e0e3e5",
+                      "background": "#f7fafc",
+                      "inverse-primary": "#b3c5ff",
+                      "surface-container-highest": "#e0e3e5",
+                      "surface-bright": "#f7fafc",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary": "#1d5abc",
+                      "on-surface-variant": "#444651",
+                      "tertiary-fixed-dim": "#e0c298",
+                      "on-error-container": "#93000a",
+                      "secondary-container": "#6899fe",
+                      "on-primary-fixed-variant": "#22428e",
+                      "inverse-on-surface": "#eef1f3",
+                      "tertiary-container": "#483516",
+                      "on-error": "#ffffff",
+                      "error": "#ba1a1a",
+                      "surface": "#f7fafc",
+                      "on-background": "#181c1e",
+                      "on-secondary-container": "#003072",
+                      "secondary-fixed-dim": "#afc6ff",
+                      "on-tertiary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "64px",
+                      "gutter": "24px",
+                      "margin-mobile": "20px",
+                      "unit": "4px",
+                      "column-gap": "32px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Libre Caslon Text"
+                      ],
+                      "display-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "label-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "display-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "64px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .gold-border { border-color: #C5A880; }
+        .gold-bg { background-color: #C5A880; }
+        .navy-text { color: #0d337f; }
+        .navy-bg { background-color: #0d337f; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md font-body-md flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface fixed top-0 w-full z-50 border-b border-primary dark:border-primary-fixed flex justify-between items-center px-margin-mobile h-16 md:hidden">
+<button class="text-primary dark:text-primary-fixed-dim hover:text-secondary transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<div class="font-headline-md-mobile text-headline-md-mobile tracking-widest text-primary dark:text-primary-fixed-dim uppercase font-headline-md-mobile text-headline-md-mobile">BAEKSEOK</div>
+<button class="text-primary dark:text-primary-fixed-dim hover:text-secondary transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-[80px] pb-[80px] px-margin-mobile flex flex-col gap-12 md:hidden">
+<!-- Hero Section -->
+<section class="flex flex-col gap-2 border-b gold-border pb-6">
+<p class="font-label-md text-label-md text-outline tracking-widest uppercase">202612345</p>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-headline-lg-mobile">Welcome, 김백석</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">컴퓨터공학부 / 소프트웨어 전공</p>
+</section>
+<!-- Metric Section -->
+<section class="flex flex-col gap-4">
+<h2 class="font-headline-md text-headline-md text-primary font-headline-md pb-2 border-b gold-border">학적 및 성적 요약</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="border gold-border p-4 flex flex-col items-center justify-center bg-surface-container-lowest">
+<p class="font-label-md text-label-md text-on-surface-variant mb-2">평점평균</p>
+<p class="font-headline-md text-headline-md text-primary font-headline-md">4.25<span class="text-sm text-outline">/4.5</span></p>
+</div>
+<div class="border gold-border p-4 flex flex-col items-center justify-center bg-surface-container-lowest">
+<p class="font-label-md text-label-md text-on-surface-variant mb-2">이수학점</p>
+<p class="font-headline-md text-headline-md text-primary font-headline-md">95<span class="text-sm text-outline">/140</span></p>
+</div>
+</div>
+</section>
+<!-- Campus Digest -->
+<section class="flex flex-col gap-4">
+<h2 class="font-headline-md text-headline-md text-primary font-headline-md pb-2 border-b gold-border">Campus Digest</h2>
+<div class="flex flex-col gap-4">
+<article class="flex flex-col gap-1 border-b border-surface-variant pb-4">
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider">중요 공지</span>
+<h3 class="font-body-lg text-body-lg text-on-surface">2026학년도 1학기 수강신청 일정 안내</h3>
+</article>
+<article class="flex flex-col gap-1 border-b border-surface-variant pb-4">
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider">시설 현황</span>
+<h3 class="font-body-lg text-body-lg text-on-surface">스터디룸 예약 현황</h3>
+</article>
+</div>
+</section>
+<!-- Opportunities -->
+<section class="flex flex-col gap-4">
+<h2 class="font-headline-md text-headline-md text-primary font-headline-md pb-2 border-b gold-border">학생 광장</h2>
+<div class="flex gap-4 border-b border-surface-variant pb-2 overflow-x-auto hide-scrollbar">
+<button class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1 whitespace-nowrap">장학 공고</button>
+<button class="font-label-md text-label-md text-outline-variant hover:text-primary transition-colors whitespace-nowrap">커뮤니티</button>
+<button class="font-label-md text-label-md text-outline-variant hover:text-primary transition-colors whitespace-nowrap">과사무실 공지</button>
+</div>
+<div class="flex flex-col gap-4">
+<article class="flex gap-4 items-start">
+<div class="w-16 h-16 bg-surface-container-low flex-shrink-0 border gold-border flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">payments</span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-body-md text-body-md text-on-surface font-semibold">교내 성적우수 장학금 신청 안내</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2">2026학년도 1학기 교내 성적우수 장학금 신청 기간 및 방법을 안내해 드립니다. 기간 내에 꼭 신청해 주시기 바랍니다.</p>
+</div>
+</article>
+<article class="flex gap-4 items-start">
+<div class="w-16 h-16 bg-surface-container-low flex-shrink-0 border gold-border flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">campaign</span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-body-md text-body-md text-on-surface font-semibold">국가장학금 2차 신청 안내</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2">한국장학재단 국가장학금 2차 신청 일정이 확정되었습니다. 대상 학생들은 확인 바랍니다.</p>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-label-md text-label-md w-full py-8 mt-auto border-t border-on-tertiary-container flex flex-col items-center gap-4 px-margin-mobile text-center md:hidden pb-24">
+<div class="flex gap-6">
+<a class="text-on-primary-container dark:text-primary-fixed-dim hover:opacity-80 transition-opacity" href="#">Privacy Policy</a>
+<a class="text-on-primary-container dark:text-primary-fixed-dim hover:opacity-80 transition-opacity" href="#">Contact Support</a>
+</div>
+<p>© 2024 Baekseok University. Editorial Student Portal.</p>
+</footer>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface fixed bottom-0 w-full z-50 border-t border-primary dark:border-primary-fixed flex justify-around items-center h-16 pb-safe px-4 md:hidden">
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-container font-bold hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-active:scale-95 duration-100" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-active:scale-95 duration-100" style="font-variation-settings: 'FILL' 0;">notifications</span>
+<span class="font-label-md text-label-md mt-1">Notices</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-active:scale-95 duration-100" style="font-variation-settings: 'FILL' 0;">smart_button</span>
+<span class="font-label-md text-label-md mt-1">ID</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors group">
+<span class="material-symbols-outlined group-active:scale-95 duration-100" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-md text-label-md mt-1">Profile</span>
+</button>
+</nav>
+<style>
+        /* Custom hide scrollbar class for the horizontal scroll area */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

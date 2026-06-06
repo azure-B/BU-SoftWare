@@ -1,0 +1,32 @@
+---
+description: Mobile CSS must not change desktop/PC layout or styles
+globs: front/src/**/*.css, front/src/**/*.jsx, front/src/**/*.js
+alwaysApply: false
+---
+
+# Mobile CSS / PC Safety
+
+PC is the baseline. Unless the user explicitly asks for PC changes, keep desktop behavior identical to the last committed version.
+
+**Mobile is also out of scope by default.** Unless the user explicitly asks for mobile changes, do not edit `front/src/public/css/mobile/*.css`, mobile-only JSX (`md:hidden`, mobile nav/drawer components), or add `@media (max-width: 767px)` blocks for a PC-only task.
+
+## Mobile CSS Scope
+
+- Put mobile-only styles in `front/src/public/css/mobile/*.css`, `mobile-common.css`, or inside `@media (max-width: 767px)`.
+- Do not add mobile declarations to base page CSS (`community.css`, `reservation.css`, `tour.css`, etc.) unless the same rule is intentionally shared with PC.
+- Do not wrap an entire base CSS file in mobile media. If a file is imported by a PC page, it must still style PC normally.
+- Avoid global selectors for mobile work. Scope with page roots like `.community-page`, `.reservation-page`, `.tour-page`, or component classes.
+
+## Mobile JSX Scope
+
+- Mobile-only components must be hidden from PC with `md:hidden` or rendered conditionally by viewport.
+- If a mobile wrapper is needed around existing PC layout, make it layout-neutral on PC (`md:contents`) or avoid rendering it on PC.
+- Do not change PC layout classes (`md:*`, desktop grid/flex, sidebar placement, container widths) while doing a mobile-only task.
+- Keep existing PC sidebars/headers/footer markup unchanged unless the user asks for PC.
+
+## Required Checks Before Finishing
+
+- Run `git diff --name-only HEAD -- front/src` and confirm unintended PC files/classes were not changed.
+- For PC safety, verify tracked base CSS files against HEAD when applicable:
+  `auth.css`, `common.css`, `community.css`, `dashboard.css`, `layout.css`, `new_post.css`, `regi.css`, `reservation.css`, `tour.css`.
+- Build or lint after JSX/CSS changes when practical, and report any pre-existing warnings separately.

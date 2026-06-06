@@ -1,0 +1,157 @@
+/* --- find.css (from publish/find.html) --- */
+.find-card {
+  border: 1px solid #c5a880;
+  background: #ffffff;
+  max-width: 650px;
+}
+
+.find-editorial-line {
+  height: 1px;
+  background-color: #c5a880;
+  width: 100%;
+}
+
+.find-input:focus {
+  outline: none;
+  border-bottom-width: 2px !important;
+  border-color: #1d5abc !important;
+}
+
+.find-tabs {
+  position: relative;
+}
+
+.find-tabs__indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 2px;
+  background-color: #c5a880;
+  transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.find-tabs__indicator--reset {
+  transform: translateX(100%);
+}
+
+.find-tab-btn {
+  color: #444651;
+  transition: color 0.24s ease;
+}
+
+.find-tab-btn--active {
+  color: #0d337f;
+}
+
+.find-tab-btn:hover {
+  color: #0d337f;
+}
+
+.find-tab-panels {
+  display: grid;
+}
+
+.find-tab-panel {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition:
+    opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.find-tab-panel--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.find-field-msg {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.find-field-msg--error {
+  color: #ba1a1a;
+}
+
+.find-field-msg--info {
+  color: #444651;
+}
+
+.find-step-reveal {
+  animation: findStepReveal 0.34s cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+.find-result-box {
+  border: 1px solid #c5a880;
+  background: #f7fafc;
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+
+@keyframes findStepReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.find-quote-aside {
+  opacity: 0.4;
+  width: 275px;
+  right: calc(100% + 2rem);
+  left: auto;
+  animation: findQuoteFadeIn 0.7s cubic-bezier(0, 0, 0.2, 1) 0.15s both;
+}
+
+.find-quote-aside p {
+  word-break: keep-all;
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+
+@keyframes findQuoteFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-16px);
+  }
+  to {
+    opacity: 0.4;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.auth-panel--find.auth-panel--visible .find-card {
+  animation: findCardEnter 0.42s cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+@keyframes findCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .find-tabs__indicator,
+  .find-tab-panel,
+  .find-step-reveal,
+  .find-quote-aside,
+  .auth-panel--find.auth-panel--visible .find-card {
+    animation: none;
+    transition-duration: 0.01ms;
+  }
+}

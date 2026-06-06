@@ -7,6 +7,7 @@ import TourPostForm from '../components/tour/TourPostForm';
 import TourPostPanel from '../components/tour/TourPostPanel';
 import TourSidebar from '../components/tour/TourSidebar';
 import { TOUR_SECTION_TABS } from '../components/tour/tourData';
+import { usePanelTransition } from '../hooks/usePanelTransition';
 import {
   attachPlaceNames,
   fetchAllPlacePosts,
@@ -21,6 +22,17 @@ import {
 } from '../components/tour/tourApi';
 import '../public/css/tour.css';
 import '../public/css/community.css';
+
+const TOUR_TRANSITION_MS = 320;
+
+function parseTourPanelKey(key) {
+  const [tab = 'places', rawPlaceId = 'none', view = 'list'] = key.split(':');
+  return {
+    tab,
+    placeId: rawPlaceId === 'none' ? null : Number(rawPlaceId),
+    view,
+  };
+}
 
 function Tour({ session = {} }) {
   const [places, setPlaces] = useState([]);
@@ -41,6 +53,25 @@ function Tour({ session = {} }) {
   const [recruitPostsLoading, setRecruitPostsLoading] = useState(false);
   const [recruitPostsError, setRecruitPostsError] = useState(null);
   const [recruitWritePlaceId, setRecruitWritePlaceId] = useState(null);
+
+  const { shownValue: shownSectionTab, fadeClass: sectionFadeClass } = usePanelTransition(
+    sectionTab,
+    { duration: TOUR_TRANSITION_MS },
+  );
+
+  const panelTransitionKey = `${sectionTab}:${selectedPlaceId ?? 'none'}:${panelView}`;
+  const { shownValue: shownPanelKey, fadeClass: panelFadeClass } = usePanelTransition(
+    panelTransitionKey,
+    {
+      duration: TOUR_TRANSITION_MS,
+      onSwap: (nextKey) => {
+        if (parseTourPanelKey(nextKey).view !== 'post') {
+          setPostDetail(null);
+        }
+      },
+    },
+  );
+  const shownPanel = parseTourPanelKey(shownPanelKey);
 
   useEffect(() => {
     let cancelled = false;
@@ -81,6 +112,11 @@ function Tour({ session = {} }) {
   const selectedPlace = useMemo(
     () => places.find((place) => place.id === selectedPlaceId) ?? null,
     [places, selectedPlaceId],
+  );
+
+  const shownSelectedPlace = useMemo(
+    () => places.find((place) => place.id === shownPanel.placeId) ?? null,
+    [places, shownPanel.placeId],
   );
 
   const loadRecruitPosts = useCallback(async (placeList) => {
@@ -159,7 +195,6 @@ function Tour({ session = {} }) {
       return;
     }
     setPanelView('list');
-    setPostDetail(null);
     loadPosts(selectedPlace.boardId);
   }, [sectionTab, selectedPlace?.boardId, loadPosts]);
 
@@ -167,7 +202,6 @@ function Tour({ session = {} }) {
     setSelectedPlaceId(place.id);
     setShowAllPins(false);
     setPanelView('list');
-    setPostDetail(null);
   }, []);
 
   const handleMapPlaceClick = useCallback(
@@ -176,7 +210,6 @@ function Tour({ session = {} }) {
       if (!place) return;
       setSelectedPlaceId(place.id);
       setPanelView('list');
-      setPostDetail(null);
     },
     [places],
   );
@@ -211,7 +244,6 @@ function Tour({ session = {} }) {
   const handleSectionTabChange = useCallback((tabId) => {
     setSectionTab(tabId);
     setPanelView('list');
-    setPostDetail(null);
     setSearchQuery('');
     if (tabId === 'recruit' && filteredPlaces.length && !recruitWritePlaceId) {
       setRecruitWritePlaceId(filteredPlaces[0].id);
@@ -285,7 +317,7 @@ function Tour({ session = {} }) {
               음식점 추천
             </h2>
             <p className="font-body-md text-sm text-on-surface-variant mb-4">
-              {sectionTab === 'places'
+              {shownSectionTab === 'places'
                 ? '학생복지동 기준 500m 이내 · 음식점을 선택해 리뷰를 남기세요.'
                 : '근처 음식점에서 같이 밥 먹을 사람을 모집하거나 참여해 보세요.'}
             </p>
@@ -317,9 +349,9 @@ function Tour({ session = {} }) {
               <p className="font-body-md text-error" role="alert">
                 {placesError}
               </p>
-            ) : sectionTab === 'recruit' ? (
-              <div className="flex flex-col gap-4 min-h-[16rem]">
-                {panelView === 'write' && recruitWritePlace ? (
+            ) : shownSectionTab === 'recruit' ? (
+              <div className={`flex flex-col gap-4 min-h-[16rem] tour-section-body ${sectionFadeClass} ${panelFadeClass}`}>
+                {shownPanel.view === 'write' && recruitWritePlace ? (
                   <>
                     <label className="flex flex-col gap-1">
                       <span className="font-label-md text-label-md text-on-surface-variant">
@@ -347,21 +379,18 @@ function Tour({ session = {} }) {
                       onCreated={handlePostCreated}
                     />
                   </>
-                ) : panelView === 'post' && postDetail ? (
+                ) : shownPanel.view === 'post' && postDetail ? (
                   <TourPostPanel
                     detail={postDetail}
                     placeName={postPlaceName}
                     token={session.token}
                     currentUserId={session.id}
-                    onBack={() => {
-                      setPanelView('list');
-                      setPostDetail(null);
-                    }}
+                    onBack={() => setPanelView('list')}
                     onPostUpdated={handlePostUpdated}
                     onPostDeleted={handlePostDeleted}
                   />
                 ) : (
-                  <>
+                  <div className="tour-post-list-panel-frame">
                     <div className="flex flex-col gap-3 border-b border-outline-variant pb-3">
                       <div className="flex items-center justify-between gap-3">
                         <div>
@@ -394,23 +423,25 @@ function Tour({ session = {} }) {
                         className="w-full border border-outline-variant px-3 py-2 font-body-md text-sm bg-surface-container-lowest"
                       />
                     </div>
-                    <CommunityPostList
-                      posts={displayedRecruitPosts}
-                      loading={recruitPostsLoading}
-                      error={recruitPostsError}
-                      emptyMessage={
-                        searchQuery.trim() || activeTag !== '전체'
-                          ? '검색 결과가 없습니다.'
-                          : '아직 같이밥 모집글이 없습니다. 첫 모집글을 남겨 보세요.'
-                      }
-                      onPostClick={handleOpenRecruitPost}
-                    />
-                  </>
+                    <div className="tour-post-list-scroll">
+                      <CommunityPostList
+                        posts={displayedRecruitPosts}
+                        loading={recruitPostsLoading}
+                        error={recruitPostsError}
+                        emptyMessage={
+                          searchQuery.trim() || activeTag !== '전체'
+                            ? '검색 결과가 없습니다.'
+                            : '아직 같이밥 모집글이 없습니다. 첫 모집글을 남겨 보세요.'
+                        }
+                        onPostClick={handleOpenRecruitPost}
+                      />
+                    </div>
+                  </div>
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                <div className="flex flex-col gap-3 max-h-[32rem] overflow-y-auto pr-1">
+              <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 items-start tour-section-body ${sectionFadeClass}`}>
+                <div className="tour-place-list-scroll flex flex-col gap-3 pr-1">
                   {filteredPlaces.length === 0 ? (
                     <p className="text-on-surface-variant text-sm">
                       {activeTag === '전체'
@@ -430,39 +461,36 @@ function Tour({ session = {} }) {
                   )}
                 </div>
 
-                <div className="flex flex-col gap-4 min-h-[16rem]">
-                  {!selectedPlace ? (
+                <div className={`flex flex-col gap-4 min-h-[16rem] tour-panel-body ${panelFadeClass}`}>
+                  {!shownSelectedPlace ? (
                     <p className="text-on-surface-variant font-body-md">
                       음식점을 선택하면 게시판이 열립니다.
                     </p>
-                  ) : panelView === 'write' ? (
+                  ) : shownPanel.view === 'write' ? (
                     <TourPostForm
-                      boardId={selectedPlace.boardId}
-                      placeName={selectedPlace.name}
+                      boardId={shownSelectedPlace.boardId}
+                      placeName={shownSelectedPlace.name}
                       token={session.token}
                       onCancel={() => setPanelView('list')}
                       onCreated={handlePostCreated}
                     />
-                  ) : panelView === 'post' && postDetail ? (
+                  ) : shownPanel.view === 'post' && postDetail ? (
                     <TourPostPanel
                       detail={postDetail}
                       placeName={postPlaceName}
                       token={session.token}
                       currentUserId={session.id}
-                      onBack={() => {
-                        setPanelView('list');
-                        setPostDetail(null);
-                      }}
+                      onBack={() => setPanelView('list')}
                       onPostUpdated={handlePostUpdated}
                       onPostDeleted={handlePostDeleted}
                     />
                   ) : (
-                    <>
+                    <div className="tour-post-list-panel-frame">
                       <div className="flex flex-col gap-3 border-b border-outline-variant pb-3">
                         <div className="flex items-center justify-between gap-3">
                           <div>
                             <h3 className="font-headline-md text-headline-md text-primary">
-                              {selectedPlace.name}
+                              {shownSelectedPlace.name}
                             </h3>
                             <p className="text-sm text-on-surface-variant">리뷰 · 같이밥 모집</p>
                           </div>
@@ -483,18 +511,20 @@ function Tour({ session = {} }) {
                           className="w-full border border-outline-variant px-3 py-2 font-body-md text-sm bg-surface-container-lowest"
                         />
                       </div>
-                      <CommunityPostList
-                        posts={displayedPosts}
-                        loading={postsLoading}
-                        error={postsError}
-                        emptyMessage={
-                          searchQuery.trim()
-                            ? '검색 결과가 없습니다.'
-                            : '아직 글이 없습니다. 리뷰나 같이밥 모집을 남겨 보세요.'
-                        }
-                        onPostClick={handleOpenPost}
-                      />
-                    </>
+                      <div className="tour-post-list-scroll">
+                        <CommunityPostList
+                          posts={displayedPosts}
+                          loading={postsLoading}
+                          error={postsError}
+                          emptyMessage={
+                            searchQuery.trim()
+                              ? '검색 결과가 없습니다.'
+                              : '아직 글이 없습니다. 리뷰나 같이밥 모집을 남겨 보세요.'
+                          }
+                          onPostClick={handleOpenPost}
+                        />
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>

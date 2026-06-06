@@ -5,6 +5,7 @@
 /* --- common.css (shared across pages) --- */
 :root {
   --brand-navy: #0d337f;
+  --brand-blue: #1d5abc;
   --accent-gold: #c5a880;
   --surface-bg: #f7fafc;
   --font-primary: 'Libre Caslon Text', serif;
@@ -54,6 +55,36 @@ body {
 
 .text-gold {
   color: var(--accent-gold);
+}
+
+/* Prev / Next — enabled: theme blue, disabled: gray */
+.pager-nav button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  transition: color 0.15s ease;
+}
+
+.pager-nav button:not(:disabled) {
+  color: var(--brand-blue);
+}
+
+.pager-nav button:not(:disabled):hover {
+  color: var(--brand-navy);
+}
+
+.pager-nav button:disabled {
+  color: #747682;
+  opacity: 1;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pager-nav button {
+    transition: none;
+  }
 }
 
 /* 단일 패널 전환: 페이드아웃 → 콘텐츠 교체 → 페이드인 */

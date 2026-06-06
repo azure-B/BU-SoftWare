@@ -35,7 +35,9 @@ export function usePanelTransition(activeValue, options = {}) {
     fadeTimerRef.current = setTimeout(() => {
       setShownValue(activeValue);
       onSwapRef.current?.(activeValue);
-      setPanelVisible(true);
+      requestAnimationFrame(() => {
+        setPanelVisible(true);
+      });
     }, duration);
 
     return () => {

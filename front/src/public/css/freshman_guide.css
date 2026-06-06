@@ -1,0 +1,60 @@
+/* --- freshman_guide.css (from publish/freshman_guide.html) --- */
+.freshman-guide-header {
+  border-bottom: 1px solid #312004;
+}
+
+.freshman-guide-nav-link--active {
+  border-bottom: 2px solid #312004;
+}
+
+.freshman-guide-step-card,
+.freshman-guide-tip-card,
+.freshman-guide-support-card {
+  border: 1px solid #c5a880;
+}
+
+.freshman-guide-tip-card:hover {
+  background-color: #f1f4f6;
+}
+
+.freshman-guide-quick-links {
+  border: 1px solid #0d337f;
+}
+
+.freshman-guide-quick-link {
+  border-bottom: 1px solid #0d337f;
+}
+
+.freshman-guide-quick-link:hover {
+  color: #c5a880;
+}
+
+.freshman-guide-quick-links-panel {
+  border: 1px solid #0d337f;
+}
+
+.freshman-guide-support-panel {
+  scroll-margin-top: 6rem;
+}
+
+.freshman-guide-icon--fill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.freshman-guide-hero__title {
+  font-size: calc(40px * 0.8);
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .freshman-guide-hero__title {
+    font-size: calc(64px * 0.8);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+}
+
+.freshman-guide-hero__desc {
+  font-size: calc(18px * 0.8);
+  line-height: 1.6;
+}

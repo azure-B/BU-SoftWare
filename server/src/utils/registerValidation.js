@@ -9,10 +9,8 @@ const PASSWORD_POLICY = {
 const EMAIL_DOMAIN = '@bu.ac.kr';
 const EMAIL_LOCAL_PATTERN = /^[a-zA-Z0-9._-]{1,64}$/;
 
-const DEPARTMENT_SLUGS = {
-  computer_science: '컴퓨터공학부',
-  advanced_it: '첨단IT학부',
-};
+/** 회원가입 선택지에서 제외 (기존 사용자 FK 유지용 레거시명) */
+const REGISTRATION_EXCLUDED_DEPARTMENT_NAMES = new Set(['컴퓨터공학과']);
 
 const NAME_PATTERN = /^[\p{L}\p{N}\s.-]{2,50}$/u;
 
@@ -56,11 +54,16 @@ function validateName(name) {
   return { ok: true, value };
 }
 
-function validateDepartmentSlug(slug) {
-  if (typeof slug !== 'string' || !DEPARTMENT_SLUGS[slug]) {
+function validateDepartmentId(departmentId) {
+  const id = Number(departmentId);
+  if (!Number.isInteger(id) || id <= 0) {
     return { ok: false, message: '학과를 선택해 주세요.' };
   }
-  return { ok: true, value: slug, label: DEPARTMENT_SLUGS[slug] };
+  return { ok: true, value: id };
+}
+
+function isDepartmentAvailableForRegistration(name) {
+  return !REGISTRATION_EXCLUDED_DEPARTMENT_NAMES.has(name);
 }
 
 function validateVerificationCode(code) {
@@ -82,11 +85,12 @@ module.exports = {
   SPECIAL_CHAR_PATTERN,
   PASSWORD_POLICY,
   EMAIL_DOMAIN,
-  DEPARTMENT_SLUGS,
+  REGISTRATION_EXCLUDED_DEPARTMENT_NAMES,
   validatePassword,
   buildCampusEmail,
   validateName,
-  validateDepartmentSlug,
+  validateDepartmentId,
+  isDepartmentAvailableForRegistration,
   validateVerificationCode,
   generateVerificationCode,
 };

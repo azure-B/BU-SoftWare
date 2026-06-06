@@ -1,11 +1,13 @@
 ---
 description: Delivery workflow — minimal scope, verify, no unsolicited commits
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Workflow
 
 - Smallest correct diff; match existing style in the touched folder
+- **Implement only what the user asked for in the current message.** Do not add, remove, or refactor unrelated behavior (mobile CSS/JSX, pagination, animation, docs, tests, rule files) unless explicitly requested.
+- If a fix suggests a related improvement, mention it briefly and wait for approval — do not implement proactively.
 - After backend edits: `cd server && npm test` when tests exist
 - After frontend edits: note if `cd front && npm start` should be run manually
 - Do not create git commits unless the user asks

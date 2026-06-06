@@ -1,14 +1,51 @@
 const CommunityModel = require('../models/communityModel');
+const BoardModel = require('../models/boardModel');
 const { sanitizePostContent, isEmptyHtml } = require('../utils/sanitizeHtml');
 
 const communityController = {
-  // GET /api/community/posts?boardId=3  or  ?boardIds=3,4
+  // GET /api/community/boards?departmentId=6
+  getBoards: async (req, res, next) => {
+    try {
+      const departmentId = req.query.departmentId
+        ? Number(req.query.departmentId)
+        : null;
+
+      if (!departmentId) {
+        return res.status(400).json({ message: 'departmentId 쿼리가 필요합니다.' });
+      }
+
+      const boards = await BoardModel.findBoardMapForDepartment(departmentId);
+      res.json(boards);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  // GET /api/community/admin-author
+  getAdminAuthor: async (req, res, next) => {
+    try {
+      const adminUserId = await CommunityModel.findAdminAuthorId();
+      res.json({ adminUserId });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  // GET /api/community/posts?boardKind=mentoring&departmentId=6
+  //     or ?boardKinds=mentoring,team&departmentId=6
+  //     or legacy ?boardId=3 / ?boardIds=3,4
   getPosts: async (req, res, next) => {
     try {
-      const posts = await CommunityModel.findPostsByBoardIds(
-        req.query.boardId,
-        req.query.boardIds,
-      );
+      const departmentId = req.query.departmentId
+        ? Number(req.query.departmentId)
+        : null;
+      const posts = await CommunityModel.findPostsByBoardIds({
+        boardId: req.query.boardId,
+        boardIds: req.query.boardIds,
+        boardKind: req.query.boardKind,
+        boardKinds: req.query.boardKinds,
+        departmentId,
+      });
       res.json(posts);
     } catch (err) {
       next(err);

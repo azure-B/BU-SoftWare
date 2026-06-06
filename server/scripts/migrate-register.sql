@@ -19,11 +19,4 @@ CREATE TABLE IF NOT EXISTS email_verifications (
 CREATE INDEX IF NOT EXISTS idx_email_verifications_email
   ON email_verifications (email, created_at DESC);
 
--- 학과 시드 (회원가입 선택지)
-INSERT INTO departments (name)
-SELECT '컴퓨터공학부'
-WHERE NOT EXISTS (SELECT 1 FROM departments WHERE name = '컴퓨터공학부');
-
-INSERT INTO departments (name)
-SELECT '첨단IT학부'
-WHERE NOT EXISTS (SELECT 1 FROM departments WHERE name = '첨단IT학부');
+-- 학과 시드: server/scripts/seed-departments.sql 참고

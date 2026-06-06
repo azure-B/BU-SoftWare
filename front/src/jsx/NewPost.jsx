@@ -12,6 +12,7 @@ import {
   updateCommunityPost,
 } from '../components/community/postData';
 import '../public/css/new_post.css';
+import '../public/css/mobile/new_post.css';
 
 function NewPost({ activeBoard, postToEdit, token, onCancel, onPostCreated, onPostUpdated }) {
   const isEditMode = Boolean(postToEdit);
@@ -152,7 +153,7 @@ function NewPost({ activeBoard, postToEdit, token, onCancel, onPostCreated, onPo
               </p>
             )}
 
-            <div className="flex justify-end gap-4 pt-6">
+            <div className="new-post-actions flex justify-end gap-4 pt-6">
               <button
                 type="button"
                 onClick={handleCancel}

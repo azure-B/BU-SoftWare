@@ -1,6 +1,10 @@
 import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import BackgroundWatermark from './BackgroundWatermark';
+import FaqChatbot from '../chat/FaqChatbot';
+import QuickLinksDock from '../community/QuickLinksDock';
+import '../../public/css/app-floating-actions.css';
+import '../../public/css/faq-chatbot.css';
 
 function AppLayout({
   pageClass = 'app-page',
@@ -27,6 +31,12 @@ function AppLayout({
         {children}
       </div>
       <AppFooter variant="app" />
+      <div className="app-floating-actions" aria-label="빠른 메뉴">
+        <div className="app-floating-actions__desktop hidden md:flex flex-col items-end gap-3">
+          <QuickLinksDock />
+          <FaqChatbot />
+        </div>
+      </div>
     </div>
   );
 }

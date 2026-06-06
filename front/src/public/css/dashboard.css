@@ -1,8 +1,36 @@
 /* --- dashboard.css (from publish/Dashboard.html) --- */
 .dashboard-layout {
   display: grid;
-  grid-template-columns: 65fr 35fr;
+  grid-template-columns: minmax(0, 65fr) minmax(0, 35fr);
   gap: 32px;
+}
+
+.dashboard-digest-section {
+  align-items: stretch;
+}
+
+.dashboard-digest-column,
+.dashboard-square-column {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.dashboard-square-column .dashboard-square-post-panel {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.dashboard-square-tabs {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
@@ -69,14 +97,87 @@
 .dashboard-square-post-panel {
   display: flex;
   flex-direction: column;
-  height: 13rem;
-  min-height: 13rem;
+  min-height: 18rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .dashboard-square-post-body {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
+}
+
+.dashboard-square-posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.dashboard-square-post-item {
+  flex: 0 0 auto;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid #e0e3e5;
+}
+
+.dashboard-square-post-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.dashboard-square-post-link {
+  display: block;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.dashboard-square-post-compact .dashboard-square-post-tag {
+  font-size: 0.7rem;
+  line-height: 1.2;
+  margin-bottom: 0.45rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-square-post-compact .dashboard-square-post-title {
+  font-size: 1rem;
+  line-height: 1.25;
+  margin-bottom: 0.45rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-square-post-compact .dashboard-square-post-excerpt {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  margin-bottom: 0;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .dashboard-square-post-nav {
@@ -95,13 +196,28 @@
   opacity: 1;
 }
 
-.dashboard-square-post-hidden {
-  opacity: 0;
+.dashboard-content-enter {
+  animation: dashboardContentEnter 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes dashboardContentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .dashboard-square-post-fade {
     transition: none;
+  }
+
+  .dashboard-content-enter {
+    animation: none;
   }
 }
 

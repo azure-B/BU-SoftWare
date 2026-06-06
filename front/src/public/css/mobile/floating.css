@@ -1,0 +1,12 @@
+/* mobile/floating.css — desktop toggles hidden on mobile; hub chatbot positioned in mobile-floating-hub.css */
+@media (max-width: 767px) {
+  .app-floating-actions__desktop {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-floating-hub {
+    display: none !important;
+  }
+}

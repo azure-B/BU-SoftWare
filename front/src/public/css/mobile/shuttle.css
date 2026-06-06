@@ -1,0 +1,65 @@
+/* mobile/shuttle.css — Publish mobile_common3.html */
+@media (max-width: 767px) {
+  .shuttle-page main {
+    padding-left: var(--mobile-page-pad-x);
+    padding-right: var(--mobile-page-pad-x);
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .shuttle-page .max-w-7xl.grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .shuttle-page header.col-span-1 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .shuttle-page header h1 {
+    line-height: 1.2;
+  }
+
+  .shuttle-map-frame {
+    order: -1;
+    scroll-margin-top: calc(var(--mobile-header-h, 4rem) + var(--mobile-safe-top, 0px) + 0.75rem);
+  }
+
+  .shuttle-kakao-map {
+    min-height: 16rem;
+    height: 16rem;
+  }
+
+  .shuttle-kakao-map__canvas {
+    touch-action: none;
+  }
+
+  .shuttle-kakao-map__status {
+    pointer-events: none;
+  }
+
+  .shuttle-sidebar {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .shuttle-schedule-panel,
+  .shuttle-notice-panel {
+    padding: 1.25rem;
+  }
+
+  .shuttle-route-card__header {
+    padding: 0.875rem;
+  }
+
+  .shuttle-boarding-btn {
+    min-height: 2.25rem;
+    font-size: 0.6875rem;
+  }
+
+  .shuttle-trip-table {
+    min-width: 640px;
+    font-size: 0.8125rem;
+  }
+}

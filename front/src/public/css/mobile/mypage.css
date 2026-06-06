@@ -1,0 +1,44 @@
+/* mobile/mypage.css — Publish mobile.common4.html */
+@media (max-width: 767px) {
+  .mypage-page main {
+    padding: 1.5rem var(--mobile-page-pad-x) 2rem;
+    gap: 2.5rem;
+  }
+
+  .mypage-page h1 {
+    line-height: 1.2;
+  }
+
+  .mypage-page .grid.grid-cols-2 {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .mypage-page .grid.grid-cols-2 > div {
+    padding: 1rem;
+  }
+
+  .ge-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 calc(-1 * var(--mobile-page-pad-x));
+    padding: 0 var(--mobile-page-pad-x);
+  }
+
+  .semester-sidebar-list {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .semester-sidebar-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .semester-sidebar-nav button {
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-height: var(--mobile-touch-min);
+  }
+}

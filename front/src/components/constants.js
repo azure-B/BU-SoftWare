@@ -8,8 +8,11 @@ export const LOGO_LOGIN =
 
 export const SITE_TITLE = '백석 학생 허브';
 
-/** 백석대학교 사이버캠퍼스 (BCTL) */
-export const CYBER_CAMPUS_URL = 'https://bctl.bu.ac.kr';
+/** 백석대학교 사이버캠퍼스 (BLMS) */
+export const CYBER_CAMPUS_URL = 'https://blms.bu.ac.kr/home/mainHome/Form/myPage';
+
+/** 백석대학교 증명서 발급 (certpia) */
+export const CERTIFICATE_ISSUANCE_URL = 'https://bu.certpia.com/login';
 
 /** Express API (CRA dev: front 3000, server 5000) */
 export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -23,6 +26,7 @@ export const NAV_ITEMS = [
   { id: 'square', label: '학과광장' },
   { id: 'dept', label: '학생광장' },
   { id: 'reservation', label: '시설예약' },
+  { id: 'shuttle', label: '셔틀버스' },
 ];
 
 export const FOOTER_LINKS_LOGIN = [

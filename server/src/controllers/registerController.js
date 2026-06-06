@@ -6,7 +6,8 @@ const { sanitizeStudentId } = require('../utils/sanitize');
 const {
   buildCampusEmail,
   validateName,
-  validateDepartmentSlug,
+  validateDepartmentId,
+  isDepartmentAvailableForRegistration,
   validateVerificationCode,
   validatePassword,
   generateVerificationCode,
@@ -40,6 +41,18 @@ function verifyRegistrationToken(token) {
 }
 
 const registerController = {
+  // GET /api/auth/register/departments
+  listDepartments: async (req, res, next) => {
+    try {
+      const departments = await RegisterModel.listDepartments();
+      res.json(
+        departments.filter((dept) => isDepartmentAvailableForRegistration(dept.name)),
+      );
+    } catch (err) {
+      next(err);
+    }
+  },
+
   // GET /api/auth/register/check-duplicate?studentId=&emailLocal=
   checkDuplicate: async (req, res, next) => {
     try {
@@ -180,9 +193,14 @@ const registerController = {
         return res.status(400).json({ message: studentResult.message });
       }
 
-      const deptResult = validateDepartmentSlug(req.body.department);
+      const deptResult = validateDepartmentId(req.body.departmentId);
       if (!deptResult.ok) {
         return res.status(400).json({ message: deptResult.message });
+      }
+
+      const department = await RegisterModel.findDepartmentById(deptResult.value);
+      if (!department || !isDepartmentAvailableForRegistration(department.name)) {
+        return res.status(400).json({ message: '학과를 선택해 주세요.' });
       }
 
       const emailResult = buildCampusEmail(req.body.emailLocal);
@@ -218,7 +236,6 @@ const registerController = {
         return res.status(400).json({ message: '이메일 인증을 완료해 주세요.' });
       }
 
-      const department = await RegisterModel.ensureDepartment(deptResult.label);
       const user = await RegisterModel.createUser({
         departmentId: department.id,
         studentId: studentResult.value,

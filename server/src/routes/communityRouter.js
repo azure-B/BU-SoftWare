@@ -4,6 +4,8 @@ const communityController = require('../controllers/communityController');
 const requireAuth = require('../middlewares/requireAuth');
 const { validate, validateNumbers } = require('../middlewares/validate');
 
+router.get('/boards', communityController.getBoards);
+router.get('/admin-author', communityController.getAdminAuthor);
 router.get('/posts', communityController.getPosts);
 router.post(
   '/posts',

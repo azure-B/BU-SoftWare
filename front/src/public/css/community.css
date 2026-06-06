@@ -134,6 +134,10 @@
 
 .community-search {
   border-bottom: 1px solid var(--brand-navy);
+  width: 100%;
+  transition:
+    border-color 0.25s ease,
+    border-width 0.2s ease;
 }
 
 .community-search:focus {
@@ -160,14 +164,470 @@
 
 .community-content-hidden {
   opacity: 0;
+  pointer-events: none;
 }
 
 .community-post-list-panel {
   min-height: 4rem;
 }
 
+/* 목록·탭 전환 페이드 */
+.community-post-list-fade {
+  transition: opacity 0.2s ease;
+}
+
+.community-post-list-visible {
+  opacity: 1;
+}
+
+.community-post-list-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 게시글 stagger 등장 */
+.community-post--enter {
+  animation: communityPostEnter 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.community-post-list-panel-frame .community-post-list-item.community-post--enter {
+  animation: communityPostEnterInFrame 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes communityPostEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes communityPostEnterInFrame {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 게시글 N개 분량 — Prev/Next 위치 고정 (Community 본문 목록) */
+.community-post-list-panel-frame {
+  --community-post-row-height: 8.5rem;
+  --community-post-visible-count: 5;
+  display: flex;
+  flex-direction: column;
+}
+
+.community-post-list-panel-frame--3 {
+  --community-post-visible-count: 3;
+}
+
+/* QnaBoard — compact row (3개 고정) */
+.community-post-list-panel-frame--qna {
+  --community-post-row-height: 6.5rem;
+}
+
+.community-post-list-panel-frame--qna .community-post-list-panel > .community-post {
+  height: var(--community-post-row-height);
+  max-height: var(--community-post-row-height);
+  min-height: var(--community-post-row-height);
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.community-post-list-panel-frame--qna .community-post-list-panel > .community-post .flex-1 {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.community-post-list-panel-frame--qna .community-post-list-panel > .community-post h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.community-post-list-panel-frame > .community-post-list-fade {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(var(--community-post-visible-count) * var(--community-post-row-height));
+}
+
+.community-post-list-panel-frame > .community-post-list-fade > .community-post-list-panel {
+  flex: 1 1 auto;
+  min-height: 100%;
+}
+
+.community-post-list-panel-frame > .pager-nav {
+  flex-shrink: 0;
+  min-height: 2.5rem;
+  margin-top: 2rem;
+}
+
+/* 목록 행 고정 + 말줄임 */
+.community-post-list-panel-frame .community-post-list-item {
+  height: var(--community-post-row-height);
+  max-height: var(--community-post-row-height);
+  min-height: var(--community-post-row-height);
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.community-post-list-panel-frame .community-post-list-item .flex-1 {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.community-post-list-panel-frame .community-post-meta {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.community-post-list-panel-frame .community-post-meta__text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.community-post-cross-dept {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.125rem 0.375rem;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #1d5abc;
+  border: 1px solid #1d5abc;
+  line-height: 1.2;
+}
+
+.community-post-list-panel-frame .community-post-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.community-post-list-panel-frame .community-post-excerpt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.community-post-list-panel-frame .community-post-hashtags {
+  display: none;
+}
+
+/* 필터 바 — 타학부 커뮤니티 보기 */
+.community-filter-bar__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.community-filter-bar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+  width: 100%;
+}
+
+.community-filter-search {
+  position: relative;
+  flex-shrink: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.community-dept-browse {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  gap: 0.625rem;
+  min-height: 1.75rem;
+  overflow: visible;
+  width: 100%;
+}
+
+.community-dept-picker-wrap {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease;
+}
+
+.community-filter-bar--dept-open .community-dept-picker-wrap {
+  max-height: 3rem;
+  opacity: 1;
+  pointer-events: auto;
+  overflow: visible;
+}
+
+.community-dept-picker-inner {
+  width: 100%;
+  min-width: 0;
+}
+
+.community-dept-browse-btn {
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-bottom: 4px;
+  line-height: 1.25;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.community-dept-browse-btn--active {
+  color: #1d5abc;
+  border-bottom-color: #1d5abc;
+}
+
+@media (min-width: 640px) {
+  .community-filter-bar__row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+  }
+
+  .community-filter-bar__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 0rem 16rem;
+    align-items: end;
+    column-gap: 0.625rem;
+    width: 100%;
+    margin-left: auto;
+    flex: 1 1 0;
+    min-width: 0;
+    transition: grid-template-columns 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .community-filter-bar__actions:not(:has(.community-dept-browse)) {
+    display: flex;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+    width: auto;
+  }
+
+  .community-filter-bar__actions:not(:has(.community-dept-browse)) .community-filter-search {
+    flex: 0 0 16rem;
+    width: 16rem;
+  }
+
+  .community-filter-bar--dept-open .community-filter-bar__actions {
+    grid-template-columns: minmax(0, 1fr) auto 10.5rem 9.5rem;
+  }
+
+  /* 버튼·picker·search를 동일 grid에 배치 — spacer가 너비 변화 흡수 */
+  .community-dept-browse {
+    display: contents;
+  }
+
+  .community-dept-browse-btn {
+    grid-column: 2;
+  }
+
+  .community-dept-picker-wrap {
+    grid-column: 3;
+    max-height: none;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease 0.1s;
+  }
+
+  .community-filter-bar--dept-open .community-dept-picker-wrap {
+    opacity: 1;
+    overflow: visible;
+    pointer-events: auto;
+  }
+
+  .community-dept-picker-inner {
+    width: 10.5rem;
+  }
+
+  .community-filter-search {
+    grid-column: 4;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .community-filter-bar--dept-open .community-filter-bar__row {
+    gap: 0.5rem 0.75rem;
+  }
+}
+
+.community-filter-bar--dept-open {
+  position: relative;
+  z-index: 15;
+  overflow: visible;
+}
+
+.community-filter-bar--dept-open .community-filter-search {
+  position: relative;
+  z-index: 10;
+}
+
+.community-dept-browse--open .community-dept-picker-inner .regi-combobox__control {
+  animation: communityDeptComboboxEnter 0.28s ease both;
+  animation-delay: 0.12s;
+}
+
+@keyframes communityDeptComboboxEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .community-filter-tabs {
+    flex-shrink: 0;
+  }
+
+  .community-filter-tabs button {
+    white-space: nowrap;
+  }
+}
+
+.community-filter-bar:has(.regi-combobox--open) {
+  z-index: 35;
+}
+
+.community-dept-picker.regi-combobox {
+  position: relative;
+  z-index: 33;
+  width: 100%;
+  min-width: 0;
+}
+
+.community-dept-picker .regi-combobox__control {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--brand-navy, #0d337f);
+  padding: 0 0 4px;
+  min-height: 1.75rem;
+  box-sizing: border-box;
+  transition: border-color 0.25s ease, border-width 0.2s ease;
+}
+
+.community-dept-picker.regi-combobox--open .regi-combobox__control,
+.community-dept-picker .regi-combobox__control:focus-within {
+  border-bottom-width: 2px;
+  border-bottom-color: #1d5abc;
+  padding-bottom: 3px;
+}
+
+.community-dept-picker .regi-combobox__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--on-surface, #181c1e);
+  font-size: 0.875rem;
+}
+
+.community-dept-picker .regi-combobox__input:focus {
+  outline: none;
+}
+
+.community-dept-picker .regi-combobox__input::placeholder {
+  color: var(--outline-variant, #c4c6d3);
+}
+
+.community-dept-picker .regi-combobox__toggle {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--brand-navy, #0d337f);
+  padding: 0;
+  cursor: pointer;
+}
+
+.community-dept-picker .regi-combobox__panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 0.35rem 0;
+  list-style: none;
+  max-height: 240px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid var(--accent-gold, #c5a880);
+  box-shadow: 0 10px 28px rgba(0, 30, 89, 0.12);
+}
+
+.community-dept-picker .regi-combobox__option,
+.community-dept-picker .regi-combobox__empty {
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--brand-navy, #0d337f);
+}
+
+.community-dept-picker .regi-combobox__option {
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.community-dept-picker .regi-combobox__option--highlighted {
+  background: rgba(29, 90, 188, 0.08);
+}
+
+.community-dept-picker .regi-combobox__option--selected {
+  color: #1d5abc;
+  font-weight: 600;
+}
+
+.community-dept-picker .regi-combobox__empty {
+  color: var(--on-surface-variant, #444651);
+  text-align: center;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .community-content-fade {
     transition: none;
+  }
+
+  .community-post-list-fade {
+    transition: none;
+  }
+
+  .community-post--enter {
+    animation: none;
+  }
+
+  .community-dept-browse-btn,
+  .community-dept-picker-wrap,
+  .community-filter-bar__actions {
+    animation: none;
+    transition: none;
+  }
+
+  .community-dept-browse--open .community-dept-picker-inner .regi-combobox__control {
+    animation: none;
   }
 }

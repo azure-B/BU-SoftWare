@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePanelTransition } from '../../hooks/usePanelTransition';
 import CommunitySidebar from './CommunitySidebar';
+import CommunitySquareSidebar from './CommunitySquareSidebar';
 import { boardIdToSlug, isCommunitySection } from './communityData';
 import Community from '../../jsx/Community';
 import NewPost from '../../jsx/NewPost';
 import Post from '../../jsx/Post';
+import QnaBoard from '../../jsx/QnaBoard';
+import QnaPost from '../../jsx/QnaPost';
+import NewQnaPost from '../../jsx/NewQnaPost';
 import '../../public/css/community.css';
 
 function CommunitySquareView({
@@ -12,9 +16,15 @@ function CommunitySquareView({
   postDetail,
   token,
   currentUserId,
+  departmentId,
+  departmentName = '',
   onOpenPost,
   onBack,
+  onBackFromPost,
   onWritePost,
+  onWriteQna,
+  onViewAllQna,
+  onQnaFlowBack,
   onEditPost,
   onCancelEdit,
   onPostUpdated,
@@ -42,13 +52,22 @@ function CommunitySquareView({
 
   const sidebarBoard =
     (shownView === 'post' || shownView === 'edit_post') && cachedPostDetail
-      ? boardIdToSlug(cachedPostDetail.boardId)
+      ? boardIdToSlug(cachedPostDetail.boardId, cachedPostDetail.boardKind)
       : activeBoard;
+
+  const showExternalQnaSidebar =
+    shownView === 'post' && cachedPostDetail?.boardKind === 'qna';
 
   const handleSidebarSelect = useCallback(
     (boardId) => {
       setActiveBoard(boardId);
-      if (view === 'post' || view === 'new_post' || view === 'edit_post') {
+      if (
+        view === 'post' ||
+        view === 'new_post' ||
+        view === 'edit_post' ||
+        view === 'qna_board' ||
+        view === 'new_qna_post'
+      ) {
         onBack();
       }
     },
@@ -63,7 +82,7 @@ function CommunitySquareView({
 
   const handlePostCreated = useCallback(
     (post) => {
-      const slug = boardIdToSlug(post.boardId);
+      const slug = boardIdToSlug(post.boardId, post.boardKind);
       setActiveBoard(slug);
       setPostsRefreshKey((key) => key + 1);
       onBack();
@@ -73,7 +92,7 @@ function CommunitySquareView({
 
   const handlePostDeleted = useCallback(
     (post) => {
-      const slug = boardIdToSlug(post.boardId);
+      const slug = boardIdToSlug(post.boardId, post.boardKind);
       setActiveBoard(slug);
       setPostsRefreshKey((key) => key + 1);
       onBack();
@@ -83,7 +102,7 @@ function CommunitySquareView({
 
   const handlePostUpdated = useCallback(
     (updated) => {
-      const slug = boardIdToSlug(updated.boardId);
+      const slug = boardIdToSlug(updated.boardId, updated.boardKind);
       setActiveBoard(slug);
       setPostsRefreshKey((key) => key + 1);
       onPostUpdated?.(updated);
@@ -91,19 +110,30 @@ function CommunitySquareView({
     [onPostUpdated],
   );
 
+  const handleQnaPostCreated = useCallback(() => {
+    setPostsRefreshKey((key) => key + 1);
+    onQnaFlowBack?.();
+  }, [onQnaFlowBack]);
+
+  const handlePostBack = onBackFromPost ?? onBack;
+
   const renderShownPanel = () => {
     switch (shownView) {
       case 'post':
-        return cachedPostDetail ? (
+        if (!cachedPostDetail) return null;
+        if (cachedPostDetail.boardKind === 'qna') {
+          return <QnaPost detail={cachedPostDetail} onBack={handlePostBack} />;
+        }
+        return (
           <Post
             detail={cachedPostDetail}
             token={token}
             currentUserId={currentUserId}
-            onBack={onBack}
+            onBack={handlePostBack}
             onEditPost={onEditPost}
             onPostDeleted={handlePostDeleted}
           />
-        ) : null;
+        );
       case 'new_post':
         return (
           <NewPost
@@ -122,18 +152,51 @@ function CommunitySquareView({
             onPostUpdated={handlePostUpdated}
           />
         ) : null;
+      case 'qna_board':
+        return (
+          <QnaBoard
+            onOpenPost={onOpenPost}
+            onWriteQna={onWriteQna}
+            onViewAllQna={onViewAllQna}
+            viewAllDisabled
+            postsRefreshKey={postsRefreshKey}
+          />
+        );
+      case 'new_qna_post':
+        return (
+          <NewQnaPost
+            departmentId={departmentId}
+            token={token}
+            onCancel={onQnaFlowBack ?? onBack}
+            onPostCreated={handleQnaPostCreated}
+          />
+        );
       case 'square':
       default:
         return (
           <Community
             activeBoard={activeBoard}
             onSelectBoard={setActiveBoard}
+            departmentId={departmentId}
+            departmentName={departmentName}
             onOpenPost={onOpenPost}
             onWritePost={handleWritePost}
+            onWriteQna={onWriteQna}
+            onViewAllQna={onViewAllQna}
+            viewAllDisabled={false}
             postsRefreshKey={postsRefreshKey}
           />
         );
     }
+  };
+
+  const sidebarProps = {
+    onItemClick: onOpenPost,
+    onWriteQna,
+    onViewAllQna,
+    refreshKey: postsRefreshKey,
+    showWriteQna: Boolean(onWriteQna),
+    viewAllDisabled: shownView === 'qna_board',
   };
 
   return (
@@ -141,7 +204,18 @@ function CommunitySquareView({
       <CommunitySidebar activeBoard={sidebarBoard} onSelectBoard={handleSidebarSelect} />
 
       <div className="community-square-content flex-1 min-w-0">
-        <div className={`panel-main-fade ${fadeClass}`}>{renderShownPanel()}</div>
+        {showExternalQnaSidebar ? (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 px-4 md:px-12">
+            <div className={`lg:col-span-8 panel-main-fade ${fadeClass}`}>
+              {renderShownPanel()}
+            </div>
+            <div className="lg:col-span-4">
+              <CommunitySquareSidebar {...sidebarProps} />
+            </div>
+          </div>
+        ) : (
+          <div className={`panel-main-fade ${fadeClass}`}>{renderShownPanel()}</div>
+        )}
       </div>
     </div>
   );

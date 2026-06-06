@@ -1,0 +1,394 @@
+/* mobile/tour.css — Publish tour_mobile.html + Community mobile padding */
+@media (max-width: 767px) {
+  .tour-page main.tour-main {
+    padding: 0.75rem var(--mobile-page-pad-x) 1.5rem;
+    width: 100%;
+    max-width: none;
+  }
+
+  /* 헤더 — Community와 동일 좌우·타이포 */
+  .tour-header {
+    padding-top: 0;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--accent-gold);
+  }
+
+  .tour-header .page-main-title {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+    color: var(--primary-container, #0d337f);
+    letter-spacing: normal;
+  }
+
+  .tour-header .page-main-desc {
+    font-size: calc(16px * 0.7) !important;
+    line-height: 1.5 !important;
+  }
+
+  .tour-header__divider {
+    display: none;
+  }
+
+  .tour-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* 지도 — 본문과 동일 너비 */
+  .tour-map-section {
+    order: 1;
+    width: 100%;
+    height: 16rem;
+    min-height: 16rem;
+    margin-left: 0;
+    margin-right: 0;
+    border-left: 1px solid var(--outline-variant, #c4c6d3);
+    border-right: 1px solid var(--outline-variant, #c4c6d3);
+    border-radius: 0;
+  }
+
+  .tour-kakao-map {
+    min-height: 16rem;
+    height: 16rem;
+  }
+
+  .tour-map-toggle {
+    font-size: calc(12px * 0.85);
+    padding: 0.375rem 0.75rem;
+  }
+
+  /* 사이드바 — 자식을 레이아웃 그리드에 직접 배치 (지도→태그→목록→인기→안내) */
+  .tour-sidebar {
+    display: contents;
+  }
+
+  .tour-tag-panel {
+    order: 2;
+  }
+
+  .tour-places-section {
+    order: 3;
+    gap: 1rem;
+  }
+
+  .tour-popular-panel {
+    order: 4;
+  }
+
+  .tour-notice-panel {
+    order: 5;
+  }
+
+  .tour-tag-panel__title {
+    display: none;
+  }
+
+  .tour-tag-panel__scroll {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+    gap: 0.5rem 0.75rem;
+    padding-bottom: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .tour-tag-panel__scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tour-tag-panel__scroll button {
+    flex-shrink: 0;
+    white-space: nowrap;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-size: calc(14px * 0.7);
+  }
+
+  .tour-tag-panel__scroll .tour-filter-active {
+    background-color: var(--deep-navy, #0d337f) !important;
+    border-color: var(--deep-navy, #0d337f) !important;
+    color: #ffffff !important;
+  }
+
+  .tour-sidebar__divider {
+    display: none;
+  }
+
+  /* 인기 장소 — 퍼블 카드 */
+  .tour-popular-panel {
+    position: relative;
+    padding: 1.5rem;
+    background: var(--surface-container-low, #f1f4f6);
+    border: 1px solid var(--outline-variant, #c4c6d3);
+  }
+
+  .tour-popular-panel h3 {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    margin-bottom: 1rem;
+    color: var(--primary-container, #0d337f);
+  }
+
+  .tour-popular-panel ul {
+    gap: 0.75rem;
+  }
+
+  .tour-popular-panel .font-display-lg {
+    font-size: 1rem;
+    width: 1.5rem;
+    text-align: center;
+  }
+
+  .tour-popular-panel .font-body-lg {
+    font-size: calc(16px * 0.85);
+  }
+
+  .tour-popular-panel .text-xs {
+    font-size: calc(12px * 0.85);
+  }
+
+  /* 안내 — 퍼블 notice */
+  .tour-notice-panel {
+    margin-top: 0 !important;
+    padding: 1rem !important;
+    border: 0 !important;
+    border-left: 2px solid var(--deep-navy, #0d337f) !important;
+    background: var(--surface-variant, #e0e3e5);
+  }
+
+  .tour-notice-panel .font-label-md {
+    display: none;
+  }
+
+  .tour-notice-panel .font-body-md {
+    font-size: calc(14px * 0.7);
+    line-height: 1.5;
+    color: var(--on-surface-variant, #444651);
+  }
+
+  .tour-places-section > div > h2 {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    color: var(--primary-container, #0d337f);
+  }
+
+  .tour-places-section > div > p {
+    font-size: calc(14px * 0.7);
+    line-height: 1.5;
+  }
+
+  .tour-section-tabs {
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    border-bottom: 0;
+  }
+
+  .tour-section-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tour-section-tab {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: calc(14px * 0.7);
+  }
+
+  .tour-places-section .tour-divider {
+    display: none;
+  }
+
+  /* 장소 선택 · 게시글 목록 */
+  .tour-places-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .tour-place-list {
+    display: none;
+  }
+
+  .tour-main .tour-place-picker .regi-combobox__input,
+  .tour-main .tour-place-picker .regi-combobox__option,
+  .tour-main .tour-place-picker .regi-combobox__empty {
+    font-size: calc(14px * 0.7);
+    line-height: 1.5;
+  }
+
+  .tour-main .tour-place-picker .regi-combobox__control {
+    min-height: var(--mobile-touch-min);
+  }
+
+  .tour-main .tour-place-picker .regi-combobox__toggle .material-symbols-outlined {
+    font-size: 1.125rem;
+  }
+
+  /* 패널 툴바 · 입력 — Community filter bar 스타일 */
+  .tour-main .tour-panel-toolbar {
+    border-bottom-color: var(--accent-gold, #c5a880);
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .tour-main .tour-panel-toolbar__head {
+    align-items: flex-end;
+    gap: 0.75rem;
+  }
+
+  .tour-main .tour-panel-toolbar__title-slot {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .tour-main .tour-place-picker--title .regi-combobox__input {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    font-weight: 600;
+    color: var(--primary-container, #0d337f);
+  }
+
+  .tour-main .tour-place-picker--title .regi-combobox__control {
+    min-height: 2rem;
+  }
+
+  .tour-main .tour-panel-write-btn {
+    align-self: flex-end;
+    padding: 0.5rem 0.875rem;
+    font-size: calc(12px * 0.85);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    min-height: 2rem;
+  }
+
+  .tour-main .tour-panel-toolbar__title {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+  }
+
+  .tour-main .tour-panel-toolbar__desc {
+    font-size: calc(14px * 0.7);
+    line-height: 1.5;
+  }
+
+  .tour-main .tour-place-select__label {
+    font-size: calc(14px * 0.7);
+    letter-spacing: 0.04em;
+  }
+
+  .tour-main .tour-field-search {
+    width: 100%;
+  }
+
+  .tour-main .tour-field-input,
+  .tour-main .tour-field-select {
+    display: block;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--brand-navy, #0d337f);
+    border-radius: 0;
+    background: transparent;
+    padding: 0 0 4px;
+    min-height: 1.75rem;
+    line-height: 1.25;
+    box-sizing: border-box;
+    font-size: calc(14px * 0.7);
+    color: var(--on-surface, #181c1e);
+    outline: none;
+    box-shadow: none;
+    appearance: none;
+  }
+
+  .tour-main .tour-field-select {
+    min-height: var(--mobile-touch-min);
+    padding-right: 1.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230D337F' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.125rem center;
+    background-size: 0.75rem auto;
+  }
+
+  .tour-main .tour-field-input::placeholder {
+    font-size: inherit;
+    color: var(--outline-variant, #c4c6d3);
+  }
+
+  .tour-main .tour-field-input:focus,
+  .tour-main .tour-field-select:focus {
+    border-bottom-width: 2px;
+    border-color: #1d5abc;
+    padding-bottom: 3px;
+  }
+
+  .tour-main .tour-field-search .material-symbols-outlined {
+    font-size: 1.125rem;
+  }
+
+  /* 게시글 목록 — Community와 동일 스케일 */
+  .tour-main .community-post {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .tour-main .community-post h3 {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+  }
+
+  .tour-main .community-post p,
+  .tour-main .community-post .text-sm {
+    font-size: calc(14px * 0.7);
+    line-height: 1.5;
+  }
+
+  .tour-main .community-post .font-label-md {
+    font-size: calc(10px * 0.85);
+  }
+
+  .tour-main .community-post-list-panel .font-body-md {
+    font-size: calc(14px * 0.7);
+  }
+
+  .tour-places-grid .tour-panel-body {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .tour-post-list-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tour-post-list-wrap > .community-post-list-panel {
+    flex: 1 1 auto;
+    min-height: calc(4 * 8rem);
+  }
+
+  .tour-pager-nav {
+    flex-shrink: 0;
+    min-height: var(--mobile-touch-min);
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(14px * 0.7);
+  }
+
+  .tour-pager-nav button {
+    min-height: var(--mobile-touch-min);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .tour-panel-body {
+    min-height: 0;
+  }
+}

@@ -1,0 +1,514 @@
+/* --- mobile-common.css (Publish mobile_common* shell + device-safe layout) --- */
+/* Covers: iPhone, Galaxy S, Z Flip/Fold, Samsung folder — max-width 767px (Tailwind md) */
+
+:root {
+  --mobile-header-h: 4rem;
+  --mobile-bottom-nav-h: 4rem;
+  --mobile-page-pad-x: 1.25rem;
+  --mobile-safe-top: env(safe-area-inset-top, 0px);
+  --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --mobile-safe-left: env(safe-area-inset-left, 0px);
+  --mobile-safe-right: env(safe-area-inset-right, 0px);
+  --mobile-touch-min: 2.75rem;
+}
+
+@media (max-width: 767px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    font-size: 80%;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  /* Horizontal scroll tabs (community, dashboard, etc.) */
+  .mobile-scroll-x {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .mobile-scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-scroll-x > * {
+    flex-shrink: 0;
+  }
+
+  /* Touch-friendly controls */
+  .mobile-touch-target {
+    min-height: var(--mobile-touch-min);
+    min-width: var(--mobile-touch-min);
+  }
+
+  button,
+  [role='button'],
+  input[type='submit'],
+  input[type='button'] {
+    touch-action: manipulation;
+  }
+
+  /* App shell: fixed header + bottom nav clearance */
+  .app-layout {
+    padding-bottom: calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom));
+  }
+
+  .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: var(--mobile-header-h);
+    min-height: var(--mobile-header-h);
+    padding-top: var(--mobile-safe-top);
+    padding-left: calc(var(--mobile-page-pad-x) + var(--mobile-safe-left));
+    padding-right: calc(var(--mobile-page-pad-x) + var(--mobile-safe-right));
+    padding-bottom: 0;
+    background: #ffffff;
+    border-bottom: 1px solid var(--brand-navy, #0d337f);
+    backdrop-filter: none;
+    display: grid;
+    grid-template-columns: var(--mobile-touch-min) 1fr var(--mobile-touch-min);
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .app-header > nav.hidden {
+    display: none !important;
+  }
+
+  .app-header__menu-btn {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .app-header__brand--mobile {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .app-header__actions {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .app-header__brand--desktop {
+    display: none !important;
+  }
+
+  .app-header.header-shared {
+    height: calc(var(--mobile-header-h) + var(--mobile-safe-top));
+  }
+
+  .app-header__brand--mobile {
+    display: block;
+    font-family: var(--font-secondary, 'Hanken Grotesk', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brand-navy, #0d337f);
+  }
+
+  .app-header__brand-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  .app-header__logo {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 1px 2px rgba(0, 30, 89, 0.12);
+    object-fit: cover;
+  }
+
+  .app-header__menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--mobile-touch-min);
+    height: var(--mobile-touch-min);
+    margin: -0.375rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--brand-navy, #0d337f);
+    cursor: pointer;
+  }
+
+  .app-header__profile {
+    width: var(--mobile-touch-min);
+    height: var(--mobile-touch-min);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .app-header__actions .app-header__logout {
+    display: none;
+  }
+
+  .app-main {
+    padding-top: calc(var(--mobile-header-h) + var(--mobile-safe-top));
+  }
+
+  /* Compact footer on mobile */
+  .app-footer--app.footer-shared {
+    display: none;
+  }
+
+  /* Floating actions: above bottom nav */
+  .app-floating-actions {
+    right: calc(var(--mobile-page-pad-x) + var(--mobile-safe-right));
+    bottom: calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom) + 0.75rem);
+  }
+
+  /* Bottom navigation — 글자 크기 html 80% 영향 롤백 */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    height: calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom));
+    padding-bottom: var(--mobile-safe-bottom);
+    padding-left: var(--mobile-safe-left);
+    padding-right: var(--mobile-safe-right);
+    background: #ffffff;
+    border-top: 1px solid var(--brand-navy, #0d337f);
+    justify-content: space-around;
+    align-items: stretch;
+    font-size: 125%;
+  }
+
+  .mobile-bottom-nav__item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+    padding: 0.375rem 0.125rem;
+    border: 0;
+    background: transparent;
+    color: #444651;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-bottom-nav__item:active {
+    transform: scale(0.96);
+  }
+
+  .mobile-bottom-nav__item--active {
+    color: #1d5abc;
+    font-weight: 700;
+  }
+
+  .mobile-bottom-nav__icon {
+    font-size: 1.375rem;
+    line-height: 1;
+  }
+
+  .mobile-bottom-nav__label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Mobile drawer menu */
+  .mobile-nav-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .mobile-nav-drawer--open {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .mobile-nav-drawer__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 30, 89, 0.35);
+    opacity: 0;
+    transition: opacity 0.28s ease;
+  }
+
+  .mobile-nav-drawer--open .mobile-nav-drawer__backdrop {
+    opacity: 1;
+  }
+
+  .mobile-nav-drawer__panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(18rem, 85vw);
+    max-width: 100%;
+    padding-top: calc(var(--mobile-safe-top) + 1rem);
+    padding-bottom: calc(var(--mobile-safe-bottom) + 1rem);
+    padding-left: calc(var(--mobile-page-pad-x) + var(--mobile-safe-left));
+    padding-right: var(--mobile-page-pad-x);
+    background: #ffffff;
+    border-right: 1px solid var(--accent-gold, #c5a880);
+    transform: translateX(-100%);
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-nav-drawer--open .mobile-nav-drawer__panel {
+    transform: translateX(0);
+  }
+
+  .mobile-nav-drawer__close {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    width: 100%;
+    min-height: var(--mobile-touch-min);
+    margin: 0 0 0.75rem;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid #e0e3e5;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--brand-navy, #0d337f);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mobile-nav-drawer__close .material-symbols-outlined {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .mobile-nav-drawer__title {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-secondary, 'Hanken Grotesk', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #747682;
+  }
+
+  .mobile-nav-drawer__link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: var(--mobile-touch-min);
+    padding: 0.5rem 0;
+    border: 0;
+    border-bottom: 1px solid #e0e3e5;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #181c1e;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mobile-nav-drawer__link--active {
+    color: #1d5abc;
+  }
+
+  .mobile-nav-drawer__logout {
+    margin-top: 1.5rem;
+    width: 100%;
+    min-height: var(--mobile-touch-min);
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--brand-navy, #0d337f);
+    background: transparent;
+    color: var(--brand-navy, #0d337f);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Sticky horizontal category bar (sidebars → tabs) */
+  .mobile-category-bar {
+    position: sticky;
+    top: calc(var(--mobile-header-h) + var(--mobile-safe-top));
+    z-index: 40;
+    box-sizing: border-box;
+    width: auto;
+    margin: 0 0 1rem;
+    padding: 0.75rem 0.5rem;
+    background: #f7fafc;
+    border-bottom: 1px solid #c4c6d3;
+  }
+
+  .mobile-category-bar__scroll {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-block: 2px;
+    scroll-padding-inline: 0.5rem;
+  }
+
+  .mobile-category-bar__scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-category-bar__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    background: #ffffff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #444651;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  /* 시설예약: 카테고리는 스크롤, 내 예약은 우측 고정 */
+  .mobile-category-bar--with-pinned {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mobile-category-bar--with-pinned > .mobile-category-bar__tab {
+    flex-shrink: 0;
+  }
+
+  .mobile-category-bar__tab--active {
+    color: #1d5abc;
+    border-color: #839ff1;
+    background: #dbe1ff;
+  }
+
+  .mobile-category-bar__tab .material-symbols-outlined {
+    flex-shrink: 0;
+    font-size: 1.125rem;
+    line-height: 1;
+    overflow: visible;
+  }
+
+  /* Page padding override: use mobile margin */
+  .px-margin-desktop,
+  .md\:px-margin-desktop,
+  .md\:px-16,
+  .px-8 {
+    padding-left: var(--mobile-page-pad-x) !important;
+    padding-right: var(--mobile-page-pad-x) !important;
+  }
+
+  .container-shared {
+    padding-left: var(--mobile-page-pad-x);
+    padding-right: var(--mobile-page-pad-x);
+  }
+
+  /* Full-width primary actions */
+  .mobile-full-btn {
+    width: 100%;
+    min-height: var(--mobile-touch-min);
+  }
+
+  /* 페이지 main header — 제목: 학과 광장(text-2xl)과 동일, 설명 70% */
+  .page-main-title {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .page-main-desc {
+    line-height: 1.5 !important;
+  }
+
+  p.page-main-desc.text-body-lg,
+  p.page-main-desc.font-body-lg {
+    font-size: calc(18px * 0.7) !important;
+  }
+
+  p.page-main-desc.text-body-md,
+  p.page-main-desc.font-body-md {
+    font-size: calc(16px * 0.7) !important;
+  }
+
+  p.page-main-desc.text-sm {
+    font-size: calc(14px * 0.7) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .app-header__brand--mobile,
+  .app-header__menu-btn,
+  .mobile-bottom-nav,
+  .mobile-nav-drawer,
+  .mobile-category-bar {
+    display: none !important;
+  }
+
+  .app-header__brand--desktop {
+    display: flex;
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .mobile-nav-drawer__backdrop,
+  .mobile-nav-drawer__panel,
+  .mobile-bottom-nav__item {
+    transition: none;
+  }
+}
+
+/* Very narrow (Z Flip cover ~260px) */
+@media (max-width: 360px) {
+  .mobile-bottom-nav__label {
+    font-size: 0.5625rem;
+  }
+
+  .mobile-bottom-nav__icon {
+    font-size: 1.25rem;
+  }
+}

@@ -1,0 +1,88 @@
+/* mobile/reservation.css — Community mobile layout와 탭·본문 너비 통일 */
+@media (max-width: 767px) {
+  .reservation-layout {
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    gap: 0;
+  }
+
+  /* community-layout--with-sidebar > .mobile-category-bar 와 동일 */
+  .reservation-layout--with-tabs > .mobile-category-bar {
+    margin-left: calc(1rem + var(--mobile-page-pad-x));
+    margin-right: calc(1rem + var(--mobile-page-pad-x));
+  }
+
+  .reservation-layout--with-tabs .mobile-category-bar__scroll {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .reservation-layout--with-tabs .mobile-category-bar__tab {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .reservation-layout--with-tabs .mobile-category-bar__tab .material-symbols-outlined {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .reservation-square-content {
+    align-self: stretch;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .reservation-square-content > .grid {
+    width: 100%;
+  }
+
+  .reservation-main-content {
+    padding: 0;
+    width: 100%;
+  }
+
+  .reservation-main {
+    padding: 0 var(--mobile-page-pad-x) 1.5rem;
+    width: 100%;
+  }
+
+  .reservation-main h1 {
+    line-height: 1.2;
+  }
+
+  .reservation-main .gold-divider.w-24 {
+    width: 100% !important;
+  }
+
+  .facility-card {
+    padding: 0.875rem;
+  }
+
+  .book-now-btn,
+  .book-unavailable-btn {
+    min-height: var(--mobile-touch-min);
+    padding: 0.625rem 0;
+  }
+
+  .reservation-dept-browse {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .reservation-dept-picker-wrap {
+    width: 100%;
+  }
+
+  .my-reservation-card {
+    padding: 0.875rem;
+  }
+
+  .my-reservation-card .my-reservation-detail-list {
+    margin-bottom: 1.5rem;
+  }
+}

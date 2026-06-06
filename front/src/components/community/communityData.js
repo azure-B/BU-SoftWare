@@ -1,3 +1,5 @@
+import { API_BASE_URL, CERTIFICATE_ISSUANCE_URL, CYBER_CAMPUS_URL } from '../constants';
+
 /** board_id ↔ 사이드바 slug (DB 시드 기준) */
 export const BOARD_IDS = {
   scholarship: 1,
@@ -69,13 +71,36 @@ export const COMMUNITY_FAQ = [
 ];
 
 export const COMMUNITY_QUICK_LINKS = [
-  { label: '중앙도서관', href: '#library' },
-  { label: '종합정보시스템', href: '#portal' },
+  {
+    label: '중앙도서관',
+    href: 'https://lib.bu.ac.kr/users/bul/SsoLogonProxy.aspx',
+    icon: 'local_library',
+  },
+  {
+    label: '종합정보시스템',
+    href: 'https://portal.bu.ac.kr/p/S00/',
+    icon: 'account_balance',
+  },
+  {
+    label: '사이버캠퍼스',
+    href: CYBER_CAMPUS_URL,
+    icon: 'laptop_chromebook',
+  },
+  {
+    label: '증명서 발급',
+    href: CERTIFICATE_ISSUANCE_URL,
+    icon: 'description',
+  },
 ];
 
 const COMMUNITY_BOARD_SET = new Set(['community', 'mentoring', 'team']);
 
-export function boardIdToSlug(id) {
+const GLOBAL_BOARD_SLUGS = new Set(['scholarship', 'contest']);
+
+export const COMMUNITY_PAGE_SIZE = 5;
+
+export function boardIdToSlug(id, boardKind) {
+  if (boardKind === 'qna') return 'qna';
   if (id === 3) return 'mentoring';
   if (id === 4) return 'team';
   if (id === 1) return 'scholarship';
@@ -84,12 +109,79 @@ export function boardIdToSlug(id) {
   return 'community';
 }
 
+export async function fetchDepartmentBoardMap(departmentId) {
+  if (!departmentId) return {};
+
+  const res = await fetch(
+    `${API_BASE_URL}/api/community/boards?departmentId=${departmentId}`,
+  );
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || '게시판 정보를 불러오지 못했습니다.');
+  }
+  return res.json();
+}
+
 export function slugToBoardId(slug) {
   return BOARD_IDS[slug] ?? null;
 }
 
 export function isCommunitySection(boardSlug) {
   return COMMUNITY_BOARD_SET.has(boardSlug);
+}
+
+export function shouldFilterByDepartment(boardSlug) {
+  return !GLOBAL_BOARD_SLUGS.has(boardSlug);
+}
+
+export function canBrowseOtherDepartments(boardSlug) {
+  return shouldFilterByDepartment(boardSlug) && boardSlug !== 'dept-board';
+}
+
+export async function fetchRegisterDepartments() {
+  const res = await fetch(`${API_BASE_URL}/api/auth/register/departments`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || '학과 목록을 불러오지 못했습니다.');
+  }
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
+function resolveBoardKind(boardSlug, filter) {
+  if (boardSlug === 'dept-board') return 'dept_board';
+  if (boardSlug === 'mentoring') return 'mentoring';
+  if (boardSlug === 'team') return 'team';
+  if (filter === '멘토링') return 'mentoring';
+  if (filter === '팀프로젝트') return 'team';
+  return null;
+}
+
+export function buildPostsFetchQuery(boardSlug, filter, departmentId) {
+  const params = new URLSearchParams();
+
+  if (!shouldFilterByDepartment(boardSlug)) {
+    const boardIds = getBoardIdsForFetch(boardSlug, filter);
+    if (boardIds.length === 1) {
+      params.set('boardId', String(boardIds[0]));
+    } else {
+      params.set('boardIds', boardIds.join(','));
+    }
+    return params.toString();
+  }
+
+  if (departmentId) {
+    params.set('departmentId', String(departmentId));
+  }
+
+  const boardKind = resolveBoardKind(boardSlug, filter);
+  if (boardKind) {
+    params.set('boardKind', boardKind);
+  } else {
+    params.set('boardKinds', 'mentoring,team');
+  }
+
+  return params.toString();
 }
 
 export function getBoardIdsForFetch(boardSlug, filter) {
@@ -145,6 +237,16 @@ export const DASHBOARD_SQUARE_TABS = [
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
+export function sortPostsByNewest(posts) {
+  return [...posts].sort((a, b) => {
+    const ta = new Date(a.createdAt).getTime();
+    const tb = new Date(b.createdAt).getTime();
+    const safeA = Number.isNaN(ta) ? 0 : ta;
+    const safeB = Number.isNaN(tb) ? 0 : tb;
+    return safeB - safeA;
+  });
+}
+
 export function getTopViewedPostsInDays(
   posts,
   { days = 7, limit = 3, fallbackToAll = true } = {},
@@ -175,6 +277,15 @@ export function plainTextExcerpt(content, maxLen = 120) {
   return `${text.slice(0, maxLen)}…`;
 }
 
+export async function fetchCommunityAdminUserId() {
+  const res = await fetch(`${API_BASE_URL}/api/community/admin-author`);
+  if (!res.ok) {
+    return null;
+  }
+  const data = await res.json();
+  return data.adminUserId ?? null;
+}
+
 export function mapApiPost(post) {
   const tagMeta = BOARD_TAG_BY_ID[post.boardId] ?? {
     tag: '일반',
@@ -184,6 +295,10 @@ export function mapApiPost(post) {
   return {
     id: post.id,
     boardId: post.boardId,
+    boardDepartmentId: post.boardDepartmentId ?? null,
+    authorId: post.authorId ?? null,
+    authorDepartmentId: post.authorDepartmentId ?? null,
+    authorDepartmentName: post.authorDepartmentName ?? null,
     tag: tagMeta.tag,
     tagClass: tagMeta.tagClass,
     time: formatPostTime(post.createdAt),
@@ -193,5 +308,25 @@ export function mapApiPost(post) {
     createdAt: post.createdAt,
     viewCount: post.viewCount ?? 0,
     comments: post.commentCount ?? 0,
+    departmentLabel: null,
+  };
+}
+
+export function enrichPostDepartmentLabel(post, adminUserId) {
+  const isAdmin =
+    adminUserId != null && post.authorId != null && post.authorId === adminUserId;
+  const boardDeptId = post.boardDepartmentId;
+  const authorDeptId = post.authorDepartmentId;
+
+  const shouldShow =
+    !isAdmin &&
+    authorDeptId != null &&
+    boardDeptId != null &&
+    Number(authorDeptId) !== Number(boardDeptId) &&
+    Boolean(post.authorDepartmentName);
+
+  return {
+    ...post,
+    departmentLabel: shouldShow ? post.authorDepartmentName : null,
   };
 }

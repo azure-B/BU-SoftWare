@@ -1,0 +1,31 @@
+/* mobile/qna.css */
+@media (max-width: 767px) {
+  .community-qna-panel {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .community-qna-search input {
+    font-size: calc(14px * 0.65);
+    line-height: 1.5;
+  }
+
+  .community-qna-search input::placeholder {
+    font-size: inherit;
+  }
+
+  .community-qna-item__btn {
+    min-height: var(--mobile-touch-min);
+  }
+
+  .community-main .community-post h3 {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+  }
+
+  .community-main .community-post .text-sm {
+    font-size: calc(14px * 0.7);
+    line-height: 1.5;
+  }
+}

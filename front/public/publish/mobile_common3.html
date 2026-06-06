@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>셔틀버스 실시간 위치</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+    
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md flex flex-col min-h-screen antialiased md:hidden pt-[64px] pb-[80px]">
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface fixed top-0 w-full z-50 border-b border-primary dark:border-primary-fixed flex justify-between items-center px-margin-mobile h-16 md:hidden">
+<button aria-label="menu" class="text-primary dark:text-primary-fixed-dim hover:text-secondary transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<div class="font-headline-md-mobile text-headline-md-mobile tracking-widest text-primary dark:text-primary-fixed-dim uppercase">BAEKSEOK</div>
+<button aria-label="account circle" class="text-primary dark:text-primary-fixed-dim hover:text-secondary transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col w-full gap-8">
+<!-- Hero Title -->
+<section class="px-margin-mobile pt-8 flex flex-col gap-2">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary pb-2 border-b border-gold">셔틀버스 실시간 위치</h1>
+</section>
+<!-- Map Section -->
+<section class="px-margin-mobile py-4 w-full h-64 relative bg-surface-container-low">
+<div aria-label="Real-time map view of shuttle buses" class="absolute inset-0 bg-cover bg-center" data-alt="A clean, minimalist map interface shown in a mobile format. The map uses subtle, muted colors like light grey and soft beige to align with an editorial aesthetic, focusing on clarity and information density. Small, elegant circular markers in deep navy blue indicate the real-time positions of shuttle buses along a route. The overall mood is precise, functional, and deeply rooted in a modern, scholastic design system." data-location="Cheonan, South Korea" role="img" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3p_cW_AOL6YxIL9pML_nwfu_qHdkvysjSk03VLiOVMaX9Tn3B_wuMXjNtNskaWMqxJzJDuQN2tGAh4HX0lNEXuo3tTFK82b94DksQa9eKfPi3eislLReMmB2CTyftVL7SwbOnC0aS5KNIhg2hHC1UJSlVyP1mmqaP4rpgaaLtlcJb8BzcZ0ZFNpwWFVrT8KjOzJtYpiJxl_-gKOCcGuxPOSdfGAligFxzTxnZD_SICLSG3tdDV6kVfGF0k-x8UIDZcYNHyzcaAg');"></div>
+<!-- Simulated Bus Markers -->
+<div class="absolute top-1/4 left-1/3 w-4 h-4 bg-primary rounded-full border-2 border-surface shadow-sm animate-pulse"></div>
+<div class="absolute top-1/2 right-1/4 w-4 h-4 bg-secondary rounded-full border-2 border-surface shadow-sm animate-pulse"></div>
+</section>
+<!-- Active Route Status -->
+<section class="px-margin-mobile flex flex-col gap-4">
+<!-- Route Item 1 -->
+<div class="border border-surface-variant p-4 flex flex-col gap-2 relative bg-surface-container-lowest">
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider">TO ANSEO STATION</span>
+<div class="flex justify-between items-end">
+<span class="font-body-lg text-body-lg text-on-surface font-semibold">Arriving in 5 mins</span>
+<span class="material-symbols-outlined text-primary" data-icon="directions_bus">directions_bus</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Last updated: Just now</p>
+</div>
+<!-- Route Item 2 -->
+<div class="border border-surface-variant p-4 flex flex-col gap-2 relative bg-surface-container-lowest">
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider">TO CHEONAN CAMPUS</span>
+<div class="flex justify-between items-end">
+<span class="font-body-lg text-body-lg text-outline">Departed</span>
+<span class="material-symbols-outlined text-outline" data-icon="directions_bus">directions_bus</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Next bus at 14:30</p>
+</div>
+</section>
+<!-- Schedule & Notices (Accordion Style) -->
+<section class="px-margin-mobile flex flex-col gap-8 pb-8">
+<!-- Schedule Accordion -->
+<details class="group flex flex-col gap-2">
+<summary class="flex justify-between items-center cursor-pointer list-none font-headline-md text-headline-md text-primary pb-2 border-b border-gold">
+<span>운행 시간표</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180" data-icon="expand_more">expand_more</span>
+</summary>
+<div class="mt-4 flex flex-col gap-2">
+<div class="flex justify-between py-2 border-b border-surface-variant">
+<span class="font-body-md text-body-md text-on-surface">Morning Rush (08:00 - 10:00)</span>
+<span class="font-label-md text-label-md text-primary">Every 10 min</span>
+</div>
+<div class="flex justify-between py-2 border-b border-surface-variant">
+<span class="font-body-md text-body-md text-on-surface">Mid-day (10:00 - 16:00)</span>
+<span class="font-label-md text-label-md text-primary">Every 30 min</span>
+</div>
+<div class="flex justify-between py-2 border-b border-surface-variant">
+<span class="font-body-md text-body-md text-on-surface">Evening (16:00 - 19:00)</span>
+<span class="font-label-md text-label-md text-primary">Every 15 min</span>
+</div>
+</div>
+</details>
+<!-- Notices Accordion -->
+<details class="group flex flex-col gap-2" open="">
+<summary class="flex justify-between items-center cursor-pointer list-none font-headline-md text-headline-md text-primary pb-2 border-b border-gold">
+<span>중요 공지사항</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180" data-icon="expand_more">expand_more</span>
+</summary>
+<div class="mt-4 flex flex-col gap-4">
+<div class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-primary mt-1" data-icon="info">info</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface">금일 기상 악화로 인해 셔틀버스 운행이 일부 지연될 수 있습니다. 학생 여러분의 양해 부탁드립니다.</p>
+<span class="font-label-md text-label-md text-outline mt-1 block">2024.10.24</span>
+</div>
+</div>
+</div>
+</details>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface fixed bottom-0 w-full z-50 border-t border-primary dark:border-primary-fixed flex justify-around items-center h-16 pb-safe px-4 md:hidden">
+<a class="flex flex-col items-center justify-center text-primary-container dark:text-secondary-container font-bold hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 duration-100" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md mt-1 text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 duration-100" style="font-variation-settings: 'FILL' 0;">notifications</span>
+<span class="font-label-md text-label-md mt-1 text-[10px]">Notices</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 duration-100" style="font-variation-settings: 'FILL' 0;">smart_button</span>
+<span class="font-label-md text-label-md mt-1 text-[10px]">ID</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 duration-100" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-md text-label-md mt-1 text-[10px]">Profile</span>
+</a>
+</nav>
+
+</body>

@@ -35,7 +35,6 @@
 .tour-section-tabs {
   display: flex;
   gap: 1.5rem;
-  border-bottom: 1px solid var(--surface-variant, #c4c7c5);
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
   font-family: inherit;
@@ -68,6 +67,90 @@
   scrollbar-width: thin;
 }
 
+.tour-section-body,
+.tour-panel-body {
+  min-width: 0;
+  transition: opacity 0.32s ease, transform 0.32s ease;
+  will-change: opacity, transform;
+}
+
+.tour-section-body.panel-fade-hidden,
+.tour-panel-body.panel-fade-hidden {
+  transform: translateY(8px);
+}
+
+.tour-post-list-scroll {
+  min-height: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 .tour-comment-item:last-of-type {
   margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .tour-place-list-scroll,
+  .tour-post-list-panel-frame {
+    height: 32rem;
+    max-height: 32rem;
+    min-height: 0;
+  }
+
+  .tour-place-list-scroll {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .tour-post-list-panel-frame {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .tour-post-list-scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding-right: 0.25rem;
+  }
+
+  .tour-post-list-scroll > .community-post-list-panel {
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    overflow-x: hidden;
+  }
+
+  .tour-post-list-scroll .community-post {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .tour-post-list-scroll .community-post .flex-1 {
+    min-width: 0;
+  }
+
+  .tour-post-list-scroll .community-post h3,
+  .tour-post-list-scroll .community-post p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-section-body,
+  .tour-panel-body {
+    transition: none;
+    transform: none;
+  }
 }

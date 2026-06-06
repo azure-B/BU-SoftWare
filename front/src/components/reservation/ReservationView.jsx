@@ -14,6 +14,7 @@ import {
   MY_RESERVATIONS_ID,
   MY_RESERVATIONS_STORAGE_KEY,
   RESERVATION_STATUS,
+  RESERVATIONS_UPDATED_EVENT,
 } from './reservationData';
 import '../../public/css/reservation.css';
 
@@ -37,6 +38,7 @@ function ReservationView() {
 
   useEffect(() => {
     localStorage.setItem(MY_RESERVATIONS_STORAGE_KEY, JSON.stringify(reservations));
+    window.dispatchEvent(new Event(RESERVATIONS_UPDATED_EVENT));
   }, [reservations]);
 
   const handleSidebarSelect = useCallback((sidebarId) => {

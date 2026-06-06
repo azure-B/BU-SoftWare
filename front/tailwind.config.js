@@ -54,6 +54,7 @@ module.exports = {
         'decoration-gold': '#C5A880',
         'accent-gold': '#C5A880',
         'deep-navy': '#0D337F',
+        'energetic-cobalt': '#1A56DB',
         'surface-container-lowest': '#ffffff',
       },
       borderRadius: {

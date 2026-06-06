@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const registerController = require('../controllers/registerController');
-const { validate } = require('../middlewares/validate');
+const { validate, validateNumbers } = require('../middlewares/validate');
 
 /**
  * @swagger
@@ -9,6 +9,8 @@ const { validate } = require('../middlewares/validate');
  *   name: Register
  *   description: 회원가입 / 이메일 인증
  */
+
+router.get('/departments', registerController.listDepartments);
 
 /**
  * @swagger
@@ -60,11 +62,12 @@ router.post(
     'verificationToken',
     'name',
     'studentId',
-    'department',
+    'departmentId',
     'emailLocal',
     'password',
     'confirmPassword',
   ),
+  validateNumbers('departmentId'),
   registerController.register,
 );
 

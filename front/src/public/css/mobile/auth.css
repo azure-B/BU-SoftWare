@@ -1,0 +1,58 @@
+/* mobile/auth.css — login, regi, find, freshman_guide */
+@media (max-width: 767px) {
+  .login-page,
+  .regi-page,
+  .find-page,
+  .freshman-guide-page,
+  .auth-flow {
+    padding-left: var(--mobile-page-pad-x);
+    padding-right: var(--mobile-page-pad-x);
+    min-height: 100dvh;
+  }
+
+  .auth-panel {
+    width: 100%;
+    max-width: none;
+    padding: 1.5rem 0;
+  }
+
+  .auth-panel h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .login-form input,
+  .regi-form input,
+  .regi-form select,
+  .find-form input {
+    font-size: 16px;
+    min-height: var(--mobile-touch-min);
+  }
+
+  .login-form button[type='submit'],
+  .regi-form button[type='submit'],
+  .find-form button[type='submit'] {
+    width: 100%;
+    min-height: var(--mobile-touch-min);
+  }
+
+  .auth-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+
+  .auth-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .freshman-guide-page .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-footer--login.footer-shared {
+    padding: 2rem var(--mobile-page-pad-x);
+    flex-direction: column;
+    text-align: center;
+  }
+}

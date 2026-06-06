@@ -1,0 +1,27 @@
+/* mobile/new_post.css — NewPost · NewQnaPost 공통 */
+@media (max-width: 767px) {
+  .new-post-main .new-post-guidelines-title {
+    font-size: 1.125rem;
+    line-height: 1.35;
+  }
+
+  .new-post-main .new-post-guidelines-body,
+  .new-post-main .new-post-guideline-text {
+    font-size: inherit;
+    white-space: normal;
+  }
+
+  .new-post-main .new-post-guidelines {
+    margin-bottom: 3rem;
+  }
+
+  .new-post-main .new-post-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .new-post-main .new-post-actions button {
+    width: 100%;
+    min-height: var(--mobile-touch-min);
+  }
+}

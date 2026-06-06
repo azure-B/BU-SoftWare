@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shuttle Bus Location - Baekseok Student Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-container": "#483516",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f1f4f6",
+                        "primary-container": "#0d337f",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "surface-container": "#ebeef0",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#444651",
+                        "on-primary-fixed-variant": "#22428e",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f7fafc",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-container-high": "#e5e9eb",
+                        "inverse-surface": "#2d3133",
+                        "surface-tint": "#3d5ba8",
+                        "on-tertiary-fixed": "#281800",
+                        "on-primary-container": "#839ff1",
+                        "on-background": "#181c1e",
+                        "on-tertiary-container": "#ba9d76",
+                        "primary": "#001e59",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#c4c6d3",
+                        "on-secondary-fixed": "#001943",
+                        "secondary-fixed-dim": "#afc6ff",
+                        "background": "#f7fafc",
+                        "secondary-container": "#6899fe",
+                        "inverse-primary": "#b3c5ff",
+                        "tertiary-fixed": "#fedeb2",
+                        "surface": "#f7fafc",
+                        "inverse-on-surface": "#eef1f3",
+                        "surface-dim": "#d7dadc",
+                        "on-secondary-container": "#003072",
+                        "on-error": "#ffffff",
+                        "outline": "#747682",
+                        "secondary-fixed": "#d9e2ff",
+                        "surface-variant": "#e0e3e5",
+                        "secondary": "#1d5abc",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed-variant": "#004299",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#181c1e",
+                        "on-tertiary-fixed-variant": "#584323",
+                        "tertiary": "#312004",
+                        "tertiary-fixed-dim": "#e0c298",
+                        "on-primary-fixed": "#001849",
+                        "gold-accent": "#C5A880",
+                        "deep-navy": "#0D337F",
+                        "energetic-cobalt": "#1A56DB"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "margin-mobile": "20px",
+                        "column-gap": "32px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px"
+                    },
+                    fontFamily: {
+                        "display-lg": ["Libre Caslon Text", "serif"],
+                        "body-md": ["Hanken Grotesk", "sans-serif"],
+                        "body-lg": ["Hanken Grotesk", "sans-serif"],
+                        "headline-lg": ["Libre Caslon Text", "serif"],
+                        "display-lg-mobile": ["Libre Caslon Text", "serif"],
+                        "label-md": ["Hanken Grotesk", "sans-serif"],
+                        "headline-md": ["Libre Caslon Text", "serif"],
+                        "headline-lg-mobile": ["Libre Caslon Text", "serif"]
+                    },
+                    fontSize: {
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["40px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        body {
+            background-color: #f7fafc;
+            color: #181c1e;
+        }
+        .editorial-rule-gold {
+            border-bottom: 1px solid #C5A880;
+        }
+        .editorial-rule-navy {
+            border-bottom: 1px solid #0D337F;
+        }
+        .editorial-rule-gold-vertical {
+            border-right: 1px solid #C5A880;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased selection:bg-gold-accent selection:text-white">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-on-background text-primary dark:text-primary-fixed font-body-lg text-body-lg docked full-width top-0 border-b border-tertiary dark:border-tertiary-container flat no shadows flex justify-between items-center w-full px-margin-desktop py-4 max-w-7xl mx-auto z-50 sticky bg-opacity-95 backdrop-blur-sm">
+<div class="flex items-center gap-8">
+<div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight">Freshmen Guide</div>
+<div class="hidden md:flex gap-6">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Registration</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Login</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Campus Life</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Resources</a>
+<a class="text-secondary dark:text-secondary-fixed font-bold border-b-2 border-tertiary hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Shuttle Bus (셔틀버스)</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary transition-colors" data-icon="search">search</span>
+<button class="bg-deep-navy text-white px-6 py-2 font-label-md text-label-md hover:bg-energetic-cobalt transition-colors duration-200">Support</button>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-16 grid grid-cols-1 md:grid-cols-12 gap-column-gap">
+<!-- Header Section -->
+<header class="col-span-1 md:col-span-12 mb-12 editorial-rule-navy pb-8">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4">Shuttle Bus Location</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">Real-time tracking and schedules for the Baekseok Student Hub campus transport network.</p>
+</header>
+<!-- Main Content (Left) -->
+<div class="col-span-1 md:col-span-7 lg:col-span-8 flex flex-col gap-12">
+<!-- Map Area -->
+<section class="border border-gold-accent p-1 bg-white relative">
+<div class="h-[500px] w-full bg-surface-container-high relative overflow-hidden" data-alt="A highly detailed, stylized digital map interface showing a campus layout with interconnected roads and buildings. The aesthetic is clean, academic, and modern, using a color palette of soft whites, deep navys, and gold accents. Real-time location markers in energetic cobalt dot the map, indicating active transport vehicles. The lighting is bright and evenly distributed, creating a crisp, highly legible editorial feel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuByYc7ca_-B5IdqKC4hattSm5xn8Rn-qs2hQ_ZFtYgLFk-eiVsynff3viK88fZTzStzUTkYrVl3LnFS50MXct-fEsXq5qPQFaHbkfIjVFw5FWDBfG-AjF1CX9ibykCopGv4hVZlwuAViwQZNIBqtptSZ8KIkY03JE6BLsQe6bsXoVp-CmFlr45yT4OQPkaODWXEKqneCdOPYyMjnlr30DcfX0rkKwp3Jj-cy1PlHNL1gtXhacYYHr0cNAV4piIKvBp8zdbjoE6q1Q'); background-size: cover; background-position: center;">
+<!-- Overlay for map readability -->
+<div class="absolute inset-0 bg-white/40 backdrop-blur-[2px]"></div>
+<!-- Map Markers (Simulated) -->
+<div class="absolute top-1/3 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="bg-primary text-white p-2 rounded-full shadow-lg border-2 border-white animate-bounce">
+<span class="material-symbols-outlined text-sm" data-icon="directions_bus">directions_bus</span>
+</div>
+<div class="bg-white/90 px-3 py-1 mt-2 text-xs font-label-md text-label-md text-primary border border-gold-accent">Bus A - En Route</div>
+</div>
+<div class="absolute top-1/2 right-1/3 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="bg-secondary text-white p-2 rounded-full shadow-lg border-2 border-white">
+<span class="material-symbols-outlined text-sm" data-icon="directions_bus">directions_bus</span>
+</div>
+<div class="bg-white/90 px-3 py-1 mt-2 text-xs font-label-md text-label-md text-primary border border-gold-accent">Bus B - Arriving 5m</div>
+</div>
+<!-- Map Controls -->
+<div class="absolute bottom-4 right-4 flex flex-col gap-2">
+<button class="bg-white p-2 border border-outline hover:bg-surface-container transition-colors shadow-sm"><span class="material-symbols-outlined" data-icon="add">add</span></button>
+<button class="bg-white p-2 border border-outline hover:bg-surface-container transition-colors shadow-sm"><span class="material-symbols-outlined" data-icon="remove">remove</span></button>
+</div>
+</div>
+</section>
+<!-- Active Routes List -->
+<section>
+<h2 class="font-headline-md text-headline-md text-primary mb-6 editorial-rule-gold pb-2">Active Routes</h2>
+<div class="flex flex-col gap-0 border-t border-gold-accent">
+<!-- Route Item 1 -->
+<div class="py-6 border-b border-gold-accent flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-surface-bright transition-colors px-4 -mx-4">
+<div class="flex gap-4 items-center">
+<div class="bg-primary text-white w-10 h-10 flex items-center justify-center font-label-md text-label-md">A</div>
+<div>
+<h3 class="font-label-md text-label-md text-primary tracking-widest uppercase">To Anseo Station</h3>
+<p class="text-sm text-on-surface-variant mt-1">Via Main Library &amp; Student Union</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span class="font-label-md text-label-md text-green-700">Arriving in 5 mins</span>
+</div>
+</div>
+<!-- Route Item 2 -->
+<div class="py-6 border-b border-gold-accent flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-surface-bright transition-colors px-4 -mx-4">
+<div class="flex gap-4 items-center">
+<div class="bg-secondary text-white w-10 h-10 flex items-center justify-center font-label-md text-label-md">B</div>
+<div>
+<h3 class="font-label-md text-label-md text-primary tracking-widest uppercase">To Cheonan Campus</h3>
+<p class="text-sm text-on-surface-variant mt-1">Direct Express Route</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+<span class="font-label-md text-label-md text-yellow-700">Departed (Next: 15 mins)</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sidebar (Right) Marginalia -->
+<aside class="col-span-1 md:col-span-5 lg:col-span-4 flex flex-col gap-12 md:pl-8 md:border-l border-gold-accent">
+<!-- Schedule Widget -->
+<div class="bg-white border border-gold-accent p-6">
+<h3 class="font-headline-md text-headline-md text-primary mb-4">Schedule <span class="text-sm font-body-md text-on-surface-variant ml-2">(셔틀 운행 시간표)</span></h3>
+<div class="editorial-rule-navy mb-6"></div>
+<div class="space-y-4 font-body-md text-sm">
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="font-bold text-on-surface">Morning Rush</span>
+<span class="text-on-surface-variant">08:00 - 10:30 (Every 10m)</span>
+</div>
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="font-bold text-on-surface">Mid-day Standard</span>
+<span class="text-on-surface-variant">10:30 - 16:00 (Every 20m)</span>
+</div>
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="font-bold text-on-surface">Evening Rush</span>
+<span class="text-on-surface-variant">16:00 - 18:30 (Every 10m)</span>
+</div>
+<div class="flex justify-between pb-2">
+<span class="font-bold text-on-surface">Night Service</span>
+<span class="text-on-surface-variant">18:30 - 22:00 (Every 30m)</span>
+</div>
+</div>
+<button class="w-full mt-6 border border-deep-navy text-deep-navy font-label-md text-label-md py-3 hover:bg-deep-navy hover:text-white transition-colors">Download Full PDF</button>
+</div>
+<!-- Important Notices -->
+<div class="bg-surface-container-low p-6 border-l-4 border-deep-navy">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-deep-navy" data-icon="info">info</span>
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest">Important Notices</h3>
+</div>
+<div class="space-y-4">
+<article class="border-b border-surface-variant pb-4">
+<p class="font-label-md text-xs text-on-surface-variant mb-1">Oct 24, 2024</p>
+<p class="font-body-md text-sm text-on-surface">Route B delayed by 10 minutes due to unexpected traffic on main highway. Please plan accordingly.</p>
+</article>
+<article>
+<p class="font-label-md text-xs text-on-surface-variant mb-1">Oct 20, 2024</p>
+<p class="font-body-md text-sm text-on-surface">Winter schedule adjustments will take effect starting next Monday. Night service frequency reduced.</p>
+</article>
+</div>
+</div>
+</aside>
+</main>
+<!-- Footer -->
+<footer class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-label-md text-label-md full-width border-t border-tertiary dark:border-tertiary-container flat no shadows flex flex-col md:flex-row justify-between items-center w-full px-margin-desktop py-12 gap-gutter mt-24">
+<div class="font-headline-md text-headline-md text-on-primary dark:text-on-primary-container mb-4 md:mb-0">Freshmen Guide</div>
+<div class="flex flex-wrap justify-center gap-6 mb-4 md:mb-0">
+<a class="text-on-primary dark:text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all duration-300" href="#">Privacy Policy</a>
+<a class="text-on-primary dark:text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all duration-300" href="#">Terms of Service</a>
+<a class="text-on-primary dark:text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all duration-300" href="#">Accessibility</a>
+<a class="text-on-primary dark:text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all duration-300" href="#">Contact Office</a>
+</div>
+<div class="text-sm opacity-70">
+            © 2024 University Institutional Press. All intellectual rights reserved.
+        </div>
+</footer>
+</body></html>

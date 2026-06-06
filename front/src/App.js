@@ -7,6 +7,7 @@ import ReservationView from './components/reservation/ReservationView';
 import MyPage from './jsx/MyPage';
 import CommunitySquareView from './components/community/CommunitySquareView';
 import Tour from './jsx/Tour';
+import Shuttle from './jsx/Shuttle';
 import AppLayout from './components/layout/AppLayout';
 import { fetchPostDetail } from './components/community/postData';
 import { getAppPageMeta, isAppView, isAuthView } from './components/layout/appNavConfig';
@@ -18,7 +19,14 @@ import {
   saveStoredAuth,
 } from './utils/authSession';
 
-const SQUARE_CONTENT_VIEWS = new Set(['square', 'post', 'new_post', 'edit_post']);
+const SQUARE_CONTENT_VIEWS = new Set([
+  'square',
+  'post',
+  'new_post',
+  'edit_post',
+  'qna_board',
+  'new_qna_post',
+]);
 
 function getAppShell(view) {
   if (SQUARE_CONTENT_VIEWS.has(view)) return 'community';
@@ -30,6 +38,7 @@ function App() {
   const [activeView, setActiveView] = useState(() => getInitialAppState().activeView);
   const [focusLoginStudentId, setFocusLoginStudentId] = useState(false);
   const [postDetail, setPostDetail] = useState(null);
+  const [postReturnView, setPostReturnView] = useState('square');
   const openingPostRef = useRef(false);
   const [session, setSession] = useState(() => getInitialAppState().session);
 
@@ -83,6 +92,7 @@ function App() {
       openingPostRef.current = true;
       try {
         const detail = await fetchPostDetail(post.id);
+        setPostReturnView(activeView === 'qna_board' ? 'qna_board' : 'square');
         setPostDetail(detail);
         navigateTo('post');
       } catch (err) {
@@ -91,7 +101,7 @@ function App() {
         openingPostRef.current = false;
       }
     },
-    [navigateTo],
+    [navigateTo, activeView],
   );
 
   const handleBackToSquare = () => {
@@ -99,9 +109,33 @@ function App() {
     navigateTo('square');
   };
 
+  const handleBackFromPost = useCallback(() => {
+    setPostDetail(null);
+    if (postDetail?.boardKind === 'qna') {
+      navigateTo(postReturnView);
+      return;
+    }
+    navigateTo('square');
+  }, [postDetail, postReturnView, navigateTo]);
+
   const handleWritePost = () => {
     setPostDetail(null);
     navigateTo('new_post');
+  };
+
+  const handleWriteQna = () => {
+    setPostDetail(null);
+    navigateTo('new_qna_post');
+  };
+
+  const handleViewAllQna = () => {
+    setPostDetail(null);
+    navigateTo('qna_board');
+  };
+
+  const handleQnaFlowBack = () => {
+    setPostDetail(null);
+    navigateTo('square');
   };
 
   const handleEditPost = useCallback(() => {
@@ -132,6 +166,8 @@ function App() {
         return <Tour session={session} />;
       case 'reservation':
         return <ReservationView />;
+      case 'shuttle':
+        return <Shuttle />;
       case 'mypage':
         return <MyPage session={session} />;
       default:
@@ -145,9 +181,15 @@ function App() {
       postDetail={postDetail}
       token={session.token}
       currentUserId={session.id}
+      departmentId={session.departmentId}
+      departmentName={session.departmentName}
       onOpenPost={handleOpenPost}
       onBack={handleBackToSquare}
+      onBackFromPost={handleBackFromPost}
       onWritePost={handleWritePost}
+      onWriteQna={handleWriteQna}
+      onViewAllQna={handleViewAllQna}
+      onQnaFlowBack={handleQnaFlowBack}
       onEditPost={handleEditPost}
       onCancelEdit={handleCancelEdit}
       onPostUpdated={handlePostUpdated}

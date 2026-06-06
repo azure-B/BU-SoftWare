@@ -89,6 +89,17 @@
   min-width: 0;
 }
 
+@media (min-width: 768px) {
+  .reservation-main-content main > div:first-child {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--accent-gold);
+  }
+
+  .reservation-main-content main > div:first-child .gold-divider {
+    display: none;
+  }
+}
+
 /* 카테고리 전환: 세부 콘텐츠만 opacity 페이드 */
 .reservation-content-fade {
   transition: opacity 0.2s ease;

@@ -6,7 +6,7 @@ const { getServerClient } = require('../src/config/supabase');
 const ADMIN_STUDENT_ID = 'test';
 const ADMIN_PASSWORD = '12341234';
 const ADMIN_NAME = '관리자';
-const DEPT_NAME = '컴퓨터공학과';
+const DEPT_NAME = '컴퓨터공학부';
 
 /** 커뮤니티(멘토링·팀프로젝트) 제외 — 장학·대회·학과 */
 const NOTICE_BOARD_IDS = [1, 2, 5];

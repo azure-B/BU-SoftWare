@@ -19,7 +19,7 @@ describe('Auth API', () => {
         password: 'hashed',
         name: '김백석',
         department_id: 1,
-        department_name: '컴퓨터공학과',
+        department_name: '컴퓨터공학부',
       });
       AuthModel.verifyPassword.mockResolvedValue(true);
 
@@ -34,7 +34,7 @@ describe('Auth API', () => {
         studentId: '20240001',
         name: '김백석',
         departmentId: 1,
-        departmentName: '컴퓨터공학과',
+        departmentName: '컴퓨터공학부',
       });
     });
 
@@ -74,7 +74,7 @@ describe('Auth API', () => {
         password: 'hashed',
         name: '김백석',
         department_id: 1,
-        department_name: '컴퓨터공학과',
+        department_name: '컴퓨터공학부',
       });
       AuthModel.verifyPassword.mockResolvedValue(false);
 

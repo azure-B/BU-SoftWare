@@ -1,20 +1,19 @@
 const { getServerClient } = require('../config/supabase');
+const { getDepartmentFilterIds } = require('../utils/departmentScope');
+const BoardModel = require('./boardModel');
 
-const COMMUNITY_WRITABLE_BOARD_IDS = new Set([3, 4]);
 const CAMPUS_TOUR_BOARD_CATEGORY = 'campus_tour';
 
-async function assertWritableBoard(supabase, boardId) {
+async function assertWritableBoard(supabase, boardId, userId) {
   if (!Number.isInteger(boardId) || boardId < 1) {
     const err = new Error('유효하지 않은 게시판입니다.');
     err.status = 400;
     throw err;
   }
 
-  if (COMMUNITY_WRITABLE_BOARD_IDS.has(boardId)) return;
-
   const { data, error } = await supabase
     .from('boards')
-    .select('category')
+    .select('category, board_kind, department_id')
     .eq('id', boardId)
     .maybeSingle();
 
@@ -33,12 +32,39 @@ async function assertWritableBoard(supabase, boardId) {
 
   if (data.category === CAMPUS_TOUR_BOARD_CATEGORY) return;
 
+  if (data.board_kind && BoardModel.WRITABLE_BOARD_KINDS.has(data.board_kind)) {
+    if (!data.department_id) return;
+
+    const { data: author, error: authorError } = await supabase
+      .from('users')
+      .select('department_id')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (authorError) {
+      const err = new Error('작성자 정보를 확인하지 못했습니다.');
+      err.status = 500;
+      err.cause = authorError;
+      throw err;
+    }
+
+    const allowedDeptIds = getDepartmentFilterIds(author?.department_id) ?? [];
+    if (allowedDeptIds.includes(data.department_id)) return;
+
+    const err = new Error('소속 학과 게시판에만 글을 작성할 수 있습니다.');
+    err.status = 403;
+    throw err;
+  }
+
   const err = new Error('글을 작성할 수 없는 게시판입니다.');
   err.status = 400;
   throw err;
 }
 
-const POST_SELECT = `
+const POST_USER_SELECT = 'users ( name, department_id, departments ( name ) )';
+const POST_USER_INNER_SELECT = 'users!inner ( name, department_id, departments ( name ) )';
+
+const POST_SELECT_BASE = `
   id,
   board_id,
   user_id,
@@ -46,9 +72,14 @@ const POST_SELECT = `
   content,
   created_at,
   view_num,
-  users ( name ),
+  boards ( board_kind, department_id ),
   comments ( count )
 `;
+
+function buildPostSelect(departmentFilterIds) {
+  const userSelect = departmentFilterIds ? POST_USER_INNER_SELECT : POST_USER_SELECT;
+  return `${POST_SELECT_BASE}, ${userSelect}`;
+}
 
 const COMMENT_SELECT = `
   id,
@@ -63,12 +94,16 @@ function mapPostRow(row) {
   return {
     id: row.id,
     boardId: row.board_id,
+    boardKind: row.boards?.board_kind ?? null,
+    boardDepartmentId: row.boards?.department_id ?? null,
     authorId: row.user_id,
     title: row.title,
     content: row.content,
     createdAt: row.created_at,
     viewCount: row.view_num ?? 0,
     authorName: row.users?.name ?? '익명',
+    authorDepartmentId: row.users?.department_id ?? null,
+    authorDepartmentName: row.users?.departments?.name ?? null,
     commentCount: row.comments?.[0]?.count ?? 0,
   };
 }
@@ -84,38 +119,52 @@ function mapCommentRow(row) {
   };
 }
 
-function parseBoardIds(boardId, boardIds) {
-  if (boardId) {
-    const id = Number(boardId);
-    if (!Number.isInteger(id) || id < 1) return null;
-    return [id];
-  }
+async function areBoardsDepartmentScoped(supabase, boardIds) {
+  const { data, error } = await supabase
+    .from('boards')
+    .select('department_id')
+    .in('id', boardIds);
 
-  if (!boardIds) return null;
-
-  const ids = String(boardIds)
-    .split(',')
-    .map((v) => Number(v.trim()))
-    .filter((v) => Number.isInteger(v) && v > 0);
-
-  return ids.length > 0 ? ids : null;
+  if (error) return false;
+  return (data ?? []).length > 0 && (data ?? []).every((row) => row.department_id != null);
 }
 
 const CommunityModel = {
-  findPostsByBoardIds: async (boardId, boardIds) => {
-    const ids = parseBoardIds(boardId, boardIds);
+  findPostsByBoardIds: async ({
+    boardId,
+    boardIds,
+    boardKind,
+    boardKinds,
+    departmentId,
+  }) => {
+    const ids = await BoardModel.resolveBoardIds({
+      boardId,
+      boardIds,
+      boardKind,
+      boardKinds,
+      departmentId,
+    });
+
     if (!ids) {
-      const err = new Error('boardId 또는 boardIds 쿼리가 필요합니다.');
+      const err = new Error('boardId, boardIds, 또는 boardKind 쿼리가 필요합니다.');
       err.status = 400;
       throw err;
     }
 
     const supabase = getServerClient();
+    const deptScopedBoards = await areBoardsDepartmentScoped(supabase, ids);
+    const departmentFilterIds =
+      deptScopedBoards || !departmentId ? null : getDepartmentFilterIds(departmentId);
+
     let query = supabase
       .from('posts')
-      .select(POST_SELECT)
+      .select(buildPostSelect(departmentFilterIds))
       .in('board_id', ids)
       .order('created_at', { ascending: false });
+
+    if (departmentFilterIds) {
+      query = query.in('users.department_id', departmentFilterIds);
+    }
 
     const { data, error } = await query;
 
@@ -164,7 +213,7 @@ const CommunityModel = {
       .from('posts')
       .update({ view_num: nextViewNum })
       .eq('id', postId)
-      .select(POST_SELECT)
+      .select(buildPostSelect(null))
       .single();
 
     if (error) {
@@ -323,7 +372,7 @@ const CommunityModel = {
     }
 
     const supabase = getServerClient();
-    await assertWritableBoard(supabase, resolvedBoardId);
+    await assertWritableBoard(supabase, resolvedBoardId, authorId);
 
     const { data: post, error: fetchError } = await supabase
       .from('posts')
@@ -358,7 +407,7 @@ const CommunityModel = {
         content: String(content).trim(),
       })
       .eq('id', resolvedPostId)
-      .select(POST_SELECT)
+      .select(buildPostSelect(null))
       .single();
 
     if (error) {
@@ -488,7 +537,7 @@ const CommunityModel = {
     }
 
     const supabase = getServerClient();
-    await assertWritableBoard(supabase, resolvedBoardId);
+    await assertWritableBoard(supabase, resolvedBoardId, authorId);
 
     const { data, error } = await supabase
       .from('posts')
@@ -498,7 +547,7 @@ const CommunityModel = {
         title: String(title).trim(),
         content: String(content).trim(),
       })
-      .select(POST_SELECT)
+      .select(buildPostSelect(null))
       .single();
 
     if (error) {
@@ -509,6 +558,25 @@ const CommunityModel = {
     }
 
     return mapPostRow(data);
+  },
+
+  findAdminAuthorId: async () => {
+    const adminStudentId = process.env.COMMUNITY_ADMIN_STUDENT_ID || 'test';
+    const supabase = getServerClient();
+    const { data, error } = await supabase
+      .from('users')
+      .select('id')
+      .eq('student_id', adminStudentId)
+      .maybeSingle();
+
+    if (error) {
+      const err = new Error('관리자 정보를 불러오지 못했습니다.');
+      err.status = 500;
+      err.cause = error;
+      throw err;
+    }
+
+    return data?.id ?? null;
   },
 };
 

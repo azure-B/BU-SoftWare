@@ -26,6 +26,41 @@ const RegisterModel = {
     return data;
   },
 
+  findUserForRecovery: async (email) => {
+    const supabase = getServerClient();
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, student_id, name, email')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
+  },
+
+  listDepartments: async () => {
+    const supabase = getServerClient();
+    const { data, error } = await supabase
+      .from('departments')
+      .select('id, name')
+      .order('name');
+
+    if (error) throw error;
+    return data ?? [];
+  },
+
+  findDepartmentById: async (id) => {
+    const supabase = getServerClient();
+    const { data, error } = await supabase
+      .from('departments')
+      .select('id, name')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
+  },
+
   findDepartmentByName: async (name) => {
     const supabase = getServerClient();
     const { data, error } = await supabase

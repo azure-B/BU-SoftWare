@@ -45,6 +45,7 @@ export function mapApiPostDetail(post) {
   return {
     id: post.id,
     boardId: post.boardId,
+    boardKind: post.boardKind ?? null,
     authorId: post.authorId,
     categoryLabel: tagMeta.tag,
     title: post.title,
