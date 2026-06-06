@@ -12,8 +12,7 @@
     "tour:seed-posts": "node scripts/seed-tour-posts.js",
     "test": "jest --runInBand --forceExit",
     "test:watch": "jest --watch",
-    "test:cover": "jest --coverage --forceExit",
-    "test:resend": "node scripts/test-resend.js"
+    "test:cover": "jest --coverage --forceExit"
   },
   "jest": {
     "testEnvironment": "node",
@@ -30,7 +29,6 @@
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^8.0.10",
     "pg": "^8.21.0",
-    "resend": "^4.8.0",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1"
   },

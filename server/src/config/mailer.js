@@ -1,43 +1,9 @@
 const nodemailer = require('nodemailer');
-const { Resend } = require('resend');
 
 let transporter = null;
-let resendClient = null;
-
-function isResendConfigured() {
-  return Boolean(process.env.RESEND_API_KEY);
-}
-
-function isSmtpConfigured() {
-  return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
-}
 
 function isMailConfigured() {
-  return isResendConfigured() || isSmtpConfigured();
-}
-
-function getResendClient() {
-  if (!isResendConfigured()) return null;
-  if (!resendClient) {
-    resendClient = new Resend(process.env.RESEND_API_KEY);
-  }
-  return resendClient;
-}
-
-/** Resend 발신 주소 — RESEND_FROM 또는 "이름 <email@domain>" */
-function resolveResendFrom() {
-  const raw = (process.env.RESEND_FROM || process.env.SMTP_FROM || '').trim();
-  if (!raw) {
-    return '백석 학생 허브 <onboarding@resend.dev>';
-  }
-  if (raw.includes('<') && raw.includes('@')) {
-    return raw;
-  }
-  if (raw.includes('@')) {
-    return raw;
-  }
-  const label = raw.replace(/^["']|["']$/g, '');
-  return `${label} <onboarding@resend.dev>`;
+  return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
 }
 
 /** 465 → SSL, 587 → STARTTLS (명시 env 우선) */
@@ -65,7 +31,7 @@ function resolveFromAddress() {
 
 function getTransporter() {
   if (transporter) return transporter;
-  if (!isSmtpConfigured()) return null;
+  if (!isMailConfigured()) return null;
 
   const port = Number(process.env.SMTP_PORT || 587);
   const secure = resolveSecure(port);
@@ -90,7 +56,8 @@ function getTransporter() {
   return transporter;
 }
 
-function buildVerificationContent(code) {
+async function sendVerificationEmail(to, code) {
+  const from = resolveFromAddress();
   const subject = '[백석 학생 허브] 이메일 인증번호';
   const text = `회원가입 인증번호: ${code}\n\n5분 이내에 입력해 주세요.`;
   const html = `
@@ -98,39 +65,13 @@ function buildVerificationContent(code) {
     <p style="font-size:24px;font-weight:bold;letter-spacing:4px">${code}</p>
     <p>5분 이내에 입력해 주세요.</p>
   `;
-  return { subject, text, html };
-}
 
-async function sendViaResend(to, subject, text, html) {
-  const client = getResendClient();
-  const from = resolveResendFrom();
-
-  const { data, error } = await client.emails.send({
-    from,
-    to: [to],
-    subject,
-    text,
-    html,
-  });
-
-  if (error) {
-    console.error('[Resend error]', error.message || error);
-    let message = '이메일 발송에 실패했습니다. Resend 설정을 확인해 주세요.';
-    if (process.env.NODE_ENV === 'development') {
-      message = `Resend 발송 실패: ${error.message || error}`;
-    }
-    const wrapped = new Error(message);
-    wrapped.status = 502;
-    throw wrapped;
-  }
-
-  return { dev: false, provider: 'resend', id: data?.id };
-}
-
-async function sendViaSmtp(to, subject, text, html) {
-  const from = resolveFromAddress();
   const transport = getTransporter();
   if (!transport) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[DEV mail] To: ${to} | Code: ${code}`);
+      return { dev: true };
+    }
     const err = new Error('SMTP is not configured');
     err.status = 500;
     throw err;
@@ -138,7 +79,7 @@ async function sendViaSmtp(to, subject, text, html) {
 
   try {
     await transport.sendMail({ from, to, subject, text, html });
-    return { dev: false, provider: 'smtp' };
+    return { dev: false };
   } catch (err) {
     console.error('[SMTP error]', err.message);
 
@@ -152,6 +93,11 @@ async function sendViaSmtp(to, subject, text, html) {
         + '「애플리케이션 비밀번호」를 발급해 SMTP_PASS에 넣어 주세요. '
         + '일반 로그인 비밀번호는 사용할 수 없습니다.';
     }
+    if (String(err.message).includes('timeout') || String(err.message).includes('Timeout')) {
+      message =
+        'SMTP 서버 연결 시간 초과입니다. Render 등 클라우드에서는 네이버 SMTP가 차단될 수 있습니다. '
+        + '로컬 서버에서 테스트하거나 Gmail SMTP를 시도해 보세요.';
+    }
 
     const wrapped = new Error(message);
     wrapped.status = 502;
@@ -159,37 +105,10 @@ async function sendViaSmtp(to, subject, text, html) {
   }
 }
 
-async function sendVerificationEmail(to, code) {
-  const { subject, text, html } = buildVerificationContent(code);
-
-  if (isResendConfigured()) {
-    return sendViaResend(to, subject, text, html);
-  }
-
-  if (isSmtpConfigured()) {
-    return sendViaSmtp(to, subject, text, html);
-  }
-
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[DEV mail] To: ${to} | Code: ${code}`);
-    return { dev: true, provider: 'console' };
-  }
-
-  const err = new Error(
-    'RESEND_API_KEY 또는 SMTP 설정이 필요합니다. Render 환경 변수를 확인해 주세요.',
-  );
-  err.status = 500;
-  throw err;
-}
-
 module.exports = {
   sendVerificationEmail,
   isMailConfigured,
-  isResendConfigured,
-  isSmtpConfigured,
   resolveFromAddress,
-  resolveResendFrom,
   resolveSecure,
   getTransporter,
-  getResendClient,
 };
