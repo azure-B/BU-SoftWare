@@ -206,7 +206,7 @@ function Tour({ session = {} }) {
     setPlaces(data.places);
     setTopTags(data.topTags);
     setPanelView('list');
-  }, [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places.length]);
+  }, [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places]);
 
   const handleSectionTabChange = useCallback((tabId) => {
     setSectionTab(tabId);
@@ -231,7 +231,7 @@ function Tour({ session = {} }) {
       setPlaces(data.places);
       setTopTags(data.topTags);
     },
-    [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places.length],
+    [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places],
   );
 
   const handlePostDeleted = useCallback(async () => {
@@ -242,7 +242,7 @@ function Tour({ session = {} }) {
     const data = await fetchTourPlaces();
     setPlaces(data.places);
     setTopTags(data.topTags);
-  }, [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places.length]);
+  }, [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places]);
 
   return (
     <main className="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop pb-24">

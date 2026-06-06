@@ -77,6 +77,7 @@ function TourKakaoMap({
   useEffect(() => {
     let cancelled = false;
     let resizeHandler = null;
+    const clusterImages = clusterImagesRef.current;
 
     async function initMap() {
       try {
@@ -135,7 +136,7 @@ function TourKakaoMap({
         }
       });
       markersRef.current = [];
-      clusterImagesRef.current.clear();
+      clusterImages.clear();
       if (centerMarkerRef.current) centerMarkerRef.current.setMap(null);
       centerMarkerRef.current = null;
       mapRef.current = null;
