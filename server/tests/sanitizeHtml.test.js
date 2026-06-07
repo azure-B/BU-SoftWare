@@ -10,6 +10,11 @@ describe('sanitizeHtml', () => {
     expect(sanitizePostContent(input)).toBe('<p>hello</p>');
   });
 
+  it('removes event handler attributes', () => {
+    const input = '<p onclick="alert(1)">hello</p>';
+    expect(sanitizePostContent(input)).toBe('<p>hello</p>');
+  });
+
   it('detects empty editor html', () => {
     expect(isEmptyHtml('<p><br></p>')).toBe(true);
     expect(isEmptyHtml('<p>hello</p>')).toBe(false);

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const communityController = require('../controllers/communityController');
 const requireAuth = require('../middlewares/requireAuth');
+const optionalAuth = require('../middlewares/optionalAuth');
 const { validate, validateNumbers } = require('../middlewares/validate');
 
 router.get('/boards', communityController.getBoards);
@@ -14,7 +15,7 @@ router.post(
   validateNumbers('boardId'),
   communityController.createPost,
 );
-router.get('/posts/:id/comments', communityController.getComments);
+router.get('/posts/:id/comments', optionalAuth, communityController.getComments);
 router.post(
   '/posts/:id/comments',
   requireAuth,
@@ -36,6 +37,6 @@ router.patch(
   communityController.updatePost,
 );
 router.delete('/posts/:id', requireAuth, communityController.deletePost);
-router.get('/posts/:id', communityController.getPost);
+router.get('/posts/:id', optionalAuth, communityController.getPost);
 
 module.exports = router;

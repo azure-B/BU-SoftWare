@@ -90,11 +90,22 @@ const BoardModel = {
 
   resolveBoardIds: async ({ boardId, boardIds, boardKind, boardKinds, departmentId }) => {
     if (boardId || boardIds) {
-      return parseLegacyBoardIds(boardId, boardIds);
+      const ids = parseLegacyBoardIds(boardId, boardIds);
+      if (!ids) return null;
+      await validateLegacyBoardAccess(ids, departmentId);
+      return ids;
     }
 
     const kinds = parseBoardKindsParam(boardKind, boardKinds);
     if (!kinds.length) return null;
+
+    for (const kind of kinds) {
+      if (DEPARTMENT_BOARD_KINDS.has(kind) && !departmentId) {
+        const err = new Error('departmentId 쿼리가 필요합니다.');
+        err.status = 400;
+        throw err;
+      }
+    }
 
     const supabase = getServerClient();
     const resolved = [];
@@ -178,6 +189,38 @@ function parseLegacyBoardIds(boardId, boardIds) {
     .filter((v) => Number.isInteger(v) && v > 0);
 
   return ids.length > 0 ? ids : null;
+}
+
+async function validateLegacyBoardAccess(boardIds, departmentId) {
+  const supabase = getServerClient();
+  const { data: boards, error } = await supabase
+    .from('boards')
+    .select('id, department_id, board_kind')
+    .in('id', boardIds);
+
+  if (error) {
+    const err = new Error('게시판 정보를 불러오지 못했습니다.');
+    err.status = 500;
+    err.cause = error;
+    throw err;
+  }
+
+  if ((boards ?? []).length !== boardIds.length) {
+    const err = new Error('존재하지 않는 게시판입니다.');
+    err.status = 400;
+    throw err;
+  }
+
+  for (const board of boards ?? []) {
+    if (board.department_id == null) continue;
+
+    const exactId = Number(departmentId);
+    if (!Number.isInteger(exactId) || exactId !== board.department_id) {
+      const err = new Error('해당 학과 게시판을 조회할 권한이 없습니다.');
+      err.status = 403;
+      throw err;
+    }
+  }
 }
 
 module.exports = BoardModel;

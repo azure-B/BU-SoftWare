@@ -1,14 +1,7 @@
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 
 const { getServerClient } = require('../src/config/supabase');
-
-const FACILITIES = [
-  { name: '도서관 스터디룸 A', location: '중앙도서관 2층' },
-  { name: 'IT센터 랩실 3', location: 'IT센터 3층' },
-  { name: '학생회관 동아리실 C', location: '학생회관 1층' },
-  { name: '코워킹 스페이스', location: '창업지원단 2층' },
-  { name: '회의실 A', location: '창업지원단 3층' },
-];
+const { FACILITY_CATALOG } = require('../src/utils/facilityCatalog');
 
 function todayAt(hours, minutes) {
   const date = new Date();
@@ -16,22 +9,12 @@ function todayAt(hours, minutes) {
   return date.toISOString();
 }
 
-function buildTodayReservations(facilityIds) {
-  const [studyRoom, itLab, clubRoom, coworking, meetingA] = facilityIds;
+function buildTodayReservations(facilityIdsBySlug) {
+  const coworking = facilityIdsBySlug.coworking;
+  const meetingA = facilityIdsBySlug['meeting-a'];
+  const clubRoom = facilityIdsBySlug['club-room'];
 
   return [
-    {
-      facility_id: studyRoom,
-      start_time: todayAt(9, 0),
-      end_time: todayAt(11, 0),
-      status: 'APPROVED',
-    },
-    {
-      facility_id: clubRoom,
-      start_time: todayAt(14, 0),
-      end_time: todayAt(16, 0),
-      status: 'APPROVED',
-    },
     {
       facility_id: coworking,
       start_time: todayAt(10, 0),
@@ -44,8 +27,13 @@ function buildTodayReservations(facilityIds) {
       end_time: todayAt(17, 0),
       status: 'PENDING',
     },
-    // IT lab intentionally has no reservation today → 예약가능
-  ];
+    {
+      facility_id: clubRoom,
+      start_time: todayAt(14, 0),
+      end_time: todayAt(16, 0),
+      status: 'APPROVED',
+    },
+  ].filter((row) => row.facility_id);
 }
 
 async function resolveUserId(supabase) {
@@ -90,7 +78,9 @@ async function ensureFacilities(supabase) {
   }
 
   const existingNames = new Set((existing ?? []).map((row) => row.name));
-  const toInsert = FACILITIES.filter((facility) => !existingNames.has(facility.name));
+  const toInsert = FACILITY_CATALOG.filter((facility) => !existingNames.has(facility.name)).map(
+    ({ name, location }) => ({ name, location }),
+  );
 
   if (toInsert.length > 0) {
     const { error: insertError } = await supabase.from('facilities').insert(toInsert);
@@ -104,7 +94,7 @@ async function ensureFacilities(supabase) {
     .select('id, name')
     .in(
       'name',
-      FACILITIES.map((facility) => facility.name),
+      FACILITY_CATALOG.map((facility) => facility.name),
     )
     .order('id', { ascending: true });
 
@@ -112,17 +102,21 @@ async function ensureFacilities(supabase) {
     throw new Error(`facilities reload 실패: ${reloadError.message}`);
   }
 
-  return FACILITIES.map(
-    (facility) => facilities.find((row) => row.name === facility.name)?.id,
-  ).filter(Boolean);
+  const facilityIdsBySlug = {};
+  for (const definition of FACILITY_CATALOG) {
+    const row = facilities.find((facility) => facility.name === definition.name);
+    if (row?.id) facilityIdsBySlug[definition.slug] = row.id;
+  }
+
+  return facilityIdsBySlug;
 }
 
 async function run() {
   const supabase = getServerClient();
   const userId = await resolveUserId(supabase);
-  const facilityIds = await ensureFacilities(supabase);
+  const facilityIdsBySlug = await ensureFacilities(supabase);
 
-  if (facilityIds.length !== FACILITIES.length) {
+  if (Object.keys(facilityIdsBySlug).length !== FACILITY_CATALOG.length) {
     throw new Error('시설 시드 데이터가 올바르게 준비되지 않았습니다.');
   }
 
@@ -141,7 +135,7 @@ async function run() {
     throw new Error(`기존 오늘 예약 삭제 실패: ${deleteError.message}`);
   }
 
-  const rows = buildTodayReservations(facilityIds).map((row) => ({
+  const rows = buildTodayReservations(facilityIdsBySlug).map((row) => ({
     ...row,
     user_id: userId,
   }));
@@ -155,6 +149,7 @@ async function run() {
     throw new Error(`reservations insert 실패: ${insertError.message}`);
   }
 
+  console.log(`Seeded ${Object.keys(facilityIdsBySlug).length} facilities`);
   console.log(`Seeded ${data.length} reservations for today (user_id=${userId}):`);
   data.forEach((row) => {
     console.log(`  - facility ${row.facility_id} ${row.start_time} ~ ${row.end_time} (${row.status})`);

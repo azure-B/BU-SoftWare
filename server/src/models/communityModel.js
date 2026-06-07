@@ -1,5 +1,6 @@
 const { getServerClient } = require('../config/supabase');
 const { getDepartmentFilterIds } = require('../utils/departmentScope');
+const { assertReadablePostById } = require('../utils/boardAccess');
 const BoardModel = require('./boardModel');
 
 const CAMPUS_TOUR_BOARD_CATEGORY = 'campus_tour';
@@ -153,6 +154,13 @@ const CommunityModel = {
 
     const supabase = getServerClient();
     const deptScopedBoards = await areBoardsDepartmentScoped(supabase, ids);
+
+    if (deptScopedBoards && !departmentId) {
+      const err = new Error('departmentId 쿼리가 필요합니다.');
+      err.status = 400;
+      throw err;
+    }
+
     const departmentFilterIds =
       deptScopedBoards || !departmentId ? null : getDepartmentFilterIds(departmentId);
 
@@ -178,7 +186,7 @@ const CommunityModel = {
     return (data ?? []).map(mapPostRow);
   },
 
-  findPostByIdAndIncrementView: async (id) => {
+  findPostByIdAndIncrementView: async (id, accessContext = {}) => {
     const postId = Number(id);
     if (!Number.isInteger(postId) || postId < 1) {
       const err = new Error('유효하지 않은 게시글 ID입니다.');
@@ -187,6 +195,7 @@ const CommunityModel = {
     }
 
     const supabase = getServerClient();
+    await assertReadablePostById(supabase, postId, accessContext);
 
     const { data: existing, error: fetchError } = await supabase
       .from('posts')
@@ -226,7 +235,7 @@ const CommunityModel = {
     return mapPostRow(data);
   },
 
-  findCommentsByPostId: async (postId) => {
+  findCommentsByPostId: async (postId, accessContext = {}) => {
     const id = Number(postId);
     if (!Number.isInteger(id) || id < 1) {
       const err = new Error('유효하지 않은 게시글 ID입니다.');
@@ -235,6 +244,8 @@ const CommunityModel = {
     }
 
     const supabase = getServerClient();
+    await assertReadablePostById(supabase, id, accessContext);
+
     const { data, error } = await supabase
       .from('comments')
       .select(COMMENT_SELECT)
@@ -268,25 +279,7 @@ const CommunityModel = {
     }
 
     const supabase = getServerClient();
-
-    const { data: post, error: postError } = await supabase
-      .from('posts')
-      .select('id')
-      .eq('id', resolvedPostId)
-      .maybeSingle();
-
-    if (postError) {
-      const err = new Error('게시글 조회에 실패했습니다.');
-      err.status = 500;
-      err.cause = postError;
-      throw err;
-    }
-
-    if (!post) {
-      const err = new Error('게시글을 찾을 수 없습니다.');
-      err.status = 404;
-      throw err;
-    }
+    await assertReadablePostById(supabase, resolvedPostId, { userId: authorId });
 
     const { data, error } = await supabase
       .from('comments')

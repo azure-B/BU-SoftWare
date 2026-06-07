@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const SPECIAL_CHAR_PATTERN = /[!@#$%^&*(),.?":{}|[\]\\/_+\-=~`';<>]/;
 
 const PASSWORD_POLICY = {
@@ -78,7 +80,7 @@ function validateVerificationCode(code) {
 }
 
 function generateVerificationCode() {
-  return String(Math.floor(100000 + Math.random() * 900000));
+  return String(crypto.randomInt(100000, 1000000));
 }
 
 module.exports = {

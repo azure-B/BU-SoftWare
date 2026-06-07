@@ -2,6 +2,14 @@ const CommunityModel = require('../models/communityModel');
 const BoardModel = require('../models/boardModel');
 const { sanitizePostContent, isEmptyHtml } = require('../utils/sanitizeHtml');
 
+function buildAccessContext(req) {
+  const departmentId = req.query.departmentId ? Number(req.query.departmentId) : null;
+  return {
+    departmentId: Number.isInteger(departmentId) && departmentId > 0 ? departmentId : null,
+    userId: req.user?.id ?? null,
+  };
+}
+
 const communityController = {
   // GET /api/community/boards?departmentId=6
   getBoards: async (req, res, next) => {
@@ -55,7 +63,10 @@ const communityController = {
   // GET /api/community/posts/:id — 조회 시 view_num +1
   getPost: async (req, res, next) => {
     try {
-      const post = await CommunityModel.findPostByIdAndIncrementView(req.params.id);
+      const post = await CommunityModel.findPostByIdAndIncrementView(
+        req.params.id,
+        buildAccessContext(req),
+      );
       res.json(post);
     } catch (err) {
       next(err);
@@ -91,7 +102,10 @@ const communityController = {
 
   getComments: async (req, res, next) => {
     try {
-      const comments = await CommunityModel.findCommentsByPostId(req.params.id);
+      const comments = await CommunityModel.findCommentsByPostId(
+        req.params.id,
+        buildAccessContext(req),
+      );
       res.json(comments);
     } catch (err) {
       next(err);
