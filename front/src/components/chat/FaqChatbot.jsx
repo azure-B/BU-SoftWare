@@ -87,7 +87,7 @@ function FaqChatbot({ open: openProp, onOpenChange, hideToggle = false, classNam
           <header className="faq-chatbot__header">
             <div>
               <p className="faq-chatbot__title">학교 안내</p>
-              <p className="faq-chatbot__subtitle">학과 사무실 · 강의실 · 셔틀</p>
+              <p className="faq-chatbot__subtitle">학과 사무실 · 병결 · 강의실 · 셔틀</p>
             </div>
             <button
               type="button"

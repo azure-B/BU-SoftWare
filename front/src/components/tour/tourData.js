@@ -6,6 +6,26 @@ export const TOUR_SELECTED_PLACE_LEVEL = 4;
 
 export const TOUR_POST_TAGS = ['맛집', '혼밥', '같이밥', '점심', '저녁', '카페', '추천', '학식'];
 
+/** 글 작성 인기 태그 — 모바일 1줄 · PC 2줄 이내 노출 */
+export const POPULAR_TAG_MOBILE_MAX = 5;
+export const POPULAR_TAG_DESKTOP_MAX = 10;
+
+/** 사이드바 인기 태그 필터 — '전체' 포함 노출 개수 */
+export const SIDEBAR_TAG_MOBILE_VISIBLE = 5;
+export const SIDEBAR_TAG_DESKTOP_VISIBLE = 7;
+
+export function resolveTourPopularTags(topTags = []) {
+  const merged = [];
+  const seen = new Set();
+  for (const tag of [...topTags, ...TOUR_POST_TAGS]) {
+    const normalized = String(tag ?? '').trim();
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    merged.push(normalized);
+  }
+  return merged;
+}
+
 export const TOUR_SECTION_TABS = [
   { id: 'places', label: '음식점' },
   { id: 'recruit', label: '같이밥 모집' },

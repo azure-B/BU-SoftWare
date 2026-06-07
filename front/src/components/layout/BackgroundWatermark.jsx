@@ -2,8 +2,11 @@ import { LOGO_APP } from '../constants';
 
 function BackgroundWatermark() {
   return (
-    <div className="absolute inset-0 z-[-1] flex items-start justify-center pt-32 opacity-[0.03] pointer-events-none">
-      <img alt="" className="w-[600px] h-auto" src={LOGO_APP} aria-hidden="true" />
+    <div
+      className="app-watermark pointer-events-none fixed inset-0 z-0 flex items-start justify-center pt-32"
+      aria-hidden="true"
+    >
+      <img alt="" className="app-watermark__logo w-[600px] max-w-[85vw] h-auto opacity-[0.03]" src={LOGO_APP} />
     </div>
   );
 }

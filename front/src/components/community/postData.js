@@ -1,5 +1,6 @@
 import { BOARD_TAG_BY_ID } from './communityData';
 import { API_BASE_URL } from '../constants';
+import { getStoredSessionDepartment, loadStoredAuth } from '../../utils/authSession';
 
 const postDetailInflight = new Map();
 
@@ -114,13 +115,32 @@ function mapApiComment(comment) {
   };
 }
 
+function buildCommunityPostUrl(postId, suffix = '') {
+  const id = Number(postId);
+  const params = new URLSearchParams();
+  const { departmentId } = getStoredSessionDepartment();
+  if (departmentId) params.set('departmentId', String(departmentId));
+
+  const qs = params.toString();
+  return `${API_BASE_URL}/api/community/posts/${id}${suffix}${qs ? `?${qs}` : ''}`;
+}
+
+function buildPostAccessHeaders() {
+  const token = loadStoredAuth()?.session?.token;
+  const headers = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
+}
+
 export async function fetchPostComments(postId) {
   const id = Number(postId);
   if (!Number.isInteger(id) || id < 1) {
     throw new Error('게시글 정보가 없습니다.');
   }
 
-  const res = await fetch(`${API_BASE_URL}/api/community/posts/${id}/comments`);
+  const res = await fetch(buildCommunityPostUrl(id, '/comments'), {
+    headers: buildPostAccessHeaders(),
+  });
   const body = await res.json().catch(() => ({}));
   if (!res.ok) {
     throw new Error(body.message || body.error || '댓글을 불러오지 못했습니다.');
@@ -224,7 +244,9 @@ export async function fetchPostDetail(postId) {
   }
 
   const request = (async () => {
-    const res = await fetch(`${API_BASE_URL}/api/community/posts/${id}`);
+    const res = await fetch(buildCommunityPostUrl(id), {
+      headers: buildPostAccessHeaders(),
+    });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
       throw new Error(body.message || body.error || '게시글을 불러오지 못했습니다.');

@@ -27,6 +27,11 @@ export function extractHashtags(text) {
   return tags;
 }
 
+export function normalizeTagInput(raw) {
+  const trimmed = String(raw ?? '').trim().replace(/^#+/, '');
+  return trimmed.replace(/\s+/g, '');
+}
+
 export function parseTourPostMeta(title = '', content = '') {
   const isRecruit = String(title).trim().startsWith('[같이밥]');
   const hashtags = extractHashtags(`${title} ${content}`);

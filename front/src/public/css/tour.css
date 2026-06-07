@@ -39,6 +39,20 @@
   color: #ffffff;
 }
 
+.tour-tag-panel__scroll {
+  overflow: hidden;
+}
+
+.tour-tag-panel__btn {
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .tour-tag-panel__scroll {
+    max-height: 5.5rem;
+  }
+}
+
 .tour-rank-gold {
   color: var(--accent-gold);
 }
@@ -76,6 +90,31 @@
 
 .tour-post-panel {
   scrollbar-width: thin;
+}
+
+.tour-post-popular-tag {
+  white-space: nowrap;
+}
+
+.tour-post-popular-tags {
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .tour-post-popular-tags {
+    max-height: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .tour-post-popular-tags {
+    max-height: 4.25rem;
+  }
+}
+
+.tour-post-tags-input-wrap:focus-within {
+  border-color: #1d5abc;
+  outline: 1px solid #1d5abc;
 }
 
 .tour-section-body,

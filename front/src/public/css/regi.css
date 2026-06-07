@@ -22,6 +22,13 @@
   box-shadow: none;
 }
 
+.form-input-border::placeholder,
+.regi-email-local::placeholder {
+  color: #747682;
+  opacity: 1;
+  -webkit-text-fill-color: #747682;
+}
+
 /* ── 학과 검색 combobox (회원가입) ── */
 .regi-form .regi-dept-picker.regi-combobox {
   position: relative;
@@ -64,7 +71,9 @@
 }
 
 .regi-form .regi-dept-picker .regi-combobox__input::placeholder {
-  color: #9ca3af;
+  color: #747682;
+  opacity: 1;
+  -webkit-text-fill-color: #747682;
 }
 
 .regi-form .regi-dept-picker .regi-combobox__toggle {
@@ -390,11 +399,16 @@
   }
 }
 
-@media (max-width: 768px) {
-  .registration-card {
-    max-width: 100%;
-    margin: 0 20px;
-    padding: 2rem !important;
+@media (max-width: 767px) {
+  .registration-card.auth-panel-card {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .regi-quote-aside {
+    display: none !important;
   }
 
   .regi-progress__label {

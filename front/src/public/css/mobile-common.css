@@ -232,21 +232,20 @@
     grid-row: 1;
   }
 
-  .app-header__brand--mobile {
+  .app-header__brand {
     grid-column: 2;
     grid-row: 1;
     justify-self: center;
-    text-align: center;
+  }
+
+  .app-header__brand-title {
+    display: none;
   }
 
   .app-header__actions {
     grid-column: 3;
     grid-row: 1;
     justify-self: end;
-  }
-
-  .app-header__brand--desktop {
-    display: none !important;
   }
 
   .app-header.header-shared {
@@ -256,36 +255,6 @@
     right: auto !important;
     height: calc(var(--mobile-header-h) + var(--mobile-safe-top));
     min-height: calc(var(--mobile-header-h) + var(--mobile-safe-top));
-  }
-
-  .app-header__brand--mobile {
-    display: block;
-    font-family: var(--font-secondary, 'Hanken Grotesk', sans-serif);
-    font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--brand-navy, #0d337f);
-  }
-
-  .app-header__brand-logo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    text-transform: none;
-    letter-spacing: normal;
-  }
-
-  .app-header__logo {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 9999px;
-    box-shadow: 0 1px 2px rgba(0, 30, 89, 0.12);
-    object-fit: cover;
   }
 
   .app-header__menu-btn {
@@ -669,7 +638,6 @@
 
 @media (min-width: 768px) {
   .app-header--mobile,
-  .app-header__brand--mobile,
   .app-header__menu-btn,
   .mobile-bottom-nav,
   .mobile-nav-drawer,
@@ -677,8 +645,8 @@
     display: none !important;
   }
 
-  .app-header__brand--desktop {
-    display: flex;
+  .app-header__brand-title {
+    display: inline;
   }
 }
 

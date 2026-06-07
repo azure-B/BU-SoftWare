@@ -13,6 +13,7 @@
 .login-input::placeholder {
   color: #747682;
   opacity: 1;
+  -webkit-text-fill-color: #747682;
 }
 
 .login-input:-webkit-autofill,

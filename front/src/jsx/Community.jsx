@@ -38,6 +38,11 @@ import { paginateItems } from '../components/community/qnaData';
 
 import { API_BASE_URL } from '../components/constants';
 
+import {
+  getStoredSessionDepartment,
+  patchStoredSessionDepartment,
+} from '../utils/authSession';
+
 import '../public/css/community.css';
 
 
@@ -112,7 +117,7 @@ function resolveHeaderBoard(outerKey) {
 
 
 
-function resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, departmentId) {
+function resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, homeDepartmentId) {
 
   if (!shouldFilterByDepartment(board)) return null;
 
@@ -122,7 +127,33 @@ function resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, 
 
   }
 
-  return departmentId ?? null;
+  if (homeDepartmentId != null && homeDepartmentId !== '') {
+
+    return Number(homeDepartmentId);
+
+  }
+
+  return null;
+
+}
+
+
+
+function resolveHomeDepartment(propDepartmentId, propDepartmentName) {
+
+  if (propDepartmentId != null && propDepartmentId !== '') {
+
+    return {
+
+      id: Number(propDepartmentId),
+
+      name: propDepartmentName || getStoredSessionDepartment().departmentName,
+
+    };
+
+  }
+
+  return getStoredSessionDepartment();
 
 }
 
@@ -140,11 +171,11 @@ function applyPostsFromCache(cache, cacheKey, setPosts) {
 
 
 
-function getPostsCacheKey(listKey, browseOtherDept, selectedDepartmentId, departmentId, postsRefreshKey) {
+function getPostsCacheKey(listKey, browseOtherDept, selectedDepartmentId, homeDepartmentId, postsRefreshKey) {
 
   const { board } = parseCommunityPanelKey(listKey);
 
-  const deptId = resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, departmentId);
+  const deptId = resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, homeDepartmentId);
 
   return `${listKey}|${deptId ?? ''}|${postsRefreshKey}`;
 
@@ -175,6 +206,20 @@ function Community({
   departmentName = '',
 
 }) {
+
+  const homeDepartment = useMemo(
+
+    () => resolveHomeDepartment(departmentId, departmentName),
+
+    [departmentId, departmentName],
+
+  );
+
+  const homeDepartmentId = homeDepartment.id;
+
+  const homeDepartmentName = homeDepartment.name;
+
+
 
   const [activeFilter, setActiveFilter] = useState('전체');
 
@@ -228,6 +273,26 @@ function Community({
 
 
 
+  useEffect(() => {
+
+    if (homeDepartmentId != null && homeDepartmentName) {
+
+      patchStoredSessionDepartment(homeDepartmentId, homeDepartmentName);
+
+    }
+
+  }, [homeDepartmentId, homeDepartmentName]);
+
+
+
+  useEffect(() => {
+
+    postsCacheRef.current.clear();
+
+  }, [homeDepartmentId]);
+
+
+
   const { board: shownBoard, filter: shownFilter } = useMemo(
 
     () => parseCommunityPanelKey(shownListKey),
@@ -272,9 +337,9 @@ function Community({
 
   const fetchDepartmentId = useMemo(
 
-    () => resolveFetchDepartmentId(shownBoard, browseOtherDept, selectedDepartmentId, departmentId),
+    () => resolveFetchDepartmentId(shownBoard, browseOtherDept, selectedDepartmentId, homeDepartmentId),
 
-    [shownBoard, browseOtherDept, selectedDepartmentId, departmentId],
+    [shownBoard, browseOtherDept, selectedDepartmentId, homeDepartmentId],
 
   );
 
@@ -282,9 +347,9 @@ function Community({
 
   const postsCacheKey = useMemo(
 
-    () => getPostsCacheKey(listPanelKey, browseOtherDept, selectedDepartmentId, departmentId, postsRefreshKey),
+    () => getPostsCacheKey(listPanelKey, browseOtherDept, selectedDepartmentId, homeDepartmentId, postsRefreshKey),
 
-    [listPanelKey, browseOtherDept, selectedDepartmentId, departmentId, postsRefreshKey],
+    [listPanelKey, browseOtherDept, selectedDepartmentId, homeDepartmentId, postsRefreshKey],
 
   );
 
@@ -296,11 +361,11 @@ function Community({
 
       const { board } = parseCommunityPanelKey(listPanelKey);
 
-      return resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, departmentId);
+      return resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, homeDepartmentId);
 
     },
 
-    [listPanelKey, browseOtherDept, selectedDepartmentId, departmentId],
+    [listPanelKey, browseOtherDept, selectedDepartmentId, homeDepartmentId],
 
   );
 
@@ -308,7 +373,7 @@ function Community({
 
   const effectiveDepartmentName = useMemo(() => {
 
-    if (!filterByDepartment) return departmentName;
+    if (!filterByDepartment) return homeDepartmentName;
 
     if (browseOtherDept && selectedDepartmentId) {
 
@@ -322,7 +387,7 @@ function Community({
 
     }
 
-    return departmentName || null;
+    return homeDepartmentName || null;
 
   }, [
 
@@ -334,7 +399,7 @@ function Community({
 
     departmentOptions,
 
-    departmentName,
+    homeDepartmentName,
 
   ]);
 
@@ -793,6 +858,22 @@ function Community({
     }
 
 
+
+    if (!query) {
+
+      setPosts([]);
+
+      setLoading(false);
+
+      setError('학과 정보를 확인할 수 없습니다. 다시 로그인해 주세요.');
+
+      return undefined;
+
+    }
+
+
+
+    setLoading(true);
 
     loadPosts();
 

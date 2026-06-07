@@ -64,6 +64,18 @@ describe('FAQ API', () => {
       expect(res.body.matched).toBe('classroom-overview');
     });
 
+    it('병결 질문에 답한다', async () => {
+      const res = await request(app)
+        .post('/api/faq/ask')
+        .send({ message: '병결 서류 어떻게 제출해?' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.answer).toContain('질병 결석');
+      expect(res.body.answer).toContain('입원일로부터 2주 이내');
+      expect(res.body.answer).toContain('자신의 학과사무실');
+      expect(res.body.matched).toBe('absence-sick');
+    });
+
     it('매칭되지 않으면 안내 메시지를 반환한다', async () => {
       const res = await request(app)
         .post('/api/faq/ask')

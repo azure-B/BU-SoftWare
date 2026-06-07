@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   DASHBOARD_NOTICE_BOARD_ID,
   DASHBOARD_SQUARE_TABS,
+  buildPostsFetchQuery,
   mapApiPost,
   plainTextExcerpt,
   sortPostsByNewest,
@@ -20,17 +21,47 @@ import '../public/css/mobile/dashboard.css';
 const COURSES_PER_PAGE = 2;
 const SQUARE_VISIBLE_POST_COUNT = 3;
 
-function formatFacilityMobileTimeLabel(facility) {
-  const isBooked = facility.status === 'booked' || facility.status === 'reserved';
+function DashboardFacilityTimeLabel({ facility }) {
+  const isReservation = facility.status === 'booked' || facility.status === 'reserved';
 
-  if (isBooked && facility.sortTime) {
-    return new Date(facility.sortTime).toLocaleDateString('ko-KR', {
-      month: 'numeric',
-      day: 'numeric',
-    });
+  if (!isReservation || !facility.sortTime) {
+    return (
+      <span className="dashboard-facility-time-label-text dashboard-facility-time-label-text--single">
+        {facility.timeLabel ?? '--'}
+      </span>
+    );
   }
 
-  return facility.timeLabel;
+  const date = new Date(facility.sortTime);
+  if (Number.isNaN(date.getTime())) {
+    return (
+      <span className="dashboard-facility-time-label-text dashboard-facility-time-label-text--single">
+        {facility.timeLabel ?? '--'}
+      </span>
+    );
+  }
+
+  const timeLine = date.toLocaleTimeString('ko-KR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
+  const now = new Date();
+  const dateLine = date.toDateString() === now.toDateString()
+    ? '오늘'
+    : date.toLocaleDateString('ko-KR', {
+        month: 'numeric',
+        day: 'numeric',
+        weekday: 'short',
+      });
+
+  return (
+    <span className="dashboard-facility-time-label-text">
+      <span className="dashboard-facility-time-label-date">{dateLine}</span>
+      <span className="dashboard-facility-time-label-time">{timeLine}</span>
+    </span>
+  );
 }
 
 function Dashboard({ session = {}, onOpenPost }) {
@@ -128,7 +159,10 @@ function Dashboard({ session = {}, onOpenPost }) {
       setFacilityError(null);
 
       try {
-        const data = await fetchDashboardFacilityStatuses(session.token);
+        const data = await fetchDashboardFacilityStatuses(
+          session.token,
+          session.departmentId ?? null,
+        );
         if (!cancelled) {
           setFacilityStatuses(data);
           setFacilityIndex(0);
@@ -152,7 +186,7 @@ function Dashboard({ session = {}, onOpenPost }) {
       cancelled = true;
       window.removeEventListener(RESERVATIONS_UPDATED_EVENT, onReservationsUpdated);
     };
-  }, [session.token]);
+  }, [session.token, session.departmentId]);
 
   useEffect(() => {
     let cancelled = false;
@@ -161,15 +195,22 @@ function Dashboard({ session = {}, onOpenPost }) {
       setSquareLoading(true);
       setSquareError(null);
 
+      const departmentId = session.departmentId ?? null;
+
       const results = await Promise.allSettled(
         DASHBOARD_SQUARE_TABS.map(async (tab) => {
-          const res = await fetch(`${API_BASE_URL}/api/community/posts?boardId=${tab.boardId}`);
+          const query = buildPostsFetchQuery(tab.id, '전체', departmentId);
+          if (!query) {
+            return [tab.id, []];
+          }
+
+          const res = await fetch(`${API_BASE_URL}/api/community/posts?${query}`);
           if (!res.ok) {
             const body = await res.json().catch(() => ({}));
             throw new Error(body.message || '게시글을 불러오지 못했습니다.');
           }
           const data = await res.json();
-          return [tab.id, data.map(mapApiPost)];
+          return [tab.id, sortPostsByNewest(data.map(mapApiPost))];
         }),
       );
 
@@ -202,7 +243,7 @@ function Dashboard({ session = {}, onOpenPost }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [session.departmentId]);
 
   const topSquarePosts = useMemo(() => {
     const posts = squarePostsByBoard[activeSquareTab] ?? [];
@@ -428,9 +469,8 @@ function Dashboard({ session = {}, onOpenPost }) {
                     ) : (
                       <div key={facilityIndex} className="w-full gold-divider-l pl-4 dashboard-content-enter">
                         <div className="flex gap-4 items-center">
-                          <span className="font-label-md text-sm w-16 text-outline font-semibold shrink-0 dashboard-facility-time-label">
-                            <span className="md:hidden">{formatFacilityMobileTimeLabel(displayedFacility)}</span>
-                            <span className="hidden md:inline">{displayedFacility.timeLabel}</span>
+                          <span className="font-label-md text-sm text-outline font-semibold shrink-0 dashboard-facility-time-label">
+                            <DashboardFacilityTimeLabel facility={displayedFacility} />
                           </span>
                           <span
                             className={
@@ -443,7 +483,7 @@ function Dashboard({ session = {}, onOpenPost }) {
                           </span>
                         </div>
                         {displayedFacility.location && (
-                          <p className="font-body-md text-sm text-on-surface-variant mt-2 pl-20">
+                          <p className="font-body-md text-sm text-on-surface-variant mt-2 dashboard-facility-location">
                             {displayedFacility.location}
                           </p>
                         )}

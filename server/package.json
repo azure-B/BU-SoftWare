@@ -12,6 +12,7 @@
     "tour:seed-posts": "node scripts/seed-tour-posts.js",
     "seed:reservations": "node scripts/seed-reservations.js",
     "seed:facilities": "node scripts/seed-facilities.js",
+    "seed:scholarship-contest": "node scripts/seed-scholarship-contest-posts.js",
     "migrate:facilities": "node scripts/apply-migrate-facilities.js",
     "test": "jest --runInBand --forceExit",
     "test:watch": "jest --watch",

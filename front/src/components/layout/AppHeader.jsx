@@ -52,17 +52,13 @@ function AppHeader({
 
       <button
         type="button"
-        className="app-header__brand--mobile app-header__brand-logo md:hidden"
+        className="app-header__brand"
         aria-label={`${SITE_TITLE} 홈으로`}
         onClick={() => onNavSelect?.('dashboard')}
       >
         <img alt="Baekseok University Logo" className="app-header__logo" src={LOGO_APP} />
+        <span className="app-header__brand-title">{SITE_TITLE}</span>
       </button>
-
-      <div className="app-header__brand--desktop flex items-center gap-4">
-        <img alt="Baekseok University Logo" className="h-10 w-10 rounded-full shadow-sm" src={LOGO_APP} />
-        <div className="font-display-lg text-2xl text-primary">{SITE_TITLE}</div>
-      </div>
 
       <nav className="hidden md:flex gap-8 items-center" aria-label="주 메뉴">
         {NAV_ITEMS.map((item) => (

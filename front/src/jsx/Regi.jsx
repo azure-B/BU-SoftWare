@@ -365,7 +365,7 @@ function Regi({ onGoToLogin, onRegiComplete }) {
   };
 
   return (
-    <div className="registration-card auth-panel-card shadow-sm p-10 md:p-12 relative z-10 mx-auto">
+    <div className="registration-card auth-panel-card w-full shadow-sm p-10 md:p-12 relative z-10 mx-auto">
       <div className="auth-panel-card__main flex flex-col flex-1">
         <div className="flex flex-col items-center mb-6">
           <img

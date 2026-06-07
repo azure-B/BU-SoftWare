@@ -98,3 +98,6 @@ BEGIN
     END IF;
   END LOOP;
 END $$;
+
+-- slug 없는 구버전 중복 시설 숨김 (예: 코워킹 스페이스 2건)
+-- reservations 가 묶인 legacy row 가 있으면 삭제 대신 slug 시설로 예약을 옮긴 뒤 수동 삭제하세요.

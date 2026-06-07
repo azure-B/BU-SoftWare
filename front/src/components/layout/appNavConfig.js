@@ -29,14 +29,12 @@ export function getAppPageMeta(view) {
         pageClass: 'dashboard-page',
         activeNav: 'dashboard',
         profileActive: false,
-        showWatermark: true,
       };
     case 'square':
       return {
         pageClass: 'community-page',
         activeNav: 'square',
         profileActive: false,
-        showWatermark: false,
       };
     case 'post':
     case 'new_post':
@@ -47,42 +45,36 @@ export function getAppPageMeta(view) {
         pageClass: 'community-page',
         activeNav: 'square',
         profileActive: false,
-        showWatermark: false,
       };
     case 'dept':
       return {
         pageClass: 'tour-page',
         activeNav: 'dept',
         profileActive: false,
-        showWatermark: false,
       };
     case 'reservation':
       return {
         pageClass: 'reservation-page bg-background text-on-surface antialiased',
         activeNav: 'reservation',
         profileActive: false,
-        showWatermark: false,
       };
     case 'shuttle':
       return {
         pageClass: 'shuttle-page text-on-surface antialiased',
         activeNav: 'shuttle',
         profileActive: false,
-        showWatermark: false,
       };
     case 'mypage':
       return {
         pageClass: 'mypage-page',
         activeNav: null,
         profileActive: true,
-        showWatermark: false,
       };
     default:
       return {
         pageClass: 'app-page',
         activeNav: 'dashboard',
         profileActive: false,
-        showWatermark: false,
       };
   }
 }

@@ -8,7 +8,7 @@ import {
   updateCommunityPost,
   updatePostComment,
 } from '../community/postData';
-import { TOUR_POST_TAGS } from './tourData';
+import TourPostTagInput from './TourPostTagInput';
 import {
   formatTourDisplayTitle,
   parseTourPostMeta,
@@ -20,6 +20,7 @@ function TourPostPanel({
   placeName,
   token,
   currentUserId,
+  popularTags = [],
   onBack,
   onPostUpdated,
   onPostDeleted,
@@ -27,7 +28,7 @@ function TourPostPanel({
   const [mode, setMode] = useState('view');
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
-  const [editTags, setEditTags] = useState(['맛집']);
+  const [editTags, setEditTags] = useState([]);
   const [editPostType, setEditPostType] = useState('review');
   const [savingPost, setSavingPost] = useState(false);
   const [deletingPost, setDeletingPost] = useState(false);
@@ -103,12 +104,6 @@ function TourPostPanel({
       cancelled = true;
     };
   }, [detail?.id]);
-
-  function toggleEditTag(tag) {
-    setEditTags((prev) =>
-      prev.includes(tag) ? prev.filter((item) => item !== tag) : [...prev, tag],
-    );
-  }
 
   const handleSavePost = useCallback(async () => {
     const trimmedTitle = editTitle.trim();
@@ -325,22 +320,12 @@ function TourPostPanel({
               </button>
             ))}
           </div>
-          <div className="flex flex-wrap gap-2">
-            {TOUR_POST_TAGS.map((tag) => (
-              <button
-                key={tag}
-                type="button"
-                onClick={() => toggleEditTag(tag)}
-                className={
-                  editTags.includes(tag)
-                    ? 'px-3 py-1 border tour-filter-active font-label-md text-xs bg-transparent cursor-pointer'
-                    : 'px-3 py-1 border border-outline-variant text-on-surface-variant font-label-md text-xs hover:border-primary transition-colors bg-transparent cursor-pointer'
-                }
-              >
-                #{tag}
-              </button>
-            ))}
-          </div>
+          <TourPostTagInput
+            selectedTags={editTags}
+            onChange={setEditTags}
+            popularTags={popularTags}
+            disabled={savingPost}
+          />
           <input
             type="text"
             value={editTitle}

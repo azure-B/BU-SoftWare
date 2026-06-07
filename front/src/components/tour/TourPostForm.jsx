@@ -1,20 +1,22 @@
 import { useState } from 'react';
 import { createCommunityPost } from '../community/postData';
-import { TOUR_POST_TAGS } from './tourData';
+import TourPostTagInput from './TourPostTagInput';
 
-function TourPostForm({ boardId, placeName, token, defaultPostType = 'review', onCancel, onCreated }) {
+function TourPostForm({
+  boardId,
+  placeName,
+  token,
+  defaultPostType = 'review',
+  popularTags = [],
+  onCancel,
+  onCreated,
+}) {
   const [postType, setPostType] = useState(defaultPostType);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [selectedTags, setSelectedTags] = useState(['맛집']);
+  const [selectedTags, setSelectedTags] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
-
-  function toggleTag(tag) {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((item) => item !== tag) : [...prev, tag],
-    );
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -31,7 +33,7 @@ function TourPostForm({ boardId, placeName, token, defaultPostType = 'review', o
       return;
     }
     if (selectedTags.length === 0) {
-      setError('태그를 하나 이상 선택해 주세요.');
+      setError('태그를 하나 이상 입력해 주세요.');
       return;
     }
 
@@ -85,25 +87,12 @@ function TourPostForm({ boardId, placeName, token, defaultPostType = 'review', o
         ))}
       </div>
 
-      <div>
-        <span className="font-label-md text-label-md text-on-surface-variant block mb-2">태그</span>
-        <div className="flex flex-wrap gap-2">
-          {TOUR_POST_TAGS.map((tag) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => toggleTag(tag)}
-              className={
-                selectedTags.includes(tag)
-                  ? 'px-3 py-1 border tour-filter-active font-label-md text-xs bg-transparent cursor-pointer'
-                  : 'px-3 py-1 border border-outline-variant text-on-surface-variant font-label-md text-xs hover:border-primary transition-colors bg-transparent cursor-pointer'
-              }
-            >
-              #{tag}
-            </button>
-          ))}
-        </div>
-      </div>
+      <TourPostTagInput
+        selectedTags={selectedTags}
+        onChange={setSelectedTags}
+        popularTags={popularTags}
+        disabled={submitting}
+      />
 
       <label className="flex flex-col gap-1">
         <span className="font-label-md text-label-md text-on-surface-variant">제목</span>

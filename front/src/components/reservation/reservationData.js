@@ -2,10 +2,12 @@ export const MY_RESERVATIONS_ID = 'my_reservations';
 
 export const RESERVATION_STATUS = {
   APPROVED: 'approved',
+  PENDING: 'pending',
 };
 
 export const RESERVATION_STATUS_LABEL = {
   [RESERVATION_STATUS.APPROVED]: '승인 완료',
+  [RESERVATION_STATUS.PENDING]: '승인 대기',
 };
 
 export const MY_RESERVATIONS_STORAGE_KEY = 'baekseok-my-reservations';
@@ -195,6 +197,15 @@ function parseCapacityFromAmenities(facility) {
 }
 
 export function getFacilityBookingMeta(facility) {
+  if (facility?.maxParticipants != null || facility?.location) {
+    return {
+      subtitle: '',
+      location: facility.location ?? '',
+      maxParticipants: facility.maxParticipants ?? parseCapacityFromAmenities(facility),
+      timeSlots: facility.timeSlots ?? DEFAULT_TIME_SLOTS,
+    };
+  }
+
   const meta = FACILITY_BOOKING_META[facility.id] ?? {};
   return {
     subtitle: meta.subtitle ?? '',
@@ -231,7 +242,8 @@ export function getBookedTimeSlots(existingReservations, facilityId, date) {
       (reservation) =>
         reservation.facilityId === facilityId &&
         reservation.date === date &&
-        reservation.status === RESERVATION_STATUS.APPROVED,
+        (reservation.status === RESERVATION_STATUS.APPROVED ||
+          reservation.status === RESERVATION_STATUS.PENDING),
     )
     .flatMap((reservation) => reservation.timeSlots ?? []);
 }
@@ -255,6 +267,15 @@ export function loadStoredReservations() {
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
+  }
+}
+
+/** DB 연동 이전 localStorage 예약 캐시 제거 */
+export function clearStoredReservations() {
+  try {
+    localStorage.removeItem(MY_RESERVATIONS_STORAGE_KEY);
+  } catch {
+    // ignore
   }
 }
 

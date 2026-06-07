@@ -1,51 +1,14 @@
-import {
-  formatTimeSlots,
-  loadStoredReservations,
-  RESERVATION_STATUS,
-  toDateInputValue,
-} from '../reservation/reservationData';
 import { API_BASE_URL } from '../constants';
+import { clearStoredReservations } from '../reservation/reservationData';
 
-function parseReservationSortTime(dateStr, timeSlots) {
-  const firstSlot = timeSlots?.[0] ?? '00:00';
-  const parsed = new Date(`${dateStr}T${firstSlot}:00`);
-  const ms = parsed.getTime();
-  return Number.isNaN(ms) ? null : ms;
-}
-
-function formatDashboardTimeLabel(dateStr, timeSlots) {
-  const firstSlot = timeSlots?.[0];
-  if (!dateStr || !firstSlot) return '--';
-
-  const date = new Date(`${dateStr}T00:00:00`);
-  const today = toDateInputValue(new Date());
-  const timeText = formatTimeSlots(timeSlots);
-
-  if (dateStr === today) {
-    return timeText;
-  }
-
-  const dateLabel = date.toLocaleDateString('ko-KR', {
-    month: 'numeric',
-    day: 'numeric',
-    weekday: 'short',
+function dedupeRows(rows) {
+  const seen = new Set();
+  return rows.filter((row) => {
+    const key = row.id ?? `${row.facilityId}|${row.sortTime}|${row.location ?? ''}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
   });
-  return `${dateLabel} ${timeText}`;
-}
-
-export function mapStoredReservationToDashboardRow(reservation) {
-  const sortTime = parseReservationSortTime(reservation.date, reservation.timeSlots);
-  return {
-    id: `local-${reservation.id}`,
-    facilityId: reservation.facilityId,
-    facilityName: reservation.facilityTitle,
-    location: reservation.location ?? '',
-    timeLabel: formatDashboardTimeLabel(reservation.date, reservation.timeSlots),
-    sortTime: sortTime ?? Date.now(),
-    status: 'booked',
-    statusLabel: '예약됨',
-    isMine: true,
-  };
 }
 
 export function sortDashboardFacilityStatuses(rows) {
@@ -74,44 +37,37 @@ export function sortDashboardFacilityStatuses(rows) {
   return [...reservations, ...others];
 }
 
-export function mergeDashboardFacilityStatuses(apiRows, localReservations = loadStoredReservations()) {
-  const nowMs = Date.now();
+export function mergeDashboardFacilityStatuses(apiRows) {
   const apiList = Array.isArray(apiRows) ? apiRows : [];
 
-  const myLocalRows = (localReservations ?? [])
-    .filter((reservation) => reservation.status === RESERVATION_STATUS.APPROVED)
-    .map(mapStoredReservationToDashboardRow)
-    .filter((row) => row.sortTime >= nowMs - 60 * 60 * 1000)
-    .sort((a, b) => a.sortTime - b.sortTime);
+  const myRows = dedupeRows(
+    apiList.filter(
+      (row) => row.isMine && (row.status === 'booked' || row.status === 'reserved'),
+    ),
+  ).sort((a, b) => (a.sortTime ?? 0) - (b.sortTime ?? 0));
 
-  const coveredKeys = new Set(
-    myLocalRows.map((row) => `${row.facilityId}|${row.timeLabel}`),
-  );
+  const myFacilityIds = new Set(myRows.map((row) => String(row.facilityId)));
 
-  const myApiRows = apiList
-    .filter((row) => row.isMine && (row.status === 'booked' || row.status === 'reserved'))
-    .filter((row) => !coveredKeys.has(`${row.facilityId}|${row.timeLabel}`));
+  const availableRows = apiList
+    .filter((row) => row.status === 'available')
+    .filter((row) => !myFacilityIds.has(String(row.facilityId)));
 
-  const myRows = [...myLocalRows, ...myApiRows].sort((a, b) => a.sortTime - b.sortTime);
-
-  const availableRows = apiList.filter((row) => row.status === 'available');
-
-  const otherRows = apiList.filter(
-    (row) =>
-      !row.isMine &&
-      row.status !== 'available' &&
-      !myRows.some(
-        (mine) =>
-          String(mine.facilityId) === String(row.facilityId) && mine.sortTime === row.sortTime,
-      ),
-  );
-
-  return sortDashboardFacilityStatuses([...myRows, ...availableRows, ...otherRows]);
+  return sortDashboardFacilityStatuses([...myRows, ...availableRows]);
 }
 
-export async function fetchDashboardFacilityStatuses(token) {
+export async function fetchDashboardFacilityStatuses(token, departmentId = null) {
+  clearStoredReservations();
+
+  const params = new URLSearchParams();
+  if (departmentId != null && departmentId !== '') {
+    params.set('departmentId', String(departmentId));
+  }
+  const query = params.toString();
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
-  const res = await fetch(`${API_BASE_URL}/api/reservations/dashboard-status`, { headers });
+  const res = await fetch(
+    `${API_BASE_URL}/api/reservations/dashboard-status${query ? `?${query}` : ''}`,
+    { headers },
+  );
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));

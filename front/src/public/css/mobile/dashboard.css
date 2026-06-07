@@ -49,8 +49,7 @@
   }
 
   .dashboard-facility-time-label {
-    white-space: nowrap;
-    line-height: 1.25;
+    height: 2.5rem;
   }
 
   .dashboard-square-post-item {

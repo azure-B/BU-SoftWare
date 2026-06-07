@@ -1,4 +1,47 @@
 /* --- layout.css (header / footer shells) --- */
+
+.app-header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+}
+
+.app-header__brand:hover .app-header__brand-title {
+  color: var(--brand-blue, #1d5abc);
+}
+
+.app-header__brand:focus-visible {
+  outline: 2px solid var(--brand-blue, #1d5abc);
+  outline-offset: 3px;
+  border-radius: 0.25rem;
+}
+
+.app-header__logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  box-shadow: 0 1px 2px rgba(0, 30, 89, 0.12);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.app-header__brand-title {
+  font-family: var(--font-primary, 'Libre Caslon Text', serif);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--brand-navy, #0d337f);
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
 .app-footer--app.footer-shared {
   background-color: var(--brand-navy);
   color: #ffffff;

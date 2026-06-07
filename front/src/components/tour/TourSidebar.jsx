@@ -1,4 +1,5 @@
 import { formatDistance } from './tourApi';
+import { SIDEBAR_TAG_DESKTOP_VISIBLE, SIDEBAR_TAG_MOBILE_VISIBLE } from './tourData';
 
 function TourSidebar({
   places = [],
@@ -8,7 +9,7 @@ function TourSidebar({
   popularPlaces = [],
   onSelectPlace,
 }) {
-  const filterOptions = ['전체', ...topTags.slice(0, 7)];
+  const filterOptions = ['전체', ...topTags];
 
   return (
     <aside className="md:col-span-4 flex flex-col gap-8 tour-sidebar p-6 border-l border-outline-variant h-full">
@@ -17,24 +18,31 @@ function TourSidebar({
           인기 태그
         </h3>
         <div className="flex flex-wrap gap-3 tour-tag-panel__scroll">
-          {filterOptions.map((tag, index) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => onTagChange?.(tag)}
-              className={[
-                'px-4 py-2 border font-label-md text-sm transition-colors bg-transparent cursor-pointer',
-                index > 5 ? 'hidden md:inline-flex' : '',
-                activeTag === tag
-                  ? 'tour-filter-active'
-                  : 'border-outline-variant text-on-surface-variant hover:border-primary',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-            >
-              {tag === '전체' ? '전체' : `#${tag}`}
-            </button>
-          ))}
+          {filterOptions.map((tag, index) => {
+            const hiddenOnMobile =
+              index >= SIDEBAR_TAG_MOBILE_VISIBLE && index < SIDEBAR_TAG_DESKTOP_VISIBLE;
+            const hiddenEverywhere = index >= SIDEBAR_TAG_DESKTOP_VISIBLE;
+
+            return (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => onTagChange?.(tag)}
+                className={[
+                  'tour-tag-panel__btn px-4 py-2 border font-label-md text-sm transition-colors bg-transparent cursor-pointer',
+                  hiddenOnMobile ? 'hidden md:inline-flex' : '',
+                  hiddenEverywhere ? 'hidden' : '',
+                  activeTag === tag
+                    ? 'tour-filter-active'
+                    : 'border-outline-variant text-on-surface-variant hover:border-primary',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
+                {tag === '전체' ? '전체' : `#${tag}`}
+              </button>
+            );
+          })}
         </div>
       </div>
 

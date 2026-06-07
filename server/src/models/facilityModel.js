@@ -23,6 +23,14 @@ function mapFacilityRow(row) {
   };
 }
 
+function filterCanonicalFacilities(rows) {
+  const namesWithSlug = new Set(
+    (rows ?? []).filter((row) => row.slug).map((row) => row.name),
+  );
+
+  return (rows ?? []).filter((row) => row.slug || !namesWithSlug.has(row.name));
+}
+
 function buildCategoryGroups(facilities, departmentName) {
   const byCategory = new Map();
   for (const facility of facilities) {
@@ -52,7 +60,54 @@ function buildCategoryGroups(facilities, departmentName) {
   }).filter((group) => group.id !== 'dept' || group.facilities.length > 0);
 }
 
+const FACILITY_LIST_SELECT =
+  'id, name, location, category, department_id, slug, description, max_participants, is_available, amenities';
+const GLOBAL_FACILITY_CATEGORIES = ['startup', 'student', 'futsal'];
+
 const FacilityModel = {
+  findCanonicalFacilityRowsForDepartment: async (departmentId = null) => {
+    const supabase = getServerClient();
+    const exactId = Number(departmentId);
+
+    const globalQuery = supabase
+      .from('facilities')
+      .select(FACILITY_LIST_SELECT)
+      .in('category', GLOBAL_FACILITY_CATEGORIES)
+      .is('department_id', null)
+      .order('id', { ascending: true });
+
+    if (!Number.isInteger(exactId) || exactId < 1) {
+      const { data: globalRows, error: globalError } = await globalQuery;
+      if (globalError) {
+        const err = new Error('시설 목록을 불러오지 못했습니다.');
+        err.status = 500;
+        err.cause = globalError;
+        throw err;
+      }
+      return filterCanonicalFacilities(globalRows ?? []);
+    }
+
+    const [{ data: globalRows, error: globalError }, { data: deptRows, error: deptFacilitiesError }] =
+      await Promise.all([
+        globalQuery,
+        supabase
+          .from('facilities')
+          .select(FACILITY_LIST_SELECT)
+          .eq('category', 'dept')
+          .eq('department_id', exactId)
+          .order('id', { ascending: true }),
+      ]);
+
+    if (globalError || deptFacilitiesError) {
+      const err = new Error('시설 목록을 불러오지 못했습니다.');
+      err.status = 500;
+      err.cause = globalError || deptFacilitiesError;
+      throw err;
+    }
+
+    return filterCanonicalFacilities([...(globalRows ?? []), ...(deptRows ?? [])]);
+  },
+
   findFacilitiesForDepartment: async (departmentId) => {
     const exactId = Number(departmentId);
     if (!Number.isInteger(exactId) || exactId < 1) {
@@ -63,23 +118,16 @@ const FacilityModel = {
 
     const supabase = getServerClient();
 
-    const [{ data: department, error: deptError }, { data: globalRows, error: globalError }] =
-      await Promise.all([
-        supabase.from('departments').select('id, name').eq('id', exactId).maybeSingle(),
-        supabase
-          .from('facilities')
-          .select(
-            'id, name, location, category, department_id, slug, description, max_participants, is_available, amenities',
-          )
-          .in('category', ['startup', 'student', 'futsal'])
-          .is('department_id', null)
-          .order('id', { ascending: true }),
-      ]);
+    const { data: department, error: deptError } = await supabase
+      .from('departments')
+      .select('id, name')
+      .eq('id', exactId)
+      .maybeSingle();
 
-    if (deptError || globalError) {
+    if (deptError) {
       const err = new Error('시설 목록을 불러오지 못했습니다.');
       err.status = 500;
-      err.cause = deptError || globalError;
+      err.cause = deptError;
       throw err;
     }
 
@@ -89,23 +137,8 @@ const FacilityModel = {
       throw err;
     }
 
-    const { data: deptRows, error: deptFacilitiesError } = await supabase
-      .from('facilities')
-      .select(
-        'id, name, location, category, department_id, slug, description, max_participants, is_available, amenities',
-      )
-      .eq('category', 'dept')
-      .eq('department_id', exactId)
-      .order('id', { ascending: true });
-
-    if (deptFacilitiesError) {
-      const err = new Error('학과 시설을 불러오지 못했습니다.');
-      err.status = 500;
-      err.cause = deptFacilitiesError;
-      throw err;
-    }
-
-    const facilities = [...(globalRows ?? []), ...(deptRows ?? [])].map(mapFacilityRow);
+    const rawRows = await FacilityModel.findCanonicalFacilityRowsForDepartment(exactId);
+    const facilities = rawRows.map(mapFacilityRow);
     const categories = buildCategoryGroups(facilities, department.name);
 
     return {

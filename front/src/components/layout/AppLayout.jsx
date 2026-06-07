@@ -17,7 +17,6 @@ function AppLayout({
   onLogout,
   onNavSelect,
   onProfileClick,
-  showWatermark = false,
   mainTransitionClass = '',
   children,
 }) {
@@ -63,20 +62,22 @@ function AppLayout({
   }, []);
 
   return (
-    <div className={`app-layout ${pageClass} min-h-screen flex flex-col relative`}>
-      {showWatermark && <BackgroundWatermark />}
-      <AppHeader
-        activeNav={activeNav}
-        profileActive={profileActive}
-        onLogout={onLogout}
-        onNavSelect={onNavSelect}
-        onProfileClick={onProfileClick}
-        onMenuClick={openDrawer}
-      />
-      <div className={`app-main flex-1 flex flex-col min-h-0 ${mainTransitionClass}`.trim()}>
-        {children}
+    <div className={`app-layout ${pageClass} min-h-screen flex flex-col relative isolate`}>
+      <BackgroundWatermark />
+      <div className="app-layout__content relative z-10 flex flex-col flex-1 min-h-0">
+        <AppHeader
+          activeNav={activeNav}
+          profileActive={profileActive}
+          onLogout={onLogout}
+          onNavSelect={onNavSelect}
+          onProfileClick={onProfileClick}
+          onMenuClick={openDrawer}
+        />
+        <div className={`app-main flex-1 flex flex-col min-h-0 ${mainTransitionClass}`.trim()}>
+          {children}
+        </div>
+        <AppFooter variant="app" />
       </div>
-      <AppFooter variant="app" />
       <MobileBottomNav activeNav={activeNav} onNavSelect={onNavSelect} />
       <MobileNavDrawer
         open={drawerOpen}

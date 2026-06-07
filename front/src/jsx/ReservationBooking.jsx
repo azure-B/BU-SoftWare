@@ -7,22 +7,57 @@ import {
   getTimeSlotsWithAvailability,
   isBookableDate,
 } from '../components/reservation/reservationData';
+import { fetchBookedSlots } from '../components/reservation/reservationApi';
 import '../public/css/reservation-in.css';
 
 const MAX_TIME_SLOTS = 4;
 
-function ReservationBooking({ facility, existingReservations = [], onCancel, onSubmit }) {
+function ReservationBooking({
+  facility,
+  existingReservations = [],
+  token,
+  submitting = false,
+  onCancel,
+  onSubmit,
+}) {
   const booking = getFacilityBookingMeta(facility);
   const minBookingDate = getMinBookingDate();
   const [reservationDate, setReservationDate] = useState('');
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [participants, setParticipants] = useState('');
   const [reason, setReason] = useState('');
+  const [apiBookedSlots, setApiBookedSlots] = useState([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
 
-  const bookedSlots = useMemo(
-    () => getBookedTimeSlots(existingReservations, facility.id, reservationDate),
-    [existingReservations, facility.id, reservationDate],
-  );
+  useEffect(() => {
+    if (!reservationDate) {
+      setApiBookedSlots([]);
+      return undefined;
+    }
+
+    let cancelled = false;
+    setSlotsLoading(true);
+
+    fetchBookedSlots({ facilitySlug: facility.id, date: reservationDate })
+      .then((slots) => {
+        if (!cancelled) setApiBookedSlots(slots);
+      })
+      .catch(() => {
+        if (!cancelled) setApiBookedSlots([]);
+      })
+      .finally(() => {
+        if (!cancelled) setSlotsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [reservationDate, facility.id]);
+
+  const bookedSlots = useMemo(() => {
+    const localSlots = getBookedTimeSlots(existingReservations, facility.id, reservationDate);
+    return [...new Set([...localSlots, ...apiBookedSlots])];
+  }, [existingReservations, facility.id, reservationDate, apiBookedSlots]);
 
   const displaySlots = useMemo(
     () => getTimeSlotsWithAvailability(booking.timeSlots, bookedSlots),
@@ -135,6 +170,10 @@ function ReservationBooking({ facility, existingReservations = [], onCancel, onS
                 <p className="font-body-md text-sm text-on-surface-variant">
                   예약 일자를 먼저 선택해 주세요.
                 </p>
+              ) : slotsLoading ? (
+                <p className="font-body-md text-sm text-on-surface-variant">
+                  예약 가능 시간을 확인하는 중…
+                </p>
               ) : (
                 <div className="grid grid-cols-4 gap-2">
                   {displaySlots.map((slot) =>
@@ -228,8 +267,12 @@ function ReservationBooking({ facility, existingReservations = [], onCancel, onS
           >
             취소
           </button>
-          <button type="submit" className="reservation-in-btn-submit px-8 py-3 font-label-md transition-colors">
-            신청하기
+          <button
+            type="submit"
+            className="reservation-in-btn-submit px-8 py-3 font-label-md transition-colors"
+            disabled={submitting || !token}
+          >
+            {submitting ? '저장 중…' : '신청하기'}
           </button>
         </div>
       </form>

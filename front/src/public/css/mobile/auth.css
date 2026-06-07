@@ -22,7 +22,10 @@
   }
 
   .auth-flow__panels {
+    width: 100%;
     max-width: none;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .auth-panel:not(.auth-panel--visible) {
@@ -31,6 +34,7 @@
 
   .auth-panel--visible {
     position: relative;
+    width: 100%;
     height: auto;
     min-height: 0;
   }
@@ -38,13 +42,18 @@
   .login-card.auth-panel-card,
   .registration-card.auth-panel-card,
   .find-card.auth-panel-card {
+    width: 100%;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
     padding: 1.5rem 1rem;
+    box-sizing: border-box;
   }
 
   .auth-panel {
     width: 100%;
     max-width: none;
-    padding: 1.5rem 0;
+    padding: 0;
   }
 
   .auth-panel h1 {
@@ -67,6 +76,8 @@
   }
 
   .login-form input::placeholder,
+  .regi-form input::placeholder,
+  .regi-form .regi-dept-picker .regi-combobox__input::placeholder,
   .find-form input::placeholder {
     color: #747682;
     opacity: 1;

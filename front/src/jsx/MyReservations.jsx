@@ -47,13 +47,13 @@ function MyReservations({ reservations }) {
                   <dt className="font-label-md text-[11px] uppercase tracking-widest text-outline mb-0.5">
                     사용 인원
                   </dt>
-                  <dd>{reservation.participants}명</dd>
+                  <dd>{reservation.participants != null ? `${reservation.participants}명` : '—'}</dd>
                 </div>
                 <div className="sm:col-span-2">
                   <dt className="font-label-md text-[11px] uppercase tracking-widest text-outline mb-0.5">
                     사용 목적
                   </dt>
-                  <dd>{reservation.reason}</dd>
+                  <dd>{reservation.reason || '—'}</dd>
                 </div>
               </dl>
             </li>

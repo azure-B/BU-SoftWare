@@ -23,6 +23,36 @@ export function getEmptySession() {
   return { ...EMPTY_SESSION };
 }
 
+export function getStoredSessionDepartment() {
+  const session = loadStoredAuth()?.session;
+  if (!session) return { departmentId: null, departmentName: '' };
+
+  const departmentId =
+    session.departmentId != null && session.departmentId !== ''
+      ? Number(session.departmentId)
+      : null;
+
+  return {
+    departmentId: Number.isInteger(departmentId) && departmentId > 0 ? departmentId : null,
+    departmentName: session.departmentName || '',
+  };
+}
+
+export function patchStoredSessionDepartment(departmentId, departmentName) {
+  const stored = loadStoredAuth();
+  if (!stored?.session?.token) return;
+
+  saveStoredAuth({
+    session: {
+      ...stored.session,
+      departmentId:
+        departmentId != null && departmentId !== '' ? Number(departmentId) : null,
+      departmentName: departmentName || stored.session.departmentName || '',
+    },
+    activeView: stored.activeView ?? 'dashboard',
+  });
+}
+
 export function resolveRestoredView(activeView, hasSession) {
   if (!hasSession) {
     if (isAuthView(activeView)) return activeView;
@@ -66,8 +96,11 @@ export function saveStoredAuth({ session, activeView }) {
         id: session.id,
         studentId: session.studentId,
         name: session.name,
-        departmentId: session.departmentId,
-        departmentName: session.departmentName,
+        departmentId:
+          session.departmentId != null && session.departmentId !== ''
+            ? Number(session.departmentId)
+            : null,
+        departmentName: session.departmentName || '',
         token: session.token,
       },
       activeView: VIEWS_NEEDING_POST.has(view) ? 'square' : view,

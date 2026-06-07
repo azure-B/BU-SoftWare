@@ -6,7 +6,7 @@ export const LOGO_APP =
 export const LOGO_LOGIN =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuBBYcDD0AjvT94JsvLfCmER1oM1ox1_R8a7WXJYj_3x_BvfN7F_NmHGSaCG9evKrPURy2gcvqe3jH7hLz9xXfbKCrNov1fKPb3aAlXf7Bq08sXAIzg3a4zP0nOaQEHEs93zbFlxDZC7tvII5Gv7k5GYczMHTRTxkNIRGy5Z1eqh2-_u8D2XbO24jJtcHRorjRxU7seiuSOjTi8PCfiaP070T6-tVXCY8SyV8bLVsnq0puqi-jKLAioVcz5YHZnCUsAeRxyyn98Dlw';
 
-export const SITE_TITLE = '백석 학생 허브';
+export const SITE_TITLE = '백석학생허브';
 
 /** 백석대학교 사이버캠퍼스 (BLMS) */
 export const CYBER_CAMPUS_URL = 'https://blms.bu.ac.kr/home/mainHome/Form/myPage';

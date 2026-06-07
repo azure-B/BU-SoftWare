@@ -3,7 +3,6 @@ import FacilityCard from '../components/reservation/FacilityCard';
 import {
   BOOKING_LEAD_DAYS,
   CATEGORY_SECTION_TITLES,
-  FACILITIES_BY_CATEGORY,
   getMinBookingDate,
   isFacilityEnterable,
 } from '../components/reservation/reservationData';
@@ -11,14 +10,14 @@ import '../public/css/reservation.css';
 
 const PANEL_FADE_MS = 200;
 
-function Reservation({ activeCategory, onBook }) {
+function Reservation({ activeCategory, facilities = [], sectionTitle, onBook }) {
   const minBookingDate = getMinBookingDate();
   const [shownCategory, setShownCategory] = useState(activeCategory);
   const [panelVisible, setPanelVisible] = useState(true);
   const fadeTimerRef = useRef(null);
 
-  const facilities = FACILITIES_BY_CATEGORY[shownCategory] || [];
-  const sectionTitle = CATEGORY_SECTION_TITLES[shownCategory] || '시설 목록';
+  const sectionTitleResolved =
+    sectionTitle || CATEGORY_SECTION_TITLES[shownCategory] || '시설 목록';
   const fadeClass = panelVisible ? 'reservation-content-visible' : 'reservation-content-hidden';
 
   useEffect(() => {
@@ -49,7 +48,7 @@ function Reservation({ activeCategory, onBook }) {
           </div>
 
           <div className={`space-y-6 reservation-content-fade ${fadeClass}`}>
-            <h3 className="font-headline-md text-2xl text-on-surface">{sectionTitle}</h3>
+            <h3 className="font-headline-md text-2xl text-on-surface">{sectionTitleResolved}</h3>
 
             {facilities.length === 0 ? (
               <p className="font-body-md text-on-surface-variant">

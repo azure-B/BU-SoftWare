@@ -65,8 +65,11 @@ function App() {
       id: user.id,
       studentId: user.studentId,
       name: user.name,
-      departmentId: user.departmentId,
-      departmentName: user.departmentName,
+      departmentId:
+        user.departmentId != null && user.departmentId !== ''
+          ? Number(user.departmentId)
+          : null,
+      departmentName: user.departmentName || '',
       token: user.token,
     });
     navigateTo('dashboard');
@@ -167,7 +170,7 @@ function App() {
       case 'dept':
         return <Tour session={session} />;
       case 'reservation':
-        return <ReservationView />;
+        return <ReservationView token={session.token} departmentId={session.departmentId} departmentName={session.departmentName} />;
       case 'shuttle':
         return <Shuttle />;
       case 'mypage':
@@ -237,7 +240,6 @@ function App() {
     return (
       <AppLayout
         pageClass={pageMeta.pageClass}
-        showWatermark={pageMeta.showWatermark}
         activeNav={headerMeta.activeNav}
         profileActive={headerMeta.profileActive}
         onLogout={handleLogout}

@@ -7,7 +7,7 @@ import TourMobilePostSection from '../components/tour/TourMobilePostSection';
 import TourPostForm from '../components/tour/TourPostForm';
 import TourPostPanel from '../components/tour/TourPostPanel';
 import TourSidebar from '../components/tour/TourSidebar';
-import { TOUR_SECTION_TABS } from '../components/tour/tourData';
+import { TOUR_SECTION_TABS, resolveTourPopularTags } from '../components/tour/tourData';
 import { usePanelTransition } from '../hooks/usePanelTransition';
 import { useMobileViewport } from '../hooks/useMobileViewport';
 import {
@@ -73,12 +73,6 @@ function Tour({ session = {} }) {
           setPostDetail(null);
         }
       },
-      shouldAnimate: (nextKey, prevKey) => {
-        const next = parseTourPanelKey(nextKey);
-        const prev = parseTourPanelKey(prevKey);
-        if (next.view === 'list' && prev.view !== 'list') return false;
-        return true;
-      },
     },
   );
   const shownPanel = parseTourPanelKey(shownPanelKey);
@@ -111,6 +105,8 @@ function Tour({ session = {} }) {
       cancelled = true;
     };
   }, []);
+
+  const popularTags = useMemo(() => resolveTourPopularTags(topTags), [topTags]);
 
   const filteredPlaces = useMemo(
     () => sortPlacesByPopularity(filterPlacesByTag(places, activeTag), activeTag),
@@ -385,7 +381,7 @@ function Tour({ session = {} }) {
             ) : shownSectionTab === 'recruit' ? (
               <div className={`flex flex-col gap-4 min-h-[16rem] tour-section-body ${sectionFadeClass}`}>
                 {shownPanel.view === 'write' && recruitWritePlace ? (
-                  <div className={`tour-mobile-stage-panel md:contents flex flex-col gap-4 min-h-0 ${panelFadeClass}`}>
+                  <div className={`tour-mobile-stage-panel md:hidden flex flex-col gap-4 min-h-0 ${panelFadeClass}`}>
                     <label className="flex flex-col gap-1">
                       <span className="font-label-md text-label-md text-on-surface-variant">
                         모집할 음식점
@@ -408,24 +404,26 @@ function Tour({ session = {} }) {
                       placeName={recruitWritePlace.name}
                       token={session.token}
                       defaultPostType="recruit"
+                      popularTags={popularTags}
                       onCancel={() => setPanelView('list')}
                       onCreated={handlePostCreated}
                     />
                   </div>
                 ) : shownPanel.view === 'post' && postDetail ? (
-                  <div className={`tour-mobile-stage-panel md:contents min-h-0 ${panelFadeClass}`}>
+                  <div className={`tour-mobile-stage-panel md:hidden min-h-0 ${panelFadeClass}`}>
                     <TourPostPanel
                       detail={postDetail}
                       placeName={postPlaceName}
                       token={session.token}
                       currentUserId={session.id}
+                      popularTags={popularTags}
                       onBack={() => setPanelView('list')}
                       onPostUpdated={handlePostUpdated}
                       onPostDeleted={handlePostDeleted}
                     />
                   </div>
                 ) : (
-                  <>
+                  <div className={`tour-mobile-stage-panel md:hidden min-h-0 ${panelFadeClass}`}>
                     <TourMobilePostSection
                       filteredPlaces={filteredPlaces}
                       selectedPlaceId={selectedPlaceId}
@@ -451,9 +449,53 @@ function Tour({ session = {} }) {
                       writeDisabled={!session.token}
                       placeSelectLabel="모집 음식점"
                       searchPlaceholder="제목, 내용, #태그 검색"
-                      scrollFadeClass={panelFadeClass}
                     />
-                    <div className="hidden md:flex tour-post-list-panel-frame flex-col gap-3">
+                  </div>
+                )}
+
+                <div className={`hidden md:flex flex-col gap-4 min-h-[16rem] tour-panel-body ${panelFadeClass}`}>
+                  {shownPanel.view === 'write' && recruitWritePlace ? (
+                    <>
+                      <label className="flex flex-col gap-1">
+                        <span className="font-label-md text-label-md text-on-surface-variant">
+                          모집할 음식점
+                        </span>
+                        <select
+                          value={recruitWritePlace.id}
+                          onChange={(e) => setRecruitWritePlaceId(Number(e.target.value))}
+                          className="border border-outline-variant px-3 py-2 font-body-md text-sm bg-surface-container-lowest"
+                        >
+                          {filteredPlaces.map((place) => (
+                            <option key={place.id} value={place.id}>
+                              {place.name}
+                              {place.distanceM != null ? ` · ${place.distanceM}m` : ''}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <TourPostForm
+                        boardId={recruitWritePlace.boardId}
+                        placeName={recruitWritePlace.name}
+                        token={session.token}
+                        defaultPostType="recruit"
+                        popularTags={popularTags}
+                        onCancel={() => setPanelView('list')}
+                        onCreated={handlePostCreated}
+                      />
+                    </>
+                  ) : shownPanel.view === 'post' && postDetail ? (
+                    <TourPostPanel
+                      detail={postDetail}
+                      placeName={postPlaceName}
+                      token={session.token}
+                      currentUserId={session.id}
+                      popularTags={popularTags}
+                      onBack={() => setPanelView('list')}
+                      onPostUpdated={handlePostUpdated}
+                      onPostDeleted={handlePostDeleted}
+                    />
+                  ) : (
+                    <div className="tour-post-list-panel-frame flex-col gap-3">
                       <div className="tour-post-list-panel-toolbar flex flex-col gap-3 border-b border-outline-variant pb-3">
                         <div className="flex items-center justify-between gap-3">
                           <div>
@@ -501,8 +543,8 @@ function Tour({ session = {} }) {
                         />
                       </div>
                     </div>
-                  </>
-                )}
+                  )}
+                </div>
               </div>
             ) : (
               <div className={`flex flex-col gap-4 min-h-[16rem] tour-section-body ${sectionFadeClass}`}>
@@ -512,6 +554,7 @@ function Tour({ session = {} }) {
                       boardId={shownSelectedPlace.boardId}
                       placeName={shownSelectedPlace.name}
                       token={session.token}
+                      popularTags={popularTags}
                       onCancel={() => setPanelView('list')}
                       onCreated={handlePostCreated}
                     />
@@ -523,6 +566,7 @@ function Tour({ session = {} }) {
                       placeName={postPlaceName}
                       token={session.token}
                       currentUserId={session.id}
+                      popularTags={popularTags}
                       onBack={() => setPanelView('list')}
                       onPostUpdated={handlePostUpdated}
                       onPostDeleted={handlePostDeleted}
@@ -578,6 +622,7 @@ function Tour({ session = {} }) {
                         boardId={shownSelectedPlace.boardId}
                         placeName={shownSelectedPlace.name}
                         token={session.token}
+                        popularTags={popularTags}
                         onCancel={() => setPanelView('list')}
                         onCreated={handlePostCreated}
                       />
@@ -587,6 +632,7 @@ function Tour({ session = {} }) {
                         placeName={postPlaceName}
                         token={session.token}
                         currentUserId={session.id}
+                        popularTags={popularTags}
                         onBack={() => setPanelView('list')}
                         onPostUpdated={handlePostUpdated}
                         onPostDeleted={handlePostDeleted}

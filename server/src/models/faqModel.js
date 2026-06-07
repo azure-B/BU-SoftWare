@@ -13,6 +13,11 @@ const {
   formatGeneralClassroomAnswer,
   buildClassroomEntries,
 } = require('../data/classroomRentalFaq');
+const {
+  ABSENCE_KEYWORDS,
+  formatAbsenceAnswer,
+  buildAbsenceEntry,
+} = require('../data/absenceFaqData');
 
 const OFFICE_HINT_KEYWORDS = ['사무실', '학과사무실', '과사무실', '위치', '연락처', '전화', '어디'];
 
@@ -35,8 +40,8 @@ const CAMPUS_SHUTTLE_KEYWORDS = [
 ];
 
 const DEFAULT_ANSWER = [
-  '학과 사무실, 강의실 대여, 셔틀·통학버스 정보를 안내해 드립니다.',
-  '예: "컴퓨터공학부 사무실", "컴퓨터공학부 강의실", "강의실 대여", "교대 통학버스"',
+  '학과 사무실, 강의실 대여, 병결, 셔틀·통학버스 정보를 안내해 드립니다.',
+  '예: "컴퓨터공학부 사무실", "병결 서류", "강의실 대여", "교대 통학버스"',
 ].join('\n');
 
 function normalize(text) {
@@ -77,6 +82,7 @@ const FAQ_ENTRIES = [
   ...buildDepartmentEntries(),
   ...buildShuttleEntries(),
   ...buildClassroomEntries(),
+  buildAbsenceEntry(),
 ];
 
 function scoreEntry(entry, normalizedQuery) {
@@ -145,15 +151,27 @@ function findAnswer(query) {
     };
   }
 
+  const isAbsenceQuery = ABSENCE_KEYWORDS.some((keyword) =>
+    normalizedQuery.includes(normalize(keyword)),
+  );
+
+  if (isAbsenceQuery) {
+    return {
+      answer: formatAbsenceAnswer(),
+      matched: 'absence-sick',
+      category: 'absence',
+    };
+  }
+
   return { answer: DEFAULT_ANSWER, matched: null };
 }
 
 function getSuggestions() {
   return [
     '컴퓨터공학부 사무실',
+    '병결 서류 제출',
     '교대 통학버스',
     '캠퍼스 셔틀',
-    '아산 통학버스',
   ];
 }
 

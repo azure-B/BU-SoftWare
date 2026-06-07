@@ -66,7 +66,11 @@ const reservationController = {
 
   getDashboardStatus: async (req, res, next) => {
     try {
-      const rows = await ReservationModel.findDashboardStatus(req.user?.id ?? null);
+      const departmentId = req.query.departmentId ? Number(req.query.departmentId) : null;
+      const rows = await ReservationModel.findDashboardStatus(
+        req.user?.id ?? null,
+        departmentId,
+      );
       res.json(rows);
     } catch (err) {
       next(err);

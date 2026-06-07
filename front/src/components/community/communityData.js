@@ -172,6 +172,8 @@ export function buildPostsFetchQuery(boardSlug, filter, departmentId) {
 
   if (departmentId) {
     params.set('departmentId', String(departmentId));
+  } else if (shouldFilterByDepartment(boardSlug)) {
+    return '';
   }
 
   const boardKind = resolveBoardKind(boardSlug, filter);
@@ -231,8 +233,8 @@ export function filterPostsBySearch(posts, query) {
 }
 
 export const DASHBOARD_SQUARE_TABS = [
-  { id: 'scholarship', label: '장학 공고', boardId: BOARD_IDS.scholarship },
-  { id: 'dept-board', label: '학과 게시판', boardId: BOARD_IDS['dept-board'] },
+  { id: 'scholarship', label: '장학 공고' },
+  { id: 'dept-board', label: '학과 게시판' },
 ];
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
