@@ -117,11 +117,11 @@ function resolveHeaderBoard(outerKey) {
 
 
 
-function resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, homeDepartmentId) {
+function resolveFetchDepartmentId(board, selectedDepartmentId, homeDepartmentId) {
 
   if (!shouldFilterByDepartment(board)) return null;
 
-  if (browseOtherDept && selectedDepartmentId) {
+  if (selectedDepartmentId) {
 
     return Number(selectedDepartmentId);
 
@@ -171,11 +171,11 @@ function applyPostsFromCache(cache, cacheKey, setPosts) {
 
 
 
-function getPostsCacheKey(listKey, browseOtherDept, selectedDepartmentId, homeDepartmentId, postsRefreshKey) {
+function getPostsCacheKey(listKey, selectedDepartmentId, homeDepartmentId, postsRefreshKey) {
 
   const { board } = parseCommunityPanelKey(listKey);
 
-  const deptId = resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, homeDepartmentId);
+  const deptId = resolveFetchDepartmentId(board, selectedDepartmentId, homeDepartmentId);
 
   return `${listKey}|${deptId ?? ''}|${postsRefreshKey}`;
 
@@ -232,8 +232,6 @@ function Community({
   const [error, setError] = useState(null);
 
   const [page, setPage] = useState(1);
-
-  const [browseOtherDept, setBrowseOtherDept] = useState(false);
 
   const [selectedDepartmentId, setSelectedDepartmentId] = useState('');
 
@@ -337,9 +335,9 @@ function Community({
 
   const fetchDepartmentId = useMemo(
 
-    () => resolveFetchDepartmentId(shownBoard, browseOtherDept, selectedDepartmentId, homeDepartmentId),
+    () => resolveFetchDepartmentId(shownBoard, selectedDepartmentId, homeDepartmentId),
 
-    [shownBoard, browseOtherDept, selectedDepartmentId, homeDepartmentId],
+    [shownBoard, selectedDepartmentId, homeDepartmentId],
 
   );
 
@@ -347,9 +345,9 @@ function Community({
 
   const postsCacheKey = useMemo(
 
-    () => getPostsCacheKey(listPanelKey, browseOtherDept, selectedDepartmentId, homeDepartmentId, postsRefreshKey),
+    () => getPostsCacheKey(listPanelKey, selectedDepartmentId, homeDepartmentId, postsRefreshKey),
 
-    [listPanelKey, browseOtherDept, selectedDepartmentId, homeDepartmentId, postsRefreshKey],
+    [listPanelKey, selectedDepartmentId, homeDepartmentId, postsRefreshKey],
 
   );
 
@@ -361,11 +359,11 @@ function Community({
 
       const { board } = parseCommunityPanelKey(listPanelKey);
 
-      return resolveFetchDepartmentId(board, browseOtherDept, selectedDepartmentId, homeDepartmentId);
+      return resolveFetchDepartmentId(board, selectedDepartmentId, homeDepartmentId);
 
     },
 
-    [listPanelKey, browseOtherDept, selectedDepartmentId, homeDepartmentId],
+    [listPanelKey, selectedDepartmentId, homeDepartmentId],
 
   );
 
@@ -375,13 +373,13 @@ function Community({
 
     if (!filterByDepartment) return homeDepartmentName;
 
-    if (browseOtherDept && selectedDepartmentId) {
+    if (selectedDepartmentId) {
 
       return (
 
         departmentOptions.find((dept) => String(dept.id) === String(selectedDepartmentId))
 
-          ?.name ?? null
+          ?.name ?? homeDepartmentName
 
       );
 
@@ -392,8 +390,6 @@ function Community({
   }, [
 
     filterByDepartment,
-
-    browseOtherDept,
 
     selectedDepartmentId,
 
@@ -529,13 +525,11 @@ function Community({
 
   useEffect(() => {
 
-    setBrowseOtherDept(false);
-
-    setSelectedDepartmentId('');
+    setSelectedDepartmentId(homeDepartmentId != null ? String(homeDepartmentId) : '');
 
     setSearchQuery('');
 
-  }, [activeBoard]);
+  }, [activeBoard, homeDepartmentId]);
 
 
 
@@ -681,65 +675,9 @@ function Community({
 
     showDeptBrowse ? (
 
-      <div
+      <div className="community-dept-browse community-dept-browse--open">
 
-        className={`community-dept-browse${
-
-          browseOtherDept ? ' community-dept-browse--open' : ''
-
-        }`}
-
-      >
-
-        <button
-
-          type="button"
-
-          onClick={() => {
-
-            if (browseOtherDept) {
-
-              setSelectedDepartmentId('');
-
-              setSearchQuery('');
-
-              setBrowseOtherDept(false);
-
-              return;
-
-            }
-
-            setBrowseOtherDept(true);
-
-          }}
-
-          disabled={departmentsLoading || departmentOptions.length === 0}
-
-          aria-expanded={browseOtherDept}
-
-          className={
-
-            browseOtherDept
-
-              ? 'community-dept-browse-btn community-dept-browse-btn--active font-label-md text-sm cursor-pointer bg-transparent border-0 p-0'
-
-              : 'community-dept-browse-btn font-label-md text-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer bg-transparent border-0 p-0'
-
-          }
-
-        >
-
-          타학부 커뮤니티 보기
-
-        </button>
-
-        <div
-
-          className="community-dept-picker-wrap"
-
-          aria-hidden={!browseOtherDept}
-
-        >
+        <div className="community-dept-picker-wrap">
 
           <div className="community-dept-picker-inner">
 
@@ -757,7 +695,7 @@ function Community({
 
               loading={departmentsLoading}
 
-              disabled={!browseOtherDept}
+              disabled={departmentsLoading || departmentOptions.length === 0}
 
               placeholder="학과 검색·선택"
 
@@ -939,7 +877,7 @@ function Community({
 
             className={`community-content-fade community-filter-bar pb-4${
 
-              browseOtherDept ? ' community-filter-bar--dept-open' : ''
+              showDeptBrowse ? ' community-filter-bar--dept-open' : ''
 
             } ${outerFadeClass}`}
 

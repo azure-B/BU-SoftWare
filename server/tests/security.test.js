@@ -78,14 +78,14 @@ describe('Security — DB 훼손·정보 유출 방어', () => {
       expect(isPublicReadableBoard({ category: 'campus_tour' })).toBe(true);
     });
 
-    it('학과 전용 게시판은 assertReadableBoard에서 403을 던진다', async () => {
+    it('멘토링·팀프로젝트 학과 게시판은 타학과도 조회할 수 있다', async () => {
       await expect(
         assertReadableBoard(
           null,
           { board_kind: 'mentoring', department_id: 3, category: 'community' },
-          { departmentId: null, userId: null },
+          { departmentId: 6, userId: 2 },
         ),
-      ).rejects.toMatchObject({ status: 403 });
+      ).resolves.toBeUndefined();
     });
 
     it('전역 QnA 게시판은 비로그인도 assertReadableBoard를 통과한다', async () => {

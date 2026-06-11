@@ -6,9 +6,14 @@ function isGlobalBoard(boardMeta) {
   return boardMeta.department_id == null && BoardModel.GLOBAL_BOARD_KINDS.has(boardMeta.board_kind);
 }
 
+const OPEN_COMMUNITY_BOARD_KINDS = new Set(['mentoring', 'team', 'dept_board']);
+
 function isPublicReadableBoard(boardMeta) {
   if (!boardMeta) return false;
   if (boardMeta.category === 'campus_tour') return true;
+  if (boardMeta.board_kind && OPEN_COMMUNITY_BOARD_KINDS.has(boardMeta.board_kind)) {
+    return true;
+  }
   return isGlobalBoard(boardMeta);
 }
 

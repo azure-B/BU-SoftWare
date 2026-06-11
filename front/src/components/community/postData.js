@@ -1,6 +1,6 @@
 import { BOARD_TAG_BY_ID } from './communityData';
 import { API_BASE_URL } from '../constants';
-import { getStoredSessionDepartment, loadStoredAuth } from '../../utils/authSession';
+import { loadStoredAuth } from '../../utils/authSession';
 
 const postDetailInflight = new Map();
 
@@ -117,12 +117,7 @@ function mapApiComment(comment) {
 
 function buildCommunityPostUrl(postId, suffix = '') {
   const id = Number(postId);
-  const params = new URLSearchParams();
-  const { departmentId } = getStoredSessionDepartment();
-  if (departmentId) params.set('departmentId', String(departmentId));
-
-  const qs = params.toString();
-  return `${API_BASE_URL}/api/community/posts/${id}${suffix}${qs ? `?${qs}` : ''}`;
+  return `${API_BASE_URL}/api/community/posts/${id}${suffix}`;
 }
 
 function buildPostAccessHeaders() {
