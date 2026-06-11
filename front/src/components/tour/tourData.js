@@ -31,6 +31,24 @@ export const TOUR_SECTION_TABS = [
   { id: 'recruit', label: '같이밥 모집' },
 ];
 
+/** 식당 셀렉트 — 전체 게시글 보기 */
+export const TOUR_ALL_PLACES_ID = 'all';
+export const TOUR_ALL_PLACES_LABEL = '전체 식당보기';
+
+export function isTourAllPlacesId(placeId) {
+  return placeId === TOUR_ALL_PLACES_ID || String(placeId) === TOUR_ALL_PLACES_ID;
+}
+
+export function buildTourPlaceOptions(places = []) {
+  return [
+    { id: TOUR_ALL_PLACES_ID, name: TOUR_ALL_PLACES_LABEL },
+    ...places.map((place) => ({
+      id: place.id,
+      name: place.distanceM != null ? `${place.name} · ${place.distanceM}m` : place.name,
+    })),
+  ];
+}
+
 export const TOUR_RECOMMENDED = [
   {
     id: 'ttukbaegi',

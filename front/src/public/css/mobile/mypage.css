@@ -1,5 +1,5 @@
 /* mobile/mypage.css — Publish mobile.common4.html */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .mypage-page main {
     padding: 1.5rem var(--mobile-page-pad-x) 2rem;
     gap: 2.5rem;

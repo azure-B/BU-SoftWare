@@ -1,5 +1,5 @@
 /* mobile/qna.css */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .community-qna-panel {
     height: auto;
     min-height: 0;

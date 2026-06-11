@@ -1,5 +1,5 @@
 /* --- mobile-common.css (Publish mobile_common* shell + device-safe layout) --- */
-/* Covers: iPhone, Galaxy S, Z Flip/Fold, Samsung folder — max-width 767px (Tailwind md) */
+/* Covers: phones + tablets — max-width 1023px (Tailwind md at 1024px) */
 
 :root {
   --mobile-header-h: 4rem;
@@ -31,12 +31,17 @@
   --mobile-category-scroll-gap: clamp(0.375rem, 2vw, 0.5rem);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
+  :root {
+    --mobile-page-pad-x: clamp(1.25rem, calc(1.25rem + (100vw - 320px) * 0.0012), 2rem);
+    --mobile-touch-min: clamp(2.75rem, 7vw, 3rem);
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* Fluid rem: 320px ≈ 12.5px, 767px ≈ 15px */
-    font-size: clamp(12.5px, calc(12.5px + (100vw - 320px) * 0.005592), 15px);
+    /* Fluid rem: 320px ≈ 12.5px, 1023px ≈ 16px */
+    font-size: clamp(12.5px, calc(12.5px + (100vw - 320px) * 0.00498), 16px);
   }
 
   .text-xs,
@@ -637,9 +642,25 @@
     width: 100%;
     min-height: var(--mobile-touch-min);
   }
+
+  .community-filter-search .community-search-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.125rem;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .community-filter-search .community-search-submit .material-symbols-outlined {
+    pointer-events: none;
+  }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .app-header--mobile,
   .app-header__menu-btn,
   .mobile-bottom-nav,
@@ -653,7 +674,7 @@
   }
 }
 
-@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
   .mobile-nav-drawer__backdrop,
   .mobile-nav-drawer__panel,
   .mobile-bottom-nav__item {

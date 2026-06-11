@@ -8,9 +8,13 @@ import TourPostForm from '../components/tour/TourPostForm';
 import TourPostPanel from '../components/tour/TourPostPanel';
 import TourSidebar from '../components/tour/TourSidebar';
 import DepartmentCombobox from '../components/regi/DepartmentCombobox';
-import { TOUR_SECTION_TABS, resolveTourPopularTags } from '../components/tour/tourData';
+import {
+  TOUR_ALL_PLACES_ID,
+  TOUR_SECTION_TABS,
+  isTourAllPlacesId,
+  resolveTourPopularTags,
+} from '../components/tour/tourData';
 import { usePanelTransition } from '../hooks/usePanelTransition';
-import { useMobileViewport } from '../hooks/useMobileViewport';
 import {
   attachPlaceNames,
   fetchAllPlacePosts,
@@ -33,20 +37,24 @@ function parseTourPanelKey(key) {
   const [tab = 'places', rawPlaceId = 'none', view = 'list'] = key.split(':');
   return {
     tab,
-    placeId: rawPlaceId === 'none' ? null : Number(rawPlaceId),
+    placeId:
+      rawPlaceId === 'none'
+        ? null
+        : isTourAllPlacesId(rawPlaceId)
+          ? TOUR_ALL_PLACES_ID
+          : Number(rawPlaceId),
     view,
   };
 }
 
 function Tour({ session = {} }) {
-  const isMobile = useMobileViewport();
   const [places, setPlaces] = useState([]);
   const [topTags, setTopTags] = useState([]);
   const [placesLoading, setPlacesLoading] = useState(true);
   const [placesError, setPlacesError] = useState(null);
   const [activeTag, setActiveTag] = useState('전체');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPlaceId, setSelectedPlaceId] = useState(null);
+  const [selectedPlaceId, setSelectedPlaceId] = useState(TOUR_ALL_PLACES_ID);
   const [showAllPins, setShowAllPins] = useState(true);
   const [posts, setPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(false);
@@ -121,10 +129,10 @@ function Tour({ session = {} }) {
     [places, selectedPlaceId],
   );
 
-  const shownSelectedPlace = useMemo(
-    () => places.find((place) => place.id === shownPanel.placeId) ?? null,
-    [places, shownPanel.placeId],
-  );
+  const shownSelectedPlace = useMemo(() => {
+    if (isTourAllPlacesId(shownPanel.placeId)) return null;
+    return places.find((place) => place.id === shownPanel.placeId) ?? null;
+  }, [places, shownPanel.placeId]);
 
   const loadRecruitPosts = useCallback(async (placeList) => {
     const boardIds = placeList.map((place) => place.boardId).filter(Boolean);
@@ -168,6 +176,26 @@ function Tour({ session = {} }) {
     }
   }, []);
 
+  const loadAllReviewPosts = useCallback(async (placeList) => {
+    const boardIds = placeList.map((place) => place.boardId).filter(Boolean);
+    if (!boardIds.length) {
+      setPosts([]);
+      return;
+    }
+
+    setPostsLoading(true);
+    setPostsError(null);
+    try {
+      const data = await fetchAllPlacePosts(boardIds);
+      setPosts(attachPlaceNames(data, placeList));
+    } catch (err) {
+      setPosts([]);
+      setPostsError(err.message || '게시글을 불러오지 못했습니다.');
+    } finally {
+      setPostsLoading(false);
+    }
+  }, []);
+
   const displayedPosts = useMemo(() => {
     const byTag = filterPostsByTag(posts, activeTag);
     return filterPostsBySearch(byTag, searchQuery);
@@ -179,6 +207,7 @@ function Tour({ session = {} }) {
   }, [recruitPosts, activeTag, searchQuery]);
 
   const mobileRecruitPosts = useMemo(() => {
+    if (isTourAllPlacesId(shownPanel.placeId)) return displayedRecruitPosts;
     const place = places.find((item) => item.id === shownPanel.placeId);
     if (!place?.boardId) return displayedRecruitPosts;
     return displayedRecruitPosts.filter((post) => post.boardId === place.boardId);
@@ -193,8 +222,7 @@ function Tour({ session = {} }) {
     () =>
       filteredPlaces.map((place) => ({
         id: place.id,
-        name:
-          place.distanceM != null ? `${place.name} · ${place.distanceM}m` : place.name,
+        name: place.distanceM != null ? `${place.name} · ${place.distanceM}m` : place.name,
       })),
     [filteredPlaces],
   );
@@ -213,30 +241,39 @@ function Tour({ session = {} }) {
   }, [places, loadRecruitPosts]);
 
   useEffect(() => {
-    if (sectionTab !== 'places' || !selectedPlace?.boardId) {
-      if (sectionTab === 'places' && !selectedPlace?.boardId) setPosts([]);
+    if (sectionTab !== 'places') return;
+
+    if (isTourAllPlacesId(selectedPlaceId)) {
+      setPanelView('list');
+      loadAllReviewPosts(filteredPlaces);
       return;
     }
+
+    if (!selectedPlace?.boardId) {
+      setPosts([]);
+      return;
+    }
+
     setPanelView('list');
     loadPosts(selectedPlace.boardId);
-  }, [sectionTab, selectedPlace?.boardId, loadPosts]);
+  }, [sectionTab, selectedPlaceId, selectedPlace?.boardId, filteredPlaces, loadPosts, loadAllReviewPosts]);
 
   useEffect(() => {
-    if (!isMobile || filteredPlaces.length === 0) return;
+    if (filteredPlaces.length === 0) return;
+    if (selectedPlaceId == null || isTourAllPlacesId(selectedPlaceId)) return;
     const isSelectedVisible = filteredPlaces.some((place) => place.id === selectedPlaceId);
     if (!isSelectedVisible) {
-      setSelectedPlaceId(filteredPlaces[0].id);
+      setSelectedPlaceId(TOUR_ALL_PLACES_ID);
     }
-  }, [isMobile, filteredPlaces, selectedPlaceId]);
+  }, [filteredPlaces, selectedPlaceId]);
 
-  const handleMobilePlaceChange = useCallback(
-    (placeId) => {
-      setSelectedPlaceId(placeId);
+  const handleMobilePlaceChange = useCallback((placeId) => {
+    setSelectedPlaceId(placeId);
+    if (!isTourAllPlacesId(placeId)) {
       setRecruitWritePlaceId(placeId);
-      setPanelView('list');
-    },
-    [],
-  );
+    }
+    setPanelView('list');
+  }, []);
 
   const handleSelectPlace = useCallback((place) => {
     setSelectedPlaceId(place.id);
@@ -268,7 +305,9 @@ function Tour({ session = {} }) {
   }, []);
 
   const handlePostCreated = useCallback(async () => {
-    if (selectedPlace?.boardId) {
+    if (isTourAllPlacesId(selectedPlaceId)) {
+      await loadAllReviewPosts(filteredPlaces);
+    } else if (selectedPlace?.boardId) {
       await loadPosts(selectedPlace.boardId);
     }
     if (places.length) {
@@ -278,7 +317,15 @@ function Tour({ session = {} }) {
     setPlaces(data.places);
     setTopTags(data.topTags);
     setPanelView('list');
-  }, [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places]);
+  }, [
+    selectedPlaceId,
+    selectedPlace?.boardId,
+    filteredPlaces,
+    loadAllReviewPosts,
+    loadPosts,
+    loadRecruitPosts,
+    places,
+  ]);
 
   const handleSectionTabChange = useCallback((tabId) => {
     setSectionTab(tabId);
@@ -296,24 +343,48 @@ function Tour({ session = {} }) {
   const handlePostUpdated = useCallback(
     async (updated) => {
       setPostDetail(updated);
-      if (selectedPlace?.boardId) await loadPosts(selectedPlace.boardId);
+      if (isTourAllPlacesId(selectedPlaceId)) {
+        await loadAllReviewPosts(filteredPlaces);
+      } else if (selectedPlace?.boardId) {
+        await loadPosts(selectedPlace.boardId);
+      }
       if (places.length) await loadRecruitPosts(places);
       const data = await fetchTourPlaces();
       setPlaces(data.places);
       setTopTags(data.topTags);
     },
-    [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places],
+    [
+      selectedPlaceId,
+      selectedPlace?.boardId,
+      filteredPlaces,
+      loadAllReviewPosts,
+      loadPosts,
+      loadRecruitPosts,
+      places,
+    ],
   );
 
   const handlePostDeleted = useCallback(async () => {
     setPanelView('list');
     setPostDetail(null);
-    if (selectedPlace?.boardId) await loadPosts(selectedPlace.boardId);
+    if (isTourAllPlacesId(selectedPlaceId)) {
+      await loadAllReviewPosts(filteredPlaces);
+    } else if (selectedPlace?.boardId) {
+      await loadPosts(selectedPlace.boardId);
+    }
     if (places.length) await loadRecruitPosts(places);
     const data = await fetchTourPlaces();
     setPlaces(data.places);
     setTopTags(data.topTags);
-  }, [selectedPlace?.boardId, loadPosts, loadRecruitPosts, places]);
+  }, [
+    selectedPlaceId,
+    selectedPlace?.boardId,
+    filteredPlaces,
+    loadAllReviewPosts,
+    loadPosts,
+    loadRecruitPosts,
+    places,
+  ]);
 
   return (
     <main className="flex-grow px-margin-mobile md:px-margin-desktop py-12 z-10 relative container-shared w-full">
@@ -397,11 +468,19 @@ function Tour({ session = {} }) {
                       <span className="font-label-md text-label-md text-on-surface-variant">
                         모집할 음식점
                       </span>
-                      <DepartmentCombobox
-                        id="tour-recruit-place-mobile"
-                        value={recruitWritePlace.id}
-                        onChange={(id) => setRecruitWritePlaceId(Number(id))}
-                        options={recruitPlaceOptions}
+                        <DepartmentCombobox
+                          id="tour-recruit-place-mobile"
+                          value={recruitWritePlace.id}
+                          onChange={(id) => {
+                            if (!isTourAllPlacesId(id)) setRecruitWritePlaceId(Number(id));
+                          }}
+                          options={filteredPlaces.map((place) => ({
+                            id: place.id,
+                            name:
+                              place.distanceM != null
+                                ? `${place.name} · ${place.distanceM}m`
+                                : place.name,
+                          }))}
                         disabled={filteredPlaces.length === 0}
                         placeholder="음식점 검색·선택"
                         emptyMessage="검색 결과가 없습니다"
@@ -454,7 +533,7 @@ function Tour({ session = {} }) {
                         }
                         setPanelView('write');
                       }}
-                      writeDisabled={!session.token}
+                      writeDisabled={!session.token || filteredPlaces.length === 0}
                       placeSelectLabel="모집 음식점"
                       searchPlaceholder="제목, 내용, #태그 검색"
                     />

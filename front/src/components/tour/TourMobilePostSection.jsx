@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
 import CommunityPostList from '../community/CommunityPostList';
 import DepartmentCombobox from '../regi/DepartmentCombobox';
+import { buildTourPlaceOptions, isTourAllPlacesId } from './tourData';
 
 function TourMobilePostSection({
   filteredPlaces = [],
@@ -20,15 +20,7 @@ function TourMobilePostSection({
   searchPlaceholder = '제목, 내용, #태그 검색',
   scrollFadeClass = '',
 }) {
-  const placeOptions = useMemo(
-    () =>
-      filteredPlaces.map((place) => ({
-        id: place.id,
-        name:
-          place.distanceM != null ? `${place.name} · ${place.distanceM}m` : place.name,
-      })),
-    [filteredPlaces],
-  );
+  const placeOptions = buildTourPlaceOptions(filteredPlaces);
 
   return (
     <div className="md:hidden tour-mobile-panel flex flex-col gap-3">
@@ -37,7 +29,7 @@ function TourMobilePostSection({
           id="tour-mobile-place-picker"
           className="community-dept-picker tour-place-picker"
           value={selectedPlaceId ?? ''}
-          onChange={(id) => onPlaceChange(Number(id))}
+          onChange={(id) => onPlaceChange(isTourAllPlacesId(id) ? id : Number(id))}
           options={placeOptions}
           disabled={filteredPlaces.length === 0}
           placeholder={`${placeSelectLabel} 검색·선택`}
@@ -54,9 +46,15 @@ function TourMobilePostSection({
             placeholder={searchPlaceholder}
             className="community-search w-full bg-transparent focus:border-secondary outline-none font-body-md text-sm pb-1 pl-1 pr-8 placeholder:text-outline-variant"
           />
-          <span className="material-symbols-outlined absolute right-1 top-1 text-on-surface-variant text-[18px]">
-            search
-          </span>
+          <button
+            type="button"
+            className="community-search-submit absolute right-1 top-1 text-on-surface-variant"
+            aria-label="검색"
+          >
+            <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
+              search
+            </span>
+          </button>
         </div>
         <button
           type="button"

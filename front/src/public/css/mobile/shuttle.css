@@ -1,5 +1,5 @@
 /* mobile/shuttle.css — Publish mobile_common3.html */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .shuttle-page main {
     padding-left: var(--mobile-page-pad-x);
     padding-right: var(--mobile-page-pad-x);

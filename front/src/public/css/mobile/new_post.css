@@ -1,5 +1,5 @@
 /* mobile/new_post.css — NewPost · NewQnaPost 공통 */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .new-post-main .new-post-guidelines-title {
     font-size: 1.125rem;
     line-height: 1.35;

@@ -1015,11 +1015,15 @@ function Community({
 
                     />
 
-                    <span className="material-symbols-outlined absolute right-1 top-1 text-on-surface-variant text-[18px]">
-
-                      search
-
-                    </span>
+                    <button
+                      type="button"
+                      className="community-search-submit absolute right-1 top-1 text-on-surface-variant"
+                      aria-label="검색"
+                    >
+                      <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
+                        search
+                      </span>
+                    </button>
 
                   </div>
 

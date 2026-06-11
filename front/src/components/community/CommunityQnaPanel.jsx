@@ -77,9 +77,11 @@ function CommunityQnaPanel({
           placeholder="질문·카테고리 검색"
           aria-label="Q&A 검색"
         />
-        <span className="material-symbols-outlined" aria-hidden="true">
-          search
-        </span>
+        <button type="button" className="community-search-submit" aria-label="검색">
+          <span className="material-symbols-outlined" aria-hidden="true">
+            search
+          </span>
+        </button>
       </div>
 
       <div className="community-qna-panel__body community-post-list-fade community-post-list-visible">

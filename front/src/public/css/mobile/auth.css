@@ -1,5 +1,5 @@
 /* mobile/auth.css — login, regi, find, freshman_guide */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .login-page,
   .regi-page,
   .find-page,

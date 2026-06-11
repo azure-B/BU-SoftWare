@@ -1,0 +1,89 @@
+/**
+ * Responsive scale layer — fluid typography & spacing by viewport width.
+ *
+ * Works with mobile-common (≤1023px) and Tailwind md/lg (1024px / 1280px).
+ *
+ * UNDO (revert this feature):
+ *   1. Remove the import in src/index.js
+ *   2. Delete this file
+ *   3. Revert tailwind.config.js screens (remove md/lg overrides)
+ *   4. Revert mobile-common.css + mobile/*.css breakpoints (1023→767, 1024→768)
+ */
+
+:root {
+  --rs-mobile-max: 1023px;
+  --rs-desktop-min: 1024px;
+  /* Shared fluid tokens (rem-based children scale with html font-size) */
+  --rs-pad-x-narrow: clamp(1.25rem, 3.2vw, 2rem);
+  --rs-pad-x-wide: clamp(2rem, 4vw, 4rem);
+  --rs-gap-fluid: clamp(1rem, 2.5vw, 1.5rem);
+  --rs-touch-min: clamp(2.75rem, 7vw, 3rem);
+}
+
+/* Tablet + phone shell: keep desktop nav hidden even when Tailwind md: would show it */
+@media (max-width: 1023px) {
+  .app-header nav[aria-label='주 메뉴'] {
+    display: none !important;
+  }
+
+  .app-header__brand-title {
+    display: none;
+  }
+
+  .header-shared {
+    height: clamp(3.5rem, 9vw, 5rem);
+  }
+
+  .app-footer--app.footer-shared .font-display-lg,
+  .app-footer--login.footer-shared .font-display-lg {
+    font-size: clamp(1rem, 3.5vw, 1.25rem);
+  }
+}
+
+/* Desktop layout, narrower than full HD — gentle margin + type scale */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  html {
+    font-size: clamp(15px, calc(15px + (100vw - 1024px) * 0.003125), 16px);
+  }
+
+  .px-margin-desktop,
+  .md\:px-margin-desktop {
+    padding-left: var(--rs-pad-x-wide) !important;
+    padding-right: var(--rs-pad-x-wide) !important;
+  }
+
+  .gap-column-gap {
+    gap: var(--rs-gap-fluid);
+  }
+
+  .text-display-lg {
+    font-size: clamp(2.5rem, 4.5vw, 4rem) !important;
+    line-height: 1.1;
+  }
+
+  .text-headline-lg,
+  .font-headline-lg.text-3xl,
+  .font-headline-lg.text-4xl {
+    font-size: clamp(1.75rem, 3vw, 2.5rem) !important;
+    line-height: 1.2;
+  }
+
+  .text-headline-md,
+  .font-headline-md.text-2xl {
+    font-size: clamp(1.25rem, 2.2vw, 1.5rem) !important;
+    line-height: 1.3;
+  }
+}
+
+/* Full desktop — explicit baseline (matches pre-scale 16px root) */
+@media (min-width: 1280px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    font-size: 16px;
+  }
+}

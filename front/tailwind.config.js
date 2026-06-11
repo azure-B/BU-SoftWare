@@ -4,6 +4,11 @@ module.exports = {
   content: ['./src/**/*.{js,jsx}', './public/index.html'],
   theme: {
     extend: {
+      /* Tablet uses mobile shell until 1024px; desktop grids widen at 1280px */
+      screens: {
+        md: '1024px',
+        lg: '1280px',
+      },
       colors: {
         secondary: '#1d5abc',
         primary: '#001e59',

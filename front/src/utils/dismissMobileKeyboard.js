@@ -1,4 +1,7 @@
-const MOBILE_MQ = '(max-width: 767px)';
+/** Align with mobile-common / Tailwind md (1024px) */
+export const MOBILE_VIEWPORT_MQ = '(max-width: 1023px)';
+
+const MOBILE_MQ = MOBILE_VIEWPORT_MQ;
 
 export function isMobileViewport() {
   return typeof window !== 'undefined' && window.matchMedia(MOBILE_MQ).matches;

@@ -1,5 +1,5 @@
 /* mobile/post.css — Publish mobile_view.html (게시글 상세) */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .community-page .post-main.community-main {
     padding: 2rem var(--mobile-page-pad-x) 1.5rem;
     width: 100%;

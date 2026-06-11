@@ -1,5 +1,5 @@
 /* mobile/dashboard.css — Publish mobile_common.html */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .dashboard-page .app-main > div,
   .dashboard-page main {
     padding-left: var(--mobile-page-pad-x);

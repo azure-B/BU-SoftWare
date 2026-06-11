@@ -11,6 +11,7 @@ const SUBMIT_BUTTON_SELECTOR = [
   '.post-comment-form button',
   '.post-comment-item button',
   '.tour-post-panel button',
+  '.community-search-submit',
 ].join(', ');
 
 function isSearchInput(target) {
