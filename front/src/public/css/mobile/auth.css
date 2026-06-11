@@ -23,7 +23,7 @@
 
   .auth-flow__panels {
     width: 100%;
-    max-width: none;
+    max-width: min(100%, 20.5rem);
     margin-left: auto;
     margin-right: auto;
   }
@@ -43,11 +43,25 @@
   .registration-card.auth-panel-card,
   .find-card.auth-panel-card {
     width: 100%;
-    max-width: none;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding: 1.5rem 1rem;
+    padding: 1.25rem 0.875rem !important;
     box-sizing: border-box;
+  }
+
+  .auth-panel-card .w-24 {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .auth-panel-card .mb-10 {
+    margin-bottom: 1.5rem;
+  }
+
+  .auth-panel-card .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1.25rem;
   }
 
   .auth-panel {
@@ -105,9 +119,14 @@
     grid-template-columns: 1fr;
   }
 
-  .app-footer--login.footer-shared {
-    padding: 2rem var(--mobile-page-pad-x);
+  .auth-flow .app-footer--login.footer-shared {
+    width: calc(100% + (var(--mobile-page-pad-x) * 2));
+    max-width: 100vw;
+    margin-left: calc(-1 * var(--mobile-page-pad-x));
+    margin-right: calc(-1 * var(--mobile-page-pad-x));
+    padding: 1.5rem 1rem;
     flex-direction: column;
     text-align: center;
+    box-sizing: border-box;
   }
 }

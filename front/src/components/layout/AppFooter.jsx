@@ -21,7 +21,7 @@ function FooterLinks({ links, linkClassName }) {
 function AppFooter({ variant = 'app' }) {
   if (variant === 'login') {
     return (
-      <footer className="app-footer app-footer--login footer-shared w-full px-margin-desktop py-12 flex flex-col md:flex-row justify-between items-center gap-gutter bg-primary dark:bg-primary-container">
+      <footer className="app-footer app-footer--login footer-shared w-full px-margin-mobile md:px-margin-desktop py-12 flex flex-col md:flex-row justify-between items-center gap-gutter bg-primary dark:bg-primary-container">
         <div className="flex flex-col gap-2">
           <h2 className="font-headline-lg text-headline-lg text-on-primary">BU</h2>
           <p className="font-body-md text-body-md text-on-primary/80 dark:text-on-primary-container/80">
@@ -39,7 +39,7 @@ function AppFooter({ variant = 'app' }) {
   }
 
   return (
-    <footer className="app-footer app-footer--app footer-shared border-t border-primary-container flex flex-col md:flex-row justify-between items-center py-12 px-margin-desktop w-full mt-20 z-10 relative">
+    <footer className="app-footer app-footer--app footer-shared border-t border-primary-container flex flex-col md:flex-row justify-between items-center py-12 px-margin-mobile md:px-margin-desktop w-full mt-20 z-10 relative">
       <div className="container-shared flex flex-col md:flex-row justify-between w-full items-center">
         <div className="font-display-lg text-2xl mb-6 md:mb-0" style={{ fontFamily: 'var(--font-primary)' }}>
           Baekseok University
