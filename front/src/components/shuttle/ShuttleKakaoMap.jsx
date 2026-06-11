@@ -359,8 +359,10 @@ function ShuttleKakaoMap({
 
   const showBoardingLocationRef = useRef(showBoardingLocation);
   const showShuttleViewRef = useRef(showShuttleView);
+  const syncSimulationVisualsRef = useRef(syncSimulationVisuals);
   showBoardingLocationRef.current = showBoardingLocation;
   showShuttleViewRef.current = showShuttleView;
+  syncSimulationVisualsRef.current = syncSimulationVisuals;
 
   useEffect(() => {
     if (!mapReady) return;
@@ -411,7 +413,7 @@ function ShuttleKakaoMap({
         const tick = () => {
           if (!mapRef.current || cancelled) return;
           if (viewModeRef.current === 'shuttle') {
-            syncSimulationVisuals(getShuttleSimulationState(new Date()));
+            syncSimulationVisualsRef.current(getShuttleSimulationState(new Date()));
           }
         };
 

@@ -1,4 +1,4 @@
-import { isAppView, isAuthView, isAdminView } from '../components/layout/appNavConfig';
+import { isAppView, isAuthView } from '../components/layout/appNavConfig';
 import { isAdminLoginStudentId } from '../components/constants';
 import { FRESHMAN_GUIDE_VIEW, isFreshmanGuideStandaloneUrl } from './freshmanGuideNav';
 
