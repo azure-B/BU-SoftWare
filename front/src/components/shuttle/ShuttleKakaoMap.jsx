@@ -13,6 +13,7 @@ import {
 } from './shuttleMapData';
 import { loadShuttleRoutePaths } from './shuttleRouteLoader';
 import {
+  getRouteStrokeColor,
   getShuttleSimulationState,
   getShuttleStatusMessage,
   routePathForBus,
@@ -115,6 +116,7 @@ function applyShuttleOverview(map, kakao) {
 
 function periodKey(state) {
   if (!state?.active) return 'idle';
+  if (state.demo24h) return state.period.id;
   return `${state.period.id}-${state.period.end}`;
 }
 
@@ -131,7 +133,7 @@ function ShuttleKakaoMap({
   const kakaoRef = useRef(null);
   const routePathsRef = useRef({});
   const busOverlaysRef = useRef([]);
-  const routePolylineRef = useRef(null);
+  const routePolylinesRef = useRef([]);
   const boardingMarkersRef = useRef([]);
   const boardingOverviewRef = useRef(null);
   const activePeriodRef = useRef('idle');
@@ -149,11 +151,40 @@ function ShuttleKakaoMap({
   viewModeRef.current = viewMode;
   boardingRouteIdRef.current = boardingRouteId;
 
+  function clearRoutePolylines() {
+    routePolylinesRef.current.forEach((polyline) => polyline.setMap(null));
+    routePolylinesRef.current = [];
+  }
+
+  function syncRoutePolylines(kakao, map, state) {
+    clearRoutePolylines();
+    if (!state?.active) return;
+
+    const routeDrawings = new Map();
+    state.buses.forEach((bus) => {
+      if (!routeDrawings.has(bus.routeId)) {
+        routeDrawings.set(bus.routeId, bus.direction);
+      }
+    });
+
+    routeDrawings.forEach((direction, routeId) => {
+      const rawPath = routePathsRef.current[routeId] ?? [];
+      const path = routePathForBus(rawPath, direction);
+      const polyline = createRoutePolyline(
+        kakao,
+        path,
+        getRouteStrokeColor(routeId),
+      );
+      if (polyline) {
+        polyline.setMap(map);
+        routePolylinesRef.current.push(polyline);
+      }
+    });
+  }
+
   function clearShuttleVisuals() {
     busOverlaysRef.current.forEach(({ overlay }) => overlay.setMap(null));
-    if (routePolylineRef.current) {
-      routePolylineRef.current.setMap(null);
-    }
+    clearRoutePolylines();
   }
 
   function clearBoardingMarkers() {
@@ -292,21 +323,13 @@ function ShuttleKakaoMap({
     const nextKey = periodKey(state);
     if (forceResync || nextKey !== activePeriodRef.current) {
       activePeriodRef.current = nextKey;
-      if (routePolylineRef.current) {
-        routePolylineRef.current.setMap(null);
-        routePolylineRef.current = null;
-      }
+      clearRoutePolylines();
 
       busOverlaysRef.current.forEach(({ overlay }) => overlay.setMap(null));
       busOverlaysRef.current = [];
 
       if (state.active) {
-        const rawPath = routePathsRef.current[state.period.routeId] ?? [];
-        const path = routePathForBus(rawPath, state.period.direction);
-        routePolylineRef.current = createRoutePolyline(kakao, path, '#001e59');
-        if (routePolylineRef.current) {
-          routePolylineRef.current.setMap(map);
-        }
+        syncRoutePolylines(kakao, map, state);
 
         busOverlaysRef.current = state.buses.map((bus) => ({
           bus,
@@ -424,8 +447,7 @@ function ShuttleKakaoMap({
       busOverlaysRef.current.forEach(({ overlay }) => overlay.setMap(null));
       busOverlaysRef.current = [];
       clearBoardingMarkers();
-      if (routePolylineRef.current) routePolylineRef.current.setMap(null);
-      routePolylineRef.current = null;
+      clearRoutePolylines();
       routePathsRef.current = {};
       mapRef.current = null;
       kakaoRef.current = null;

@@ -89,3 +89,22 @@
 .new-post-submit-btn:hover {
   background-color: #1d5abc;
 }
+
+/* 글쓰기 — Community 타학부 picker와 동일 combobox (항상 노출) */
+.new-post-dept-field .community-dept-picker-wrap {
+  max-height: none;
+  opacity: 1;
+  pointer-events: auto;
+  overflow: visible;
+}
+
+.new-post-dept-field .community-dept-picker-inner {
+  width: 100%;
+  min-width: 0;
+}
+
+.new-post-main:has(.community-dept-picker.app-combobox--open) {
+  position: relative;
+  z-index: 15;
+  overflow: visible;
+}

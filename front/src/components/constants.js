@@ -17,6 +17,17 @@ export const CERTIFICATE_ISSUANCE_URL = 'https://bu.certpia.com/login';
 /** Express API (CRA dev: front 3000, server 5000) */
 export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+/** 관리자 로그인 학번 (server seed:admin 과 동일) */
+export const ADMIN_LOGIN_STUDENT_ID = 'admin';
+
+/** 시연용 로그인 (Login 기본값) */
+export const DEMO_LOGIN_STUDENT_ID = 'test2';
+export const DEMO_LOGIN_PASSWORD = '1q2w3e4r!Q';
+
+export function isAdminLoginStudentId(studentId) {
+  return String(studentId ?? '').trim() === ADMIN_LOGIN_STUDENT_ID;
+}
+
 /** Kakao Maps JavaScript API (도메인 등록 필요: localhost:3000 등) */
 export const KAKAO_MAP_APP_KEY =
   process.env.REACT_APP_KAKAO_MAP_APP_KEY || 'f883af0deb606aebe88c391add89714f';

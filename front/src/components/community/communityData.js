@@ -148,6 +148,16 @@ export async function fetchRegisterDepartments() {
   return Array.isArray(data) ? data : [];
 }
 
+export async function fetchAllDepartments() {
+  const res = await fetch(`${API_BASE_URL}/api/community/departments`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || '학과 목록을 불러오지 못했습니다.');
+  }
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
 function resolveBoardKind(boardSlug, filter) {
   if (boardSlug === 'dept-board') return 'dept_board';
   if (boardSlug === 'mentoring') return 'mentoring';

@@ -5,6 +5,7 @@ const requireAuth = require('../middlewares/requireAuth');
 const optionalAuth = require('../middlewares/optionalAuth');
 const { validate, validateNumbers } = require('../middlewares/validate');
 
+router.get('/departments', communityController.getDepartments);
 router.get('/boards', communityController.getBoards);
 router.get('/admin-author', communityController.getAdminAuthor);
 router.get('/posts', communityController.getPosts);

@@ -7,140 +7,17 @@
   transition: box-shadow 0.4s ease;
 }
 
-.form-input-border {
-  border: none;
-  border-bottom: 1px solid #001e59;
-  border-radius: 0;
-  background: transparent;
-  padding: 8px 0;
-  transition: border-color 0.25s ease, border-width 0.2s ease;
-}
-
-.form-input-border:focus {
-  outline: none;
-  border-bottom: 2px solid #1d5abc;
-  box-shadow: none;
-}
-
-.form-input-border::placeholder,
 .regi-email-local::placeholder {
   color: #747682;
   opacity: 1;
   -webkit-text-fill-color: #747682;
 }
 
-/* ── 학과 검색 combobox (회원가입) ── */
-.regi-form .regi-dept-picker.regi-combobox {
-  position: relative;
+.regi-form .regi-dept-picker.app-combobox {
   z-index: 20;
-  width: 100%;
 }
 
-.regi-form .regi-dept-picker .regi-combobox__control {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  border: none;
-  border-bottom: 1px solid #001e59;
-  border-radius: 0;
-  background: transparent;
-  padding: 8px 0 7px;
-  min-height: 2.25rem;
-  box-sizing: border-box;
-  transition: border-color 0.25s ease, border-width 0.2s ease;
-}
-
-.regi-form .regi-dept-picker.regi-combobox--open .regi-combobox__control,
-.regi-form .regi-dept-picker .regi-combobox__control:focus-within {
-  border-bottom-width: 2px;
-  border-bottom-color: #1d5abc;
-  padding-bottom: 6px;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__input {
-  flex: 1;
-  min-width: 0;
-  border: none;
-  background: transparent;
-  padding: 0;
-  color: #181c1e;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__input:focus {
-  outline: none;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__input::placeholder {
-  color: #747682;
-  opacity: 1;
-  -webkit-text-fill-color: #747682;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__toggle {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: transparent;
-  color: #001e59;
-  padding: 0;
-  cursor: pointer;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__toggle:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__toggle .material-symbols-outlined {
-  font-size: 1.25rem;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__panel {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-  z-index: 30;
-  margin: 0;
-  padding: 0.35rem 0;
-  list-style: none;
-  max-height: 240px;
-  overflow-y: auto;
-  background: #ffffff;
-  border: 1px solid #c5a880;
-  box-shadow: 0 8px 24px rgba(0, 30, 89, 0.1);
-}
-
-.regi-form .regi-dept-picker .regi-combobox__option,
-.regi-form .regi-dept-picker .regi-combobox__empty {
-  padding: 0.55rem 0.85rem;
-  font-size: 0.9375rem;
-  line-height: 1.35;
-  color: #181c1e;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__option {
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__option--highlighted {
-  background: rgba(29, 90, 188, 0.08);
-}
-
-.regi-form .regi-dept-picker .regi-combobox__option--selected {
-  color: #001e59;
-  font-weight: 600;
-}
-
-.regi-form .regi-dept-picker .regi-combobox__empty {
-  color: #6b7280;
-  cursor: default;
-}
-
-.regi-form:has(.regi-dept-picker.regi-combobox--open) {
+.regi-form:has(.regi-dept-picker.app-combobox--open) {
   position: relative;
   z-index: 25;
 }

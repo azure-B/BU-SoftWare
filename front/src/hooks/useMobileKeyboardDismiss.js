@@ -54,7 +54,7 @@ export function useMobileKeyboardDismiss() {
       if (!isMobileViewport()) return;
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (target.closest('.regi-combobox__option')) {
+      if (target.closest('.app-combobox__option')) {
         dismissMobileKeyboard();
         return;
       }

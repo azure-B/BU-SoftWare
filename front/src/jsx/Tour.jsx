@@ -7,6 +7,7 @@ import TourMobilePostSection from '../components/tour/TourMobilePostSection';
 import TourPostForm from '../components/tour/TourPostForm';
 import TourPostPanel from '../components/tour/TourPostPanel';
 import TourSidebar from '../components/tour/TourSidebar';
+import DepartmentCombobox from '../components/regi/DepartmentCombobox';
 import { TOUR_SECTION_TABS, resolveTourPopularTags } from '../components/tour/tourData';
 import { usePanelTransition } from '../hooks/usePanelTransition';
 import { useMobileViewport } from '../hooks/useMobileViewport';
@@ -186,6 +187,16 @@ function Tour({ session = {} }) {
   const recruitWritePlace = useMemo(
     () => places.find((place) => place.id === recruitWritePlaceId) ?? filteredPlaces[0] ?? null,
     [places, recruitWritePlaceId, filteredPlaces],
+  );
+
+  const recruitPlaceOptions = useMemo(
+    () =>
+      filteredPlaces.map((place) => ({
+        id: place.id,
+        name:
+          place.distanceM != null ? `${place.name} · ${place.distanceM}m` : place.name,
+      })),
+    [filteredPlaces],
   );
 
   const postPlaceName = useMemo(() => {
@@ -386,18 +397,15 @@ function Tour({ session = {} }) {
                       <span className="font-label-md text-label-md text-on-surface-variant">
                         모집할 음식점
                       </span>
-                      <select
+                      <DepartmentCombobox
+                        id="tour-recruit-place-mobile"
                         value={recruitWritePlace.id}
-                        onChange={(e) => setRecruitWritePlaceId(Number(e.target.value))}
-                        className="border border-outline-variant px-3 py-2 font-body-md text-sm bg-surface-container-lowest"
-                      >
-                        {filteredPlaces.map((place) => (
-                          <option key={place.id} value={place.id}>
-                            {place.name}
-                            {place.distanceM != null ? ` · ${place.distanceM}m` : ''}
-                          </option>
-                        ))}
-                      </select>
+                        onChange={(id) => setRecruitWritePlaceId(Number(id))}
+                        options={recruitPlaceOptions}
+                        disabled={filteredPlaces.length === 0}
+                        placeholder="음식점 검색·선택"
+                        emptyMessage="검색 결과가 없습니다"
+                      />
                     </label>
                     <TourPostForm
                       boardId={recruitWritePlace.boardId}
@@ -460,18 +468,15 @@ function Tour({ session = {} }) {
                         <span className="font-label-md text-label-md text-on-surface-variant">
                           모집할 음식점
                         </span>
-                        <select
+                        <DepartmentCombobox
+                          id="tour-recruit-place-desktop"
                           value={recruitWritePlace.id}
-                          onChange={(e) => setRecruitWritePlaceId(Number(e.target.value))}
-                          className="border border-outline-variant px-3 py-2 font-body-md text-sm bg-surface-container-lowest"
-                        >
-                          {filteredPlaces.map((place) => (
-                            <option key={place.id} value={place.id}>
-                              {place.name}
-                              {place.distanceM != null ? ` · ${place.distanceM}m` : ''}
-                            </option>
-                          ))}
-                        </select>
+                          onChange={(id) => setRecruitWritePlaceId(Number(id))}
+                          options={recruitPlaceOptions}
+                          disabled={filteredPlaces.length === 0}
+                          placeholder="음식점 검색·선택"
+                          emptyMessage="검색 결과가 없습니다"
+                        />
                       </label>
                       <TourPostForm
                         boardId={recruitWritePlace.boardId}

@@ -1,14 +1,17 @@
 const request = require('supertest');
 
 jest.mock('../src/models/authModel');
+jest.mock('../src/models/adminModel');
 
 const AuthModel = require('../src/models/authModel');
+const AdminModel = require('../src/models/adminModel');
 const app = require('../src/app');
 
 describe('Auth API', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     process.env.JWT_SECRET = 'test-secret';
+    AdminModel.isUserAdmin.mockResolvedValue(false);
   });
 
   describe('POST /api/auth/login', () => {

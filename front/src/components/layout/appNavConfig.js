@@ -1,3 +1,5 @@
+export const ADMIN_VIEW = 'admin';
+
 export const APP_VIEWS = [
   'dashboard',
   'square',
@@ -13,6 +15,10 @@ export const APP_VIEWS = [
 ];
 
 export const AUTH_VIEWS = ['login', 'regi', 'find', 'freshman_guide'];
+
+export function isAdminView(view) {
+  return view === ADMIN_VIEW;
+}
 
 export function isAppView(view) {
   return APP_VIEWS.includes(view);

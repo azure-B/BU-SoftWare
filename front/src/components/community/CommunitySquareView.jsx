@@ -140,6 +140,8 @@ function CommunitySquareView({
         return (
           <NewPost
             activeBoard={activeBoard}
+            homeDepartmentId={departmentId}
+            homeDepartmentName={departmentName}
             token={token}
             onCancel={onBack}
             onPostCreated={handlePostCreated}

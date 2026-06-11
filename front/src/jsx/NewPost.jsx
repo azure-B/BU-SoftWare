@@ -1,6 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import RichTextEditor from '../components/community/RichTextEditor';
-import { boardIdToSlug, slugToBoardId } from '../components/community/communityData';
+import {
+  boardIdToSlug,
+  fetchAllDepartments,
+  fetchDepartmentBoardMap,
+} from '../components/community/communityData';
 import {
   defaultCategoryForBoard,
   NEW_POST_CATEGORIES,
@@ -11,10 +15,27 @@ import {
   isEmptyEditorContent,
   updateCommunityPost,
 } from '../components/community/postData';
+import DepartmentCombobox from '../components/regi/DepartmentCombobox';
+import '../public/css/community.css';
 import '../public/css/new_post.css';
 import '../public/css/mobile/new_post.css';
 
-function NewPost({ activeBoard, postToEdit, token, onCancel, onPostCreated, onPostUpdated }) {
+function resolveBoardKind(category) {
+  if (category === 'team') return 'team';
+  if (category === 'mentoring') return 'mentoring';
+  return null;
+}
+
+function NewPost({
+  activeBoard,
+  homeDepartmentId = null,
+  homeDepartmentName = '',
+  postToEdit,
+  token,
+  onCancel,
+  onPostCreated,
+  onPostUpdated,
+}) {
   const isEditMode = Boolean(postToEdit);
   const [title, setTitle] = useState(postToEdit?.title ?? '');
   const [category, setCategory] = useState(() =>
@@ -23,6 +44,93 @@ function NewPost({ activeBoard, postToEdit, token, onCancel, onPostCreated, onPo
   const [content, setContent] = useState(postToEdit?.contentHtml ?? '');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+
+  const [departmentOptions, setDepartmentOptions] = useState([]);
+  const [departmentsLoading, setDepartmentsLoading] = useState(false);
+  const [departmentsError, setDepartmentsError] = useState('');
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState(
+    homeDepartmentId != null && homeDepartmentId !== '' ? String(homeDepartmentId) : '',
+  );
+  const [boardMap, setBoardMap] = useState(null);
+  const [boardMapLoading, setBoardMapLoading] = useState(false);
+
+  useEffect(() => {
+    if (isEditMode) return undefined;
+
+    let cancelled = false;
+    setDepartmentsLoading(true);
+    setDepartmentsError('');
+
+    fetchAllDepartments()
+      .then((rows) => {
+        if (!cancelled) {
+          setDepartmentOptions(Array.isArray(rows) ? rows : []);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setDepartmentOptions([]);
+          setDepartmentsError(err.message || '학과 목록을 불러오지 못했습니다.');
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setDepartmentsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isEditMode]);
+
+  useEffect(() => {
+    if (isEditMode) return undefined;
+    if (homeDepartmentId != null && homeDepartmentId !== '' && !selectedDepartmentId) {
+      setSelectedDepartmentId(String(homeDepartmentId));
+    }
+  }, [homeDepartmentId, isEditMode, selectedDepartmentId]);
+
+  useEffect(() => {
+    if (isEditMode) return undefined;
+
+    const deptId = Number(selectedDepartmentId);
+    if (!Number.isInteger(deptId) || deptId < 1) {
+      setBoardMap(null);
+      return undefined;
+    }
+
+    let cancelled = false;
+    setBoardMapLoading(true);
+
+    fetchDepartmentBoardMap(deptId)
+      .then((map) => {
+        if (!cancelled) setBoardMap(map ?? {});
+      })
+      .catch(() => {
+        if (!cancelled) setBoardMap(null);
+      })
+      .finally(() => {
+        if (!cancelled) setBoardMapLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isEditMode, selectedDepartmentId]);
+
+  const selectedDepartmentName = useMemo(() => {
+    if (!selectedDepartmentId) return homeDepartmentName;
+    const match = departmentOptions.find(
+      (dept) => String(dept.id) === String(selectedDepartmentId),
+    );
+    return match?.name ?? homeDepartmentName;
+  }, [departmentOptions, homeDepartmentName, selectedDepartmentId]);
+
+  const resolvedBoardId = useMemo(() => {
+    if (isEditMode) return postToEdit?.boardId ?? null;
+    const kind = resolveBoardKind(category);
+    if (!kind || !boardMap) return null;
+    return boardMap[kind] ?? null;
+  }, [isEditMode, postToEdit, category, boardMap]);
 
   const handleCancel = useCallback(() => {
     onCancel?.();
@@ -44,9 +152,19 @@ function NewPost({ activeBoard, postToEdit, token, onCancel, onPostCreated, onPo
         return;
       }
 
-      const boardId = slugToBoardId(category);
+      if (!isEditMode && !selectedDepartmentId) {
+        setError('게시할 학과를 선택해 주세요.');
+        return;
+      }
+
+      if (boardMapLoading) {
+        setError('게시판 정보를 불러오는 중입니다.');
+        return;
+      }
+
+      const boardId = resolvedBoardId;
       if (!boardId) {
-        setError('게시판을 선택해 주세요.');
+        setError('선택한 학과의 게시판을 찾을 수 없습니다.');
         return;
       }
 
@@ -76,7 +194,18 @@ function NewPost({ activeBoard, postToEdit, token, onCancel, onPostCreated, onPo
         setSubmitting(false);
       }
     },
-    [title, content, category, token, isEditMode, postToEdit, onPostCreated, onPostUpdated],
+    [
+      title,
+      content,
+      token,
+      isEditMode,
+      postToEdit,
+      selectedDepartmentId,
+      boardMapLoading,
+      resolvedBoardId,
+      onPostCreated,
+      onPostUpdated,
+    ],
   );
 
   return (
@@ -91,6 +220,40 @@ function NewPost({ activeBoard, postToEdit, token, onCancel, onPostCreated, onPo
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {!isEditMode && (
+              <div className="space-y-2 new-post-dept-field">
+                <label
+                  className="font-label-md text-label-md uppercase text-on-surface"
+                  htmlFor="post-department"
+                >
+                  게시 학과
+                </label>
+                <div className="community-dept-picker-wrap">
+                  <div className="community-dept-picker-inner">
+                    <DepartmentCombobox
+                      id="post-department"
+                      className="community-dept-picker"
+                      value={selectedDepartmentId}
+                      onChange={setSelectedDepartmentId}
+                      options={departmentOptions}
+                      loading={departmentsLoading}
+                      error={departmentsError}
+                      disabled={submitting}
+                      placeholder="학과 검색·선택"
+                      emptyMessage="검색 결과가 없습니다"
+                    />
+                  </div>
+                </div>
+                {selectedDepartmentName && (
+                  <p className="font-body-md text-sm text-on-surface-variant">
+                    {String(homeDepartmentId) === String(selectedDepartmentId)
+                      ? `내 학과(${selectedDepartmentName})에 게시합니다.`
+                      : `타학부(${selectedDepartmentName})에 게시합니다.`}
+                  </p>
+                )}
+              </div>
+            )}
+
             <div className="space-y-2">
               <label
                 className="font-label-md text-label-md uppercase text-on-surface"
@@ -164,7 +327,7 @@ function NewPost({ activeBoard, postToEdit, token, onCancel, onPostCreated, onPo
               </button>
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || (!isEditMode && boardMapLoading)}
                 className="new-post-submit-btn px-6 py-3 text-on-primary font-label-md text-label-md uppercase tracking-wider border-0 cursor-pointer disabled:opacity-50"
               >
                 {submitting ? 'Saving…' : isEditMode ? 'Save' : 'Submit'}

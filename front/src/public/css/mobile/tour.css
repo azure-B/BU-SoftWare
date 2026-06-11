@@ -211,17 +211,17 @@
     display: none;
   }
 
-  .tour-main .tour-place-picker .regi-combobox__input,
-  .tour-main .tour-place-picker .regi-combobox__option,
-  .tour-main .tour-place-picker .regi-combobox__empty {
+  .tour-main .tour-place-picker .app-combobox__input,
+  .tour-main .tour-place-picker .app-combobox__option,
+  .tour-main .tour-place-picker .app-combobox__empty {
     line-height: 1.5;
   }
 
-  .tour-main .tour-place-picker .regi-combobox__control {
+  .tour-main .tour-place-picker .app-combobox__control {
     min-height: var(--mobile-touch-min);
   }
 
-  .tour-main .tour-place-picker .regi-combobox__toggle .material-symbols-outlined {
+  .tour-main .tour-place-picker .app-combobox__toggle .material-symbols-outlined {
   }
 
   /* ??? ??? ? ??? ??Community filter bar ??????*/
@@ -241,13 +241,13 @@
     min-width: 0;
   }
 
-  .tour-main .tour-place-picker--title .regi-combobox__input {
+  .tour-main .tour-place-picker--title .app-combobox__input {
     line-height: 1.35;
     font-weight: 600;
     color: var(--primary-container, #0d337f);
   }
 
-  .tour-main .tour-place-picker--title .regi-combobox__control {
+  .tour-main .tour-place-picker--title .app-combobox__control {
     min-height: 2rem;
   }
 
@@ -428,7 +428,7 @@
     box-sizing: border-box;
   }
 
-  .tour-mobile-panel:has(.regi-combobox--open) {
+  .tour-mobile-panel:has(.app-combobox--open) {
     position: relative;
     z-index: 35;
   }
@@ -440,23 +440,23 @@
     box-sizing: border-box;
   }
 
-  .tour-mobile-panel .tour-place-picker .regi-combobox__input,
-  .tour-mobile-panel .tour-place-picker .regi-combobox__option,
-  .tour-mobile-panel .tour-place-picker .regi-combobox__empty {
+  .tour-mobile-panel .tour-place-picker .app-combobox__input,
+  .tour-mobile-panel .tour-place-picker .app-combobox__option,
+  .tour-mobile-panel .tour-place-picker .app-combobox__empty {
     line-height: 1.5;
   }
 
-  .tour-mobile-panel .tour-place-picker .regi-combobox__control {
+  .tour-mobile-panel .tour-place-picker .app-combobox__control {
     min-height: var(--mobile-touch-min);
     padding: 0;
   }
 
-  .tour-mobile-panel .tour-place-picker.regi-combobox--open .regi-combobox__control,
-  .tour-mobile-panel .tour-place-picker .regi-combobox__control:focus-within {
+  .tour-mobile-panel .tour-place-picker.app-combobox--open .app-combobox__control,
+  .tour-mobile-panel .tour-place-picker .app-combobox__control:focus-within {
     padding-bottom: 0;
   }
 
-  .tour-mobile-panel .tour-place-picker .regi-combobox__toggle .material-symbols-outlined {
+  .tour-mobile-panel .tour-place-picker .app-combobox__toggle .material-symbols-outlined {
   }
 
   .tour-mobile-panel-toolbar {

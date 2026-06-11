@@ -31,12 +31,14 @@ front/
 │       ├── login.html
 │       └── regi.html
 └── src/
-    ├── index.js            # common.css + layout.css
+    ├── index.js            # common.css + form-controls.css + layout.css
     ├── App.js              # view routing (login / dashboard / …)
     ├── components/
     │   ├── constants.js    # logo, nav, footer links
     │   ├── chat/
     │   │   └── FaqChatbot.jsx   # 학과 사무실·셔틀 FAQ (플로팅)
+    │   ├── admin/
+    │   │   └── adminApi.js      # 관리자 API (공지·시설)
     │   └── layout/
     │       ├── AppHeader.jsx
     │       ├── AppFooter.jsx   # variant: login | app
@@ -63,6 +65,7 @@ front/
     │   ├── Regi.jsx           # 회원가입 (login ↔ regi)
     │   ├── Find.jsx           # 계정 찾기 (login ↔ find)
     │   ├── FreshmanGuide.jsx  # 신입생 가이드 (login → freshman_guide)
+    │   ├── Admin.jsx          # 관리자 (admin.html, login: admin/admin)
     │   ├── Shuttle.jsx        # 셔틀버스 (freshman_guide → shuttle)
     │   ├── Dashboard.jsx
     │   ├── Reservation.jsx
@@ -74,12 +77,14 @@ front/
     │   ├── Tour.jsx           # nav: dept (캠퍼스 투어)
     │   └── MyPage.jsx
     └── public/css/
+        ├── form-controls.css   # shared inputs + searchable combobox
         ├── …
         ├── community.css
         ├── post.css
         ├── new_post.css
         ├── tour.css
-        └── faq-chatbot.css
+        ├── faq-chatbot.css
+        └── admin.css
 ```
 
 ## Conventions

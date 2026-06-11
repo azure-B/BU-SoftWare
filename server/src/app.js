@@ -23,6 +23,7 @@ const reservationRouter = require('./routes/reservationRouter');
 const dashboardRouter = require('./routes/dashboardRouter');
 const tourRouter = require('./routes/tourRouter');
 const faqRouter = require('./routes/faqRouter');
+const adminRouter = require('./routes/adminRouter');
 const { startTourMaintenanceJob } = require('./jobs/tourMaintenanceJob');
 
 const app = express();
@@ -96,6 +97,7 @@ app.use('/api/reservations', reservationRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/tour', tourRouter);
 app.use('/api/faq', faqRouter);
+app.use('/api/admin', adminRouter);
 
 if (isDemoRoutesEnabled) {
   app.use('/api/users',   userRouter);

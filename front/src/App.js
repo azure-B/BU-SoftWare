@@ -8,9 +8,11 @@ import MyPage from './jsx/MyPage';
 import CommunitySquareView from './components/community/CommunitySquareView';
 import Tour from './jsx/Tour';
 import Shuttle from './jsx/Shuttle';
+import Admin from './jsx/Admin';
 import AppLayout from './components/layout/AppLayout';
 import { fetchPostDetail } from './components/community/postData';
-import { getAppPageMeta, isAppView, isAuthView } from './components/layout/appNavConfig';
+import { getAppPageMeta, isAppView, isAuthView, isAdminView } from './components/layout/appNavConfig';
+import { isAdminLoginStudentId } from './components/constants';
 import { usePanelTransition } from './hooks/usePanelTransition';
 import { useMobileKeyboardDismiss } from './hooks/useMobileKeyboardDismiss';
 import {
@@ -30,6 +32,7 @@ const SQUARE_CONTENT_VIEWS = new Set([
 ]);
 
 function getAppShell(view) {
+  if (isAdminView(view)) return 'admin';
   if (SQUARE_CONTENT_VIEWS.has(view)) return 'community';
   if (isAuthView(view)) return 'auth';
   return view;
@@ -44,6 +47,10 @@ function App() {
   const openingPostRef = useRef(false);
   const [session, setSession] = useState(() => getInitialAppState().session);
 
+  const navigateTo = useCallback((nextView) => {
+    setActiveView((current) => (current === nextView ? current : nextView));
+  }, []);
+
   useEffect(() => {
     if (session.token) {
       saveStoredAuth({ session, activeView });
@@ -52,15 +59,18 @@ function App() {
     clearStoredAuth();
   }, [session, activeView]);
 
+  useEffect(() => {
+    if (activeView === 'admin' && session.token && !session.isAdmin) {
+      navigateTo('dashboard');
+    }
+  }, [activeView, session.token, session.isAdmin, navigateTo]);
+
   const { shownValue: shownView, fadeClass } = usePanelTransition(activeView, {
     shouldAnimate: (next, current) => getAppShell(next) !== getAppShell(current),
   });
 
-  const navigateTo = useCallback((nextView) => {
-    setActiveView((current) => (current === nextView ? current : nextView));
-  }, []);
-
   const handleLogin = (user) => {
+    const isAdmin = Boolean(user.isAdmin) || isAdminLoginStudentId(user.studentId);
     setSession({
       id: user.id,
       studentId: user.studentId,
@@ -71,8 +81,9 @@ function App() {
           : null,
       departmentName: user.departmentName || '',
       token: user.token,
+      isAdmin,
     });
-    navigateTo('dashboard');
+    navigateTo(isAdmin ? 'admin' : 'dashboard');
   };
 
   const handleLogout = () => {
@@ -207,6 +218,13 @@ function App() {
       return renderCommunityMain(communityView);
     }
 
+    if (isAdminView(shownView)) {
+      if (!session.isAdmin) {
+        return null;
+      }
+      return <Admin session={session} onLogout={handleLogout} />;
+    }
+
     if (isAuthView(shownView)) {
       const authView = getAppShell(activeView) === 'auth' ? activeView : shownView;
       return (
@@ -231,6 +249,13 @@ function App() {
 
     return renderAppMain(shownView);
   };
+
+  if (isAdminView(shownView)) {
+    if (!session.isAdmin) {
+      return null;
+    }
+    return <div className={`panel-main-fade ${fadeClass}`}>{renderShownContent()}</div>;
+  }
 
   if (isAppView(shownView)) {
     const headerView = isAppView(activeView) ? activeView : shownView;

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { API_BASE_URL, LOGO_LOGIN } from '../components/constants';
+import { API_BASE_URL, DEMO_LOGIN_PASSWORD, DEMO_LOGIN_STUDENT_ID, LOGO_LOGIN } from '../components/constants';
 import { openFreshmanGuideInNewWindow } from '../utils/freshmanGuideNav';
 
 const LOGIN_PANEL_TRANSITION_MS = 400;
@@ -12,8 +12,8 @@ function Login({
   onFocusStudentIdHandled,
 }) {
   const studentIdInputRef = useRef(null);
-  const [studentId, setStudentId] = useState('');
-  const [password, setPassword] = useState('');
+  const [studentId, setStudentId] = useState(DEMO_LOGIN_STUDENT_ID);
+  const [password, setPassword] = useState(DEMO_LOGIN_PASSWORD);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -61,6 +61,7 @@ function Login({
           departmentId: data.user.departmentId,
           departmentName: data.user.departmentName,
           token: data.token,
+          isAdmin: Boolean(data.user.isAdmin),
         });
       }
     } catch {

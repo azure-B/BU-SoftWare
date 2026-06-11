@@ -36,6 +36,10 @@ async function assertWritableBoard(supabase, boardId, userId) {
   if (data.board_kind && BoardModel.WRITABLE_BOARD_KINDS.has(data.board_kind)) {
     if (!data.department_id) return;
 
+    if (data.board_kind === 'mentoring' || data.board_kind === 'team') {
+      return;
+    }
+
     const { data: author, error: authorError } = await supabase
       .from('users')
       .select('department_id')
@@ -554,7 +558,7 @@ const CommunityModel = {
   },
 
   findAdminAuthorId: async () => {
-    const adminStudentId = process.env.COMMUNITY_ADMIN_STUDENT_ID || 'test';
+    const adminStudentId = process.env.COMMUNITY_ADMIN_STUDENT_ID || 'admin';
     const supabase = getServerClient();
     const { data, error } = await supabase
       .from('users')

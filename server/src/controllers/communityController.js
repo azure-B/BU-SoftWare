@@ -1,5 +1,6 @@
 const CommunityModel = require('../models/communityModel');
 const BoardModel = require('../models/boardModel');
+const RegisterModel = require('../models/registerModel');
 const { sanitizePostContent, isEmptyHtml } = require('../utils/sanitizeHtml');
 
 function buildAccessContext(req) {
@@ -11,6 +12,16 @@ function buildAccessContext(req) {
 }
 
 const communityController = {
+  // GET /api/community/departments — 글쓰기·학과 선택용 전체 학과 목록
+  getDepartments: async (req, res, next) => {
+    try {
+      const departments = await RegisterModel.listDepartments();
+      res.json(departments);
+    } catch (err) {
+      next(err);
+    }
+  },
+
   // GET /api/community/boards?departmentId=6
   getBoards: async (req, res, next) => {
     try {

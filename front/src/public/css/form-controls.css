@@ -1,0 +1,170 @@
+/* Shared form inputs + searchable combobox (Regi, Admin, Community, Tour) */
+:root {
+  --app-field-border: #001e59;
+  --app-field-border-focus: #1d5abc;
+  --app-field-placeholder: #747682;
+  --app-combobox-row-height: 2.75rem;
+  --app-combobox-visible-rows: 3;
+}
+
+.form-input-border {
+  border: none;
+  border-bottom: 1px solid var(--app-field-border);
+  border-radius: 0;
+  background: transparent;
+  padding: 8px 0;
+  width: 100%;
+  transition: border-color 0.25s ease, border-width 0.2s ease;
+}
+
+.form-input-border:focus {
+  outline: none;
+  border-bottom: 2px solid var(--app-field-border-focus);
+  box-shadow: none;
+}
+
+.form-input-border::placeholder {
+  color: var(--app-field-placeholder);
+  opacity: 1;
+  -webkit-text-fill-color: var(--app-field-placeholder);
+}
+
+.form-select-border,
+select.form-input-border {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 1.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23001e59'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  background-size: 1.25rem;
+}
+
+.form-select-border:disabled,
+select.form-input-border:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ── Searchable combobox ── */
+.app-combobox {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.app-combobox__control {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: none;
+  border-bottom: 1px solid var(--app-field-border);
+  border-radius: 0;
+  background: transparent;
+  padding: 8px 0 7px;
+  min-height: 2.25rem;
+  box-sizing: border-box;
+  transition: border-color 0.25s ease, border-width 0.2s ease;
+}
+
+.app-combobox--open .app-combobox__control,
+.app-combobox__control:focus-within {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--app-field-border-focus);
+  padding-bottom: 6px;
+}
+
+.app-combobox__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #181c1e;
+}
+
+.app-combobox__input:focus {
+  outline: none;
+}
+
+.app-combobox__input::placeholder {
+  color: var(--app-field-placeholder);
+  opacity: 1;
+  -webkit-text-fill-color: var(--app-field-placeholder);
+}
+
+.app-combobox__toggle {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--app-field-border);
+  padding: 0;
+  cursor: pointer;
+}
+
+.app-combobox__toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.app-combobox__toggle .material-symbols-outlined {
+  font-size: 1.25rem;
+}
+
+.app-combobox__panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 0.35rem 0;
+  list-style: none;
+  max-height: calc(
+    var(--app-combobox-row-height) * var(--app-combobox-visible-rows) + 0.7rem
+  );
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #c5a880;
+  box-shadow: 0 8px 24px rgba(0, 30, 89, 0.1);
+}
+
+.app-combobox__option,
+.app-combobox__empty {
+  padding: 0 0.85rem;
+  min-height: var(--app-combobox-row-height);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: #181c1e;
+}
+
+.app-combobox__option {
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.app-combobox__option--highlighted {
+  background: rgba(29, 90, 188, 0.08);
+}
+
+.app-combobox__option--selected {
+  color: var(--app-field-border);
+  font-weight: 600;
+}
+
+.app-combobox__empty {
+  color: #6b7280;
+  cursor: default;
+  justify-content: center;
+}
+
+.app-combobox--disabled {
+  opacity: 0.65;
+  pointer-events: none;
+}

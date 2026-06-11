@@ -77,7 +77,7 @@
 
   .login-form input::placeholder,
   .regi-form input::placeholder,
-  .regi-form .regi-dept-picker .regi-combobox__input::placeholder,
+  .regi-form .regi-dept-picker .app-combobox__input::placeholder,
   .find-form input::placeholder {
     color: #747682;
     opacity: 1;

@@ -480,7 +480,7 @@
   z-index: 10;
 }
 
-.community-dept-browse--open .community-dept-picker-inner .regi-combobox__control {
+.community-dept-browse--open .community-dept-picker-inner .app-combobox__control {
   animation: communityDeptComboboxEnter 0.28s ease both;
   animation-delay: 0.12s;
 }
@@ -505,106 +505,31 @@
   }
 }
 
-.community-filter-bar:has(.regi-combobox--open) {
+.community-filter-bar:has(.app-combobox--open) {
   z-index: 35;
 }
 
-.community-dept-picker.regi-combobox {
-  position: relative;
+.community-dept-picker.app-combobox {
   z-index: 33;
-  width: 100%;
-  min-width: 0;
 }
 
-.community-dept-picker .regi-combobox__control {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  border-bottom: 1px solid var(--brand-navy, #0d337f);
+.community-dept-picker .app-combobox__control {
   padding: 0 0 4px;
   min-height: 1.75rem;
-  box-sizing: border-box;
-  transition: border-color 0.25s ease, border-width 0.2s ease;
 }
 
-.community-dept-picker.regi-combobox--open .regi-combobox__control,
-.community-dept-picker .regi-combobox__control:focus-within {
-  border-bottom-width: 2px;
-  border-bottom-color: #1d5abc;
-  padding-bottom: 3px;
-}
-
-.community-dept-picker .regi-combobox__input {
-  flex: 1;
-  min-width: 0;
-  border: none;
-  background: transparent;
-  padding: 0;
-  color: var(--on-surface, #181c1e);
+.community-dept-picker .app-combobox__input {
   font-size: 0.875rem;
 }
 
-.community-dept-picker .regi-combobox__input:focus {
-  outline: none;
-}
-
-.community-dept-picker .regi-combobox__input::placeholder {
-  color: var(--outline-variant, #c4c6d3);
-}
-
-.community-dept-picker .regi-combobox__toggle {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: transparent;
-  color: var(--brand-navy, #0d337f);
-  padding: 0;
-  cursor: pointer;
-}
-
-.community-dept-picker .regi-combobox__panel {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-  z-index: 30;
-  margin: 0;
-  padding: 0.35rem 0;
-  list-style: none;
-  max-height: 240px;
-  overflow-y: auto;
-  background: #ffffff;
-  border: 1px solid var(--accent-gold, #c5a880);
-  box-shadow: 0 10px 28px rgba(0, 30, 89, 0.12);
-}
-
-.community-dept-picker .regi-combobox__option,
-.community-dept-picker .regi-combobox__empty {
-  padding: 0.65rem 0.85rem;
+.community-dept-picker .app-combobox__option,
+.community-dept-picker .app-combobox__empty {
   font-size: 0.875rem;
-  line-height: 1.4;
   color: var(--brand-navy, #0d337f);
 }
 
-.community-dept-picker .regi-combobox__option {
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.community-dept-picker .regi-combobox__option--highlighted {
-  background: rgba(29, 90, 188, 0.08);
-}
-
-.community-dept-picker .regi-combobox__option--selected {
+.community-dept-picker .app-combobox__option--selected {
   color: #1d5abc;
-  font-weight: 600;
-}
-
-.community-dept-picker .regi-combobox__empty {
-  color: var(--on-surface-variant, #444651);
-  text-align: center;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -627,7 +552,7 @@
     transition: none;
   }
 
-  .community-dept-browse--open .community-dept-picker-inner .regi-combobox__control {
+  .community-dept-browse--open .community-dept-picker-inner .app-combobox__control {
     animation: none;
   }
 }

@@ -1,13 +1,14 @@
 const jwt = require('jsonwebtoken');
 const AuthModel = require('../models/authModel');
-
-function toPublicUser(row) {
+const AdminModel = require('../models/adminModel');
+function toPublicUser(row, isAdmin = false) {
   return {
     id: row.id,
     studentId: row.student_id,
     name: row.name,
     departmentId: row.department_id,
     departmentName: row.department_name,
+    isAdmin,
   };
 }
 
@@ -42,8 +43,9 @@ const authController = {
         return res.status(401).json({ message: '학번 또는 비밀번호가 올바르지 않습니다.' });
       }
 
+      const isAdmin = await AdminModel.isUserAdmin(user.id, user.student_id);
       const token = signToken(user);
-      res.json({ token, user: toPublicUser(user) });
+      res.json({ token, user: toPublicUser(user, isAdmin) });
     } catch (err) {
       next(err);
     }

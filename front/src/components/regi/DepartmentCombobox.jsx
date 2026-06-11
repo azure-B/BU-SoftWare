@@ -75,13 +75,6 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
     setHighlightIndex(0);
   }, [query, open]);
 
-  const openList = () => {
-    if (isDisabled) return;
-    setOpen(true);
-    setQuery('');
-    setHighlightIndex(0);
-  };
-
   const closeList = () => {
     setOpen(false);
     setQuery('');
@@ -99,7 +92,11 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
   };
 
   const handleInputFocus = () => {
-    openList();
+    if (isDisabled) return;
+    setQuery(selectedOption?.name ?? '');
+    setOpen(true);
+    setHighlightIndex(0);
+    requestAnimationFrame(() => inputRef.current?.select());
   };
 
   const handleInputKeyDown = (event) => {
@@ -108,7 +105,9 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       if (!open) {
-        openList();
+        setQuery(selectedOption?.name ?? '');
+        setOpen(true);
+        setHighlightIndex(0);
         return;
       }
       setHighlightIndex((prev) => Math.min(prev + 1, Math.max(filteredOptions.length - 1, 0)));
@@ -118,7 +117,9 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
     if (event.key === 'ArrowUp') {
       event.preventDefault();
       if (!open) {
-        openList();
+        setQuery(selectedOption?.name ?? '');
+        setOpen(true);
+        setHighlightIndex(0);
         return;
       }
       setHighlightIndex((prev) => Math.max(prev - 1, 0));
@@ -128,7 +129,9 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
     if (event.key === 'Enter') {
       event.preventDefault();
       if (!open) {
-        openList();
+        setQuery(selectedOption?.name ?? '');
+        setOpen(true);
+        setHighlightIndex(0);
         return;
       }
       const option = filteredOptions[highlightIndex];
@@ -149,9 +152,9 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
   return (
     <div
       ref={rootRef}
-      className={`regi-combobox${open ? ' regi-combobox--open' : ''}${isDisabled ? ' regi-combobox--disabled' : ''}${className ? ` ${className}` : ''}`}
+      className={`app-combobox${open ? ' app-combobox--open' : ''}${isDisabled ? ' app-combobox--disabled' : ''}${className ? ` ${className}` : ''}`}
     >
-      <div className="regi-combobox__control">
+      <div className="app-combobox__control">
         <input
           ref={inputRef}
           id={id}
@@ -165,7 +168,7 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
               ? `${listboxId}-option-${filteredOptions[highlightIndex].id}`
               : undefined
           }
-          className="regi-combobox__input font-body-md text-body-md w-full"
+          className="app-combobox__input font-body-md text-body-md w-full"
           value={inputValue}
           onChange={handleInputChange}
           onFocus={handleInputFocus}
@@ -176,7 +179,7 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
         />
         <button
           type="button"
-          className="regi-combobox__toggle"
+          className="app-combobox__toggle"
           aria-label={open ? toggleAriaClose : toggleAriaOpen}
           disabled={isDisabled}
           onMouseDown={(event) => event.preventDefault()}
@@ -185,7 +188,9 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
               closeList();
               inputRef.current?.blur();
             } else {
-              openList();
+              setQuery('');
+              setOpen(true);
+              setHighlightIndex(0);
               inputRef.current?.focus();
             }
           }}
@@ -201,10 +206,10 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
           ref={listRef}
           id={listboxId}
           role="listbox"
-          className="regi-combobox__panel"
+          className="app-combobox__panel"
         >
           {filteredOptions.length === 0 ? (
-            <li className="regi-combobox__empty" role="presentation">
+            <li className="app-combobox__empty" role="presentation">
               {emptyMessage}
             </li>
           ) : (
@@ -220,9 +225,9 @@ const DepartmentCombobox = forwardRef(function DepartmentCombobox(
                   aria-selected={isSelected}
                   data-active={isHighlighted ? 'true' : 'false'}
                   className={[
-                    'regi-combobox__option',
-                    isSelected ? 'regi-combobox__option--selected' : '',
-                    isHighlighted ? 'regi-combobox__option--highlighted' : '',
+                    'app-combobox__option',
+                    isSelected ? 'app-combobox__option--selected' : '',
+                    isHighlighted ? 'app-combobox__option--highlighted' : '',
                   ].filter(Boolean).join(' ')}
                   onMouseEnter={() => setHighlightIndex(index)}
                   onMouseDown={(event) => event.preventDefault()}

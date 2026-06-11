@@ -1,4 +1,5 @@
-import { isAppView, isAuthView } from '../components/layout/appNavConfig';
+import { isAppView, isAuthView, isAdminView } from '../components/layout/appNavConfig';
+import { isAdminLoginStudentId } from '../components/constants';
 import { FRESHMAN_GUIDE_VIEW, isFreshmanGuideStandaloneUrl } from './freshmanGuideNav';
 
 const STORAGE_KEY = 'bu_hub_auth';
@@ -10,6 +11,7 @@ const EMPTY_SESSION = {
   departmentId: null,
   departmentName: '',
   token: null,
+  isAdmin: false,
 };
 
 /** 새로고침 시 postDetail 없이는 복원 불가 — 광장으로 */
@@ -17,6 +19,10 @@ const VIEWS_NEEDING_POST = new Set(['post', 'new_post', 'edit_post', 'new_qna_po
 
 function isValidSession(session) {
   return Boolean(session?.token && session?.id);
+}
+
+function sessionIsAdmin(session) {
+  return Boolean(session?.isAdmin) || isAdminLoginStudentId(session?.studentId);
 }
 
 export function getEmptySession() {
@@ -53,10 +59,13 @@ export function patchStoredSessionDepartment(departmentId, departmentName) {
   });
 }
 
-export function resolveRestoredView(activeView, hasSession) {
+export function resolveRestoredView(activeView, hasSession, isAdmin = false) {
   if (!hasSession) {
     if (isAuthView(activeView)) return activeView;
     return 'login';
+  }
+  if (activeView === 'admin') {
+    return isAdmin ? 'admin' : 'dashboard';
   }
   if (!isAppView(activeView)) return 'dashboard';
   if (VIEWS_NEEDING_POST.has(activeView)) return 'square';
@@ -77,7 +86,7 @@ export function loadStoredAuth() {
 
     return {
       session,
-      activeView: resolveRestoredView(parsed.activeView, true),
+      activeView: resolveRestoredView(parsed.activeView, true, sessionIsAdmin(session)),
     };
   } catch {
     localStorage.removeItem(STORAGE_KEY);
@@ -88,7 +97,7 @@ export function loadStoredAuth() {
 export function saveStoredAuth({ session, activeView }) {
   if (!isValidSession(session)) return;
 
-  const view = isAppView(activeView) ? activeView : 'dashboard';
+  const view = isAppView(activeView) || activeView === 'admin' ? activeView : 'dashboard';
   localStorage.setItem(
     STORAGE_KEY,
     JSON.stringify({
@@ -102,6 +111,7 @@ export function saveStoredAuth({ session, activeView }) {
             : null,
         departmentName: session.departmentName || '',
         token: session.token,
+        isAdmin: sessionIsAdmin(session),
       },
       activeView: VIEWS_NEEDING_POST.has(view) ? 'square' : view,
     }),
