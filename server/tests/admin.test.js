@@ -6,6 +6,7 @@ jest.mock('../src/models/adminModel', () => ({
   getStats: jest.fn(),
   createDashboardNotice: jest.fn(),
   createFacility: jest.fn(),
+  reviewReservation: jest.fn(),
   DASHBOARD_NOTICE_BOARD_ID: 100,
 }));
 
@@ -72,6 +73,22 @@ describe('Admin API', () => {
       const res = await request(app)
         .delete('/api/admin/facilities/0')
         .set('Authorization', authHeader());
+
+      expect(res.status).toBe(400);
+    });
+  });
+
+  describe('PATCH /api/admin/reservations/:id', () => {
+    it('반려 시 사유 없으면 400을 반환한다', async () => {
+      AdminModel.isUserAdmin.mockResolvedValue(true);
+      AdminModel.reviewReservation.mockRejectedValue(
+        Object.assign(new Error('반려 사유를 입력해 주세요.'), { status: 400 }),
+      );
+
+      const res = await request(app)
+        .patch('/api/admin/reservations/1')
+        .set('Authorization', authHeader())
+        .send({ status: 'REJECTED', rejectReason: '' });
 
       expect(res.status).toBe(400);
     });

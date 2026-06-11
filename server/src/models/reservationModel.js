@@ -1,6 +1,10 @@
 const { getServerClient } = require('../config/supabase');
 const FacilityModel = require('./facilityModel');
 const {
+  normalizeReservationStatus,
+  pickRejectReason,
+} = require('../utils/reservationStatus');
+const {
   buildReservationWindow,
   endOfLocalDay,
   isBookableDate,
@@ -80,8 +84,7 @@ function mapApiReservationRow(row, facility) {
   const slug = facility.slug ?? String(facility.dbId ?? facility.id);
   const date = toDateInputValue(new Date(row.start_time));
   const timeSlots = timeSlotsFromRange(row.start_time, row.end_time);
-  const status =
-    row.status === 'APPROVED' || row.status === 'CONFIRMED' ? 'approved' : 'pending';
+  const status = normalizeReservationStatus(row.status);
 
   return {
     id: String(row.id),
@@ -93,6 +96,7 @@ function mapApiReservationRow(row, facility) {
     participants: null,
     reason: null,
     status,
+    rejectReason: pickRejectReason(row),
     createdAt: row.created_at ?? row.start_time,
   };
 }
@@ -165,10 +169,12 @@ const ReservationModel = {
     const supabase = getServerClient();
     const { data, error } = await supabase
       .from('reservations')
-      .select('id, facility_id, user_id, start_time, end_time, status, facilities ( slug, name, location )')
+      .select(
+        'id, facility_id, user_id, start_time, end_time, status, N_reason, facilities ( slug, name, location )',
+      )
       .eq('user_id', authorId)
-      .gte('end_time', new Date().toISOString())
-      .order('start_time', { ascending: true });
+      .order('start_time', { ascending: false })
+      .limit(100);
 
     if (error) {
       const err = new Error('예약 목록을 불러오지 못했습니다.');
@@ -275,9 +281,9 @@ const ReservationModel = {
         user_id: authorId,
         start_time,
         end_time,
-        status: 'APPROVED',
+        status: 'PENDING',
       })
-      .select('id, facility_id, user_id, start_time, end_time, status')
+      .select('id, facility_id, user_id, start_time, end_time, status, N_reason')
       .single();
 
     if (error) {

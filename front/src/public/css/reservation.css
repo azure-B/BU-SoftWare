@@ -126,10 +126,25 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.05em;
+  border-radius: 9999px;
+}
+
+.my-reservation-status--pending {
   color: #001849;
   background-color: #dbe1ff;
   border: 1px solid #1d5abc;
-  border-radius: 9999px;
+}
+
+.my-reservation-status--approved {
+  color: #0d337f;
+  background-color: #e8f5e9;
+  border: 1px solid #2e7d32;
+}
+
+.my-reservation-status--rejected {
+  color: #8b1a1a;
+  background-color: #ffebee;
+  border: 1px solid #ba1a1a;
 }
 
 @media (prefers-reduced-motion: reduce) {

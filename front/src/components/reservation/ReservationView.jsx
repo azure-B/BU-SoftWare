@@ -202,12 +202,12 @@ function ReservationView({ token, departmentId, departmentName = '' }) {
           categoryId: bookingCategoryId,
           participants: formData.participants,
           reason: formData.reason,
-          status: created.status || RESERVATION_STATUS.APPROVED,
+          status: created.status || RESERVATION_STATUS.PENDING,
         };
 
         setReservations((prev) => [newReservation, ...prev]);
         window.dispatchEvent(new Event(RESERVATIONS_UPDATED_EVENT));
-        window.alert('예약이 승인되었습니다.');
+        window.alert('예약 신청이 완료되었습니다. 관리자 승인 후 이용 가능합니다.');
         setActiveView('list');
         reloadReservations();
       } catch (err) {

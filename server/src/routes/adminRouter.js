@@ -18,5 +18,7 @@ router.get('/facilities', adminController.listFacilities);
 router.post('/facilities', validate('name', 'location'), adminController.createFacility);
 router.patch('/facilities/:id', validate('name', 'location'), adminController.updateFacility);
 router.delete('/facilities/:id', adminController.deleteFacility);
+router.get('/reservations', adminController.listReservations);
+router.patch('/reservations/:id', adminController.reviewReservation);
 
 module.exports = router;

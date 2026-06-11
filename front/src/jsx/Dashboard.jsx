@@ -21,45 +21,40 @@ import '../public/css/mobile/dashboard.css';
 const COURSES_PER_PAGE = 2;
 const SQUARE_VISIBLE_POST_COUNT = 3;
 
+function formatFacilityReservationDate(sortTime) {
+  const date = new Date(sortTime);
+  if (Number.isNaN(date.getTime())) return null;
+
+  const now = new Date();
+  if (date.toDateString() === now.toDateString()) {
+    return '오늘';
+  }
+
+  return date.toLocaleDateString('ko-KR', {
+    month: 'numeric',
+    day: 'numeric',
+    weekday: 'short',
+  });
+}
+
 function DashboardFacilityTimeLabel({ facility }) {
   const isReservation = facility.status === 'booked' || facility.status === 'reserved';
 
-  if (!isReservation || !facility.sortTime) {
+  if (!isReservation) {
     return (
-      <span className="dashboard-facility-time-label-text dashboard-facility-time-label-text--single">
-        {facility.timeLabel ?? '--'}
+      <span className="dashboard-facility-time-label-text dashboard-facility-time-label-text--available">
+        현재시각기준
       </span>
     );
   }
 
-  const date = new Date(facility.sortTime);
-  if (Number.isNaN(date.getTime())) {
-    return (
-      <span className="dashboard-facility-time-label-text dashboard-facility-time-label-text--single">
-        {facility.timeLabel ?? '--'}
-      </span>
-    );
-  }
-
-  const timeLine = date.toLocaleTimeString('ko-KR', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
-
-  const now = new Date();
-  const dateLine = date.toDateString() === now.toDateString()
-    ? '오늘'
-    : date.toLocaleDateString('ko-KR', {
-        month: 'numeric',
-        day: 'numeric',
-        weekday: 'short',
-      });
+  const dateLine = facility.sortTime
+    ? formatFacilityReservationDate(facility.sortTime)
+    : null;
 
   return (
-    <span className="dashboard-facility-time-label-text">
-      <span className="dashboard-facility-time-label-date">{dateLine}</span>
-      <span className="dashboard-facility-time-label-time">{timeLine}</span>
+    <span className="dashboard-facility-time-label-text dashboard-facility-time-label-text--reserved">
+      {dateLine ?? facility.timeLabel ?? '--'}
     </span>
   );
 }
@@ -475,8 +470,8 @@ function Dashboard({ session = {}, onOpenPost }) {
                           <span
                             className={
                               displayedFacility.status === 'available'
-                                ? 'font-body-md text-base text-primary-container font-bold'
-                                : 'font-body-md text-base text-on-background'
+                                ? 'font-body-md text-base text-on-background dashboard-facility-name'
+                                : 'font-body-md text-base text-primary font-bold dashboard-facility-name dashboard-facility-name--reserved'
                             }
                           >
                             {displayedFacility.facilityName} ({displayedFacility.statusLabel})

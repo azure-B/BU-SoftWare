@@ -4,13 +4,21 @@ import {
   deleteAdminNotice,
   fetchAdminFacilities,
   fetchAdminNotices,
+  fetchAdminReservations,
   fetchAdminStats,
   publishAdminNotice,
   registerAdminFacility,
+  reviewAdminReservation,
   updateAdminFacility,
   updateAdminNotice,
 } from '../components/admin/adminApi';
 import { fetchRegisterDepartments } from '../components/community/communityData';
+import {
+  formatReservationDate,
+  formatTimeSlots,
+  RESERVATION_STATUS,
+  RESERVATION_STATUS_LABEL,
+} from '../components/reservation/reservationData';
 import DepartmentCombobox from '../components/regi/DepartmentCombobox';
 import '../public/css/admin.css';
 
@@ -92,6 +100,12 @@ function Admin({ session, onLogout }) {
   const [noticeDeleting, setNoticeDeleting] = useState(false);
   const [facilitySubmitting, setFacilitySubmitting] = useState(false);
   const [facilityDeleting, setFacilityDeleting] = useState(false);
+  const [reservations, setReservations] = useState([]);
+  const [selectedReservationId, setSelectedReservationId] = useState(null);
+  const [rejectReason, setRejectReason] = useState('');
+  const [reservationMessage, setReservationMessage] = useState('');
+  const [reservationMessageType, setReservationMessageType] = useState('');
+  const [reservationSubmitting, setReservationSubmitting] = useState(false);
   const [departmentOptions, setDepartmentOptions] = useState([]);
   const [departmentsLoading, setDepartmentsLoading] = useState(true);
   const [departmentsError, setDepartmentsError] = useState('');
@@ -130,19 +144,22 @@ function Admin({ session, onLogout }) {
     setListsLoading(true);
 
     try {
-      const [statsData, noticeRows, facilityRows] = await Promise.all([
+      const [statsData, noticeRows, facilityRows, reservationRows] = await Promise.all([
         fetchAdminStats(session.token),
         fetchAdminNotices(session.token),
         fetchAdminFacilities(session.token),
+        fetchAdminReservations(session.token),
       ]);
 
       setStats(statsData);
       setNotices(Array.isArray(noticeRows) ? noticeRows : []);
       setFacilities(Array.isArray(facilityRows) ? facilityRows : []);
+      setReservations(Array.isArray(reservationRows) ? reservationRows : []);
     } catch {
       setStats({ activeAnnouncements: 0, registeredFacilities: 0 });
       setNotices([]);
       setFacilities([]);
+      setReservations([]);
     } finally {
       setStatsLoading(false);
       setListsLoading(false);
@@ -376,6 +393,51 @@ function Admin({ session, onLogout }) {
     }
   };
 
+  const selectedReservation = reservations.find((row) => row.id === selectedReservationId) ?? null;
+
+  const handleSelectReservation = (reservation) => {
+    setSelectedReservationId(reservation.id);
+    setRejectReason(reservation.rejectReason || '');
+    setReservationMessage('');
+    setReservationMessageType('');
+  };
+
+  const handleReviewReservation = async (nextStatus) => {
+    if (!selectedReservationId) return;
+
+    if (nextStatus === 'REJECTED' && !rejectReason.trim()) {
+      setReservationMessage('반려 사유를 입력해 주세요.');
+      setReservationMessageType('error');
+      return;
+    }
+
+    const actionLabel = nextStatus === 'APPROVED' ? '승인' : '반려';
+    if (!window.confirm(`선택한 예약을 ${actionLabel}하시겠습니까?`)) return;
+
+    setReservationMessage('');
+    setReservationMessageType('');
+    setReservationSubmitting(true);
+
+    try {
+      await reviewAdminReservation({
+        token: session.token,
+        reservationId: selectedReservationId,
+        status: nextStatus,
+        rejectReason: nextStatus === 'REJECTED' ? rejectReason.trim() : '',
+      });
+      setReservationMessage(`예약이 ${actionLabel}되었습니다.`);
+      setReservationMessageType('success');
+      setSelectedReservationId(null);
+      setRejectReason('');
+      await loadAdminData();
+    } catch (err) {
+      setReservationMessage(err.message || '예약 처리에 실패했습니다.');
+      setReservationMessageType('error');
+    } finally {
+      setReservationSubmitting(false);
+    }
+  };
+
   return (
     <div className="admin-page bg-background text-on-background antialiased flex min-h-screen">
       <nav className="admin-sidebar bg-surface h-screen fixed left-0 top-0 border-r border-outline-variant flex flex-col py-8 px-4 z-50">
@@ -404,6 +466,15 @@ function Admin({ session, onLogout }) {
               시설 관리
             </a>
           </li>
+          <li>
+            <a
+              className="admin-nav-link flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-secondary transition-colors duration-200 font-label-md text-label-md tracking-wider"
+              href="#reservations"
+            >
+              <span className="material-symbols-outlined">event_available</span>
+              시설 예약
+            </a>
+          </li>
         </ul>
         <div className="mt-auto px-4 space-y-2">
           <p className="text-xs text-on-surface-variant px-1">
@@ -428,7 +499,7 @@ function Admin({ session, onLogout }) {
           <section className="mb-16">
             <h2 className="font-display-lg text-display-lg text-primary mb-4">관리자 대시보드</h2>
             <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
-              중요 공지와 캠퍼스 시설을 등록·수정합니다. 변경 사항은 대시보드와 시설 예약 화면에 반영됩니다.
+              중요 공지·캠퍼스 시설·시설 예약 신청을 관리합니다. 변경 사항은 대시보드와 시설 예약 화면에 반영됩니다.
             </p>
             <div className="editorial-divider mt-8 w-1/3" />
           </section>
@@ -752,6 +823,132 @@ function Admin({ session, onLogout }) {
                   </form>
                 </div>
               </section>
+
+              <section id="reservations">
+                <div className="flex items-end justify-between mb-6 editorial-divider pb-2">
+                  <h3 className="font-headline-md text-headline-md text-primary">시설 예약 관리</h3>
+                </div>
+                <div className="bg-surface-container-lowest border border-surface-variant p-8">
+                  <h4 className="font-label-md text-label-md text-on-surface-variant mb-3">
+                    예약 신청 목록 ({listsLoading ? '…' : reservations.length})
+                  </h4>
+                  {listsLoading ? (
+                    <p className="text-sm text-on-surface-variant mb-6">목록을 불러오는 중입니다…</p>
+                  ) : reservations.length === 0 ? (
+                    <p className="text-sm text-on-surface-variant mb-6">등록된 시설 예약이 없습니다.</p>
+                  ) : (
+                    <div className="admin-record-list">
+                      {reservations.map((reservation) => (
+                        <button
+                          key={reservation.id}
+                          type="button"
+                          className={`admin-record-item${
+                            selectedReservationId === reservation.id ? ' admin-record-item--selected' : ''
+                          }`}
+                          onClick={() => handleSelectReservation(reservation)}
+                        >
+                          <div className="admin-record-item__title">
+                            {reservation.facilityName}
+                            <span className={`admin-reservation-badge admin-reservation-badge--${reservation.status}`}>
+                              {RESERVATION_STATUS_LABEL[reservation.status] ?? reservation.status}
+                            </span>
+                          </div>
+                          <div className="admin-record-item__meta">
+                            {reservation.userName} ({reservation.studentId}) ·{' '}
+                            {formatReservationDate(reservation.date)} ·{' '}
+                            {formatTimeSlots(reservation.timeSlots)}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {selectedReservation && (
+                    <div className="admin-reservation-review mt-6 pt-6 border-t border-surface-variant">
+                      <h4 className="font-label-md text-label-md text-on-surface-variant mb-4">
+                        예약 상세 · {RESERVATION_STATUS_LABEL[selectedReservation.status]}
+                      </h4>
+                      <dl className="admin-reservation-detail grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 font-body-md text-sm">
+                        <div>
+                          <dt className="text-on-surface-variant">신청자</dt>
+                          <dd className="text-on-background">
+                            {selectedReservation.userName} ({selectedReservation.studentId})
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="text-on-surface-variant">시설</dt>
+                          <dd className="text-on-background">{selectedReservation.facilityName}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-on-surface-variant">위치</dt>
+                          <dd className="text-on-background">{selectedReservation.facilityLocation || '—'}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-on-surface-variant">예약 일시</dt>
+                          <dd className="text-on-background">
+                            {formatReservationDate(selectedReservation.date)} ·{' '}
+                            {formatTimeSlots(selectedReservation.timeSlots)}
+                          </dd>
+                        </div>
+                      </dl>
+
+                      {selectedReservation.status === RESERVATION_STATUS.PENDING && (
+                        <>
+                          <div className="flex flex-col mb-6">
+                            <label
+                              htmlFor="admin-reject-reason"
+                              className="font-label-md text-label-md text-on-surface-variant mb-2"
+                            >
+                              반려 사유
+                            </label>
+                            <textarea
+                              id="admin-reject-reason"
+                              className="admin-reject-reason w-full min-h-[96px] border border-surface-variant bg-background p-3 font-body-md text-body-md resize-y"
+                              placeholder="반려 시 사유를 입력하세요"
+                              value={rejectReason}
+                              onChange={(e) => setRejectReason(e.target.value)}
+                              disabled={reservationSubmitting}
+                            />
+                          </div>
+                          <div className="admin-section-actions">
+                            <button
+                              type="button"
+                              className="admin-btn-danger"
+                              onClick={() => handleReviewReservation('REJECTED')}
+                              disabled={reservationSubmitting}
+                            >
+                              {reservationSubmitting ? '처리 중…' : '반려'}
+                            </button>
+                            <button
+                              type="button"
+                              className="px-8 py-3 bg-primary text-on-primary font-label-md text-label-md tracking-wider hover:bg-secondary transition-colors disabled:opacity-60"
+                              onClick={() => handleReviewReservation('APPROVED')}
+                              disabled={reservationSubmitting}
+                            >
+                              {reservationSubmitting ? '처리 중…' : '승인'}
+                            </button>
+                          </div>
+                        </>
+                      )}
+
+                      {selectedReservation.status === RESERVATION_STATUS.REJECTED &&
+                        selectedReservation.rejectReason && (
+                          <p className="font-body-md text-sm text-error">
+                            반려 사유: {selectedReservation.rejectReason}
+                          </p>
+                        )}
+                    </div>
+                  )}
+
+                  {reservationMessage && (
+                    <p
+                      className={`admin-form-message admin-form-message--${reservationMessageType || 'error'} mt-4`}
+                    >
+                      {reservationMessage}
+                    </p>
+                  )}
+                </div>
+              </section>
             </div>
 
             <aside className="lg:col-span-4 space-y-12 lg:pl-8 lg:border-l lg:border-surface-variant">
@@ -771,6 +968,15 @@ function Admin({ session, onLogout }) {
                     <span className="font-body-md text-body-md text-on-surface-variant">등록 시설</span>
                     <span className="font-headline-md text-headline-md text-secondary">
                       {statsLoading ? '…' : stats.registeredFacilities}
+                    </span>
+                  </div>
+                  <div className="navy-divider opacity-20" />
+                  <div className="flex items-center justify-between">
+                    <span className="font-body-md text-body-md text-on-surface-variant">예약 신청 대기</span>
+                    <span className="font-headline-md text-headline-md text-primary">
+                      {listsLoading
+                        ? '…'
+                        : reservations.filter((row) => row.status === RESERVATION_STATUS.PENDING).length}
                     </span>
                   </div>
                 </div>

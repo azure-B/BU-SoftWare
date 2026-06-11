@@ -115,6 +115,36 @@
   cursor: not-allowed;
 }
 
+.admin-page .admin-reservation-badge {
+  display: inline-flex;
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  vertical-align: middle;
+}
+
+.admin-page .admin-reservation-badge--pending {
+  color: #001849;
+  background: #dbe1ff;
+}
+
+.admin-page .admin-reservation-badge--approved {
+  color: #0d337f;
+  background: #e8f5e9;
+}
+
+.admin-page .admin-reservation-badge--rejected {
+  color: #8b1a1a;
+  background: #ffebee;
+}
+
+.admin-page .admin-reject-reason:focus {
+  outline: none;
+  border-color: #1d5abc;
+}
+
 @media (max-width: 767px) {
   .admin-page .admin-sidebar {
     display: none;

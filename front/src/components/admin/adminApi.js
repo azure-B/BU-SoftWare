@@ -114,3 +114,19 @@ export async function deleteAdminFacility({ token, facilityId }) {
   });
   return parseJsonResponse(res);
 }
+
+export async function fetchAdminReservations(token) {
+  const res = await fetch(`${API_BASE_URL}/api/admin/reservations`, {
+    headers: authHeaders(token),
+  });
+  return parseJsonResponse(res);
+}
+
+export async function reviewAdminReservation({ token, reservationId, status, rejectReason }) {
+  const res = await fetch(`${API_BASE_URL}/api/admin/reservations/${reservationId}`, {
+    method: 'PATCH',
+    headers: authHeaders(token),
+    body: JSON.stringify({ status, rejectReason }),
+  });
+  return parseJsonResponse(res);
+}

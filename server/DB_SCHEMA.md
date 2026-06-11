@@ -220,6 +220,7 @@ boards ──< posts
 | `start_time` | `timestamptz` | NOT NULL | |
 | `end_time` | `timestamptz` | NOT NULL | |
 | `status` | `varchar(50)` | DEFAULT `'PENDING'` | 승인 대기, 완료, 반려 등 |
+| `n_reason` | `text` | NULL 허용 | 반려 사유 |
 
 ---
 

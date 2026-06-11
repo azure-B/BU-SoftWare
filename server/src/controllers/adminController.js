@@ -13,6 +13,12 @@ function parseFacilityId(raw) {
   return id;
 }
 
+function parseReservationId(raw) {
+  const id = Number(raw);
+  if (!Number.isInteger(id) || id < 1) return null;
+  return id;
+}
+
 const adminController = {
   getStats: async (req, res, next) => {
     try {
@@ -183,6 +189,34 @@ const adminController = {
 
       const result = await AdminModel.deleteFacility(facilityId);
       res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  listReservations: async (req, res, next) => {
+    try {
+      const rows = await AdminModel.listReservationRequests();
+      res.json(rows);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  reviewReservation: async (req, res, next) => {
+    try {
+      const reservationId = parseReservationId(req.params.id);
+      if (!reservationId) {
+        return res.status(400).json({ message: '유효하지 않은 예약입니다.' });
+      }
+
+      const reservation = await AdminModel.reviewReservation({
+        reservationId,
+        status: req.body.status,
+        rejectReason: req.body.rejectReason,
+      });
+
+      res.json(reservation);
     } catch (err) {
       next(err);
     }

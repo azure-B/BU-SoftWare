@@ -1,5 +1,10 @@
 const { getServerClient } = require('../config/supabase');
 const { isAdminStudentId } = require('../constants/adminAccount');
+const {
+  normalizeReservationStatus,
+  pickRejectReason,
+} = require('../utils/reservationStatus');
+const { timeSlotsFromRange, toDateInputValue } = require('../utils/reservationTime');
 
 const DASHBOARD_NOTICE_BOARD_ID = 100;
 
@@ -113,6 +118,32 @@ function mapFacilityRow(row) {
     departmentName: row.departments?.name ?? '',
     maxParticipants: row.max_participants ?? 10,
     isAvailable: row.is_available !== false,
+  };
+}
+
+function mapAdminReservationRow(row) {
+  const facility = row.facilities ?? {};
+  const user = row.users ?? {};
+  const date = toDateInputValue(new Date(row.start_time));
+  const timeSlots = timeSlotsFromRange(row.start_time, row.end_time);
+  const status = normalizeReservationStatus(row.status);
+
+  return {
+    id: row.id,
+    facilityId: row.facility_id,
+    facilityName: facility.name ?? '',
+    facilityLocation: facility.location ?? '',
+    facilitySlug: facility.slug ?? null,
+    userId: row.user_id,
+    userName: user.name ?? '',
+    studentId: user.student_id ?? '',
+    date,
+    timeSlots,
+    status,
+    rejectReason: pickRejectReason(row),
+    createdAt: row.created_at ?? row.start_time,
+    startTime: row.start_time,
+    endTime: row.end_time,
   };
 }
 
@@ -471,6 +502,101 @@ const AdminModel = {
     }
 
     return { id: exactId };
+  },
+
+  listReservationRequests: async () => {
+    const supabase = getServerClient();
+    const { data, error } = await supabase
+      .from('reservations')
+      .select(
+        'id, facility_id, user_id, start_time, end_time, status, N_reason, facilities ( slug, name, location ), users ( name, student_id )',
+      )
+      .order('start_time', { ascending: false })
+      .limit(200);
+
+    if (error) {
+      const err = new Error('시설 예약 목록을 불러오지 못했습니다.');
+      err.status = 500;
+      err.cause = error;
+      throw err;
+    }
+
+    return (data ?? [])
+      .filter((row) => row.facilities && row.users)
+      .map(mapAdminReservationRow);
+  },
+
+  reviewReservation: async ({ reservationId, status, rejectReason }) => {
+    const exactId = Number(reservationId);
+    if (!Number.isInteger(exactId) || exactId < 1) {
+      const err = new Error('유효하지 않은 예약입니다.');
+      err.status = 400;
+      throw err;
+    }
+
+    const nextStatus = String(status ?? '').toUpperCase();
+    if (nextStatus !== 'APPROVED' && nextStatus !== 'REJECTED') {
+      const err = new Error('승인 또는 반려만 처리할 수 있습니다.');
+      err.status = 400;
+      throw err;
+    }
+
+    const trimmedReason = String(rejectReason ?? '').trim();
+    if (nextStatus === 'REJECTED' && !trimmedReason) {
+      const err = new Error('반려 사유를 입력해 주세요.');
+      err.status = 400;
+      throw err;
+    }
+
+    const supabase = getServerClient();
+    const { data: existing, error: fetchError } = await supabase
+      .from('reservations')
+      .select('id, status')
+      .eq('id', exactId)
+      .maybeSingle();
+
+    if (fetchError) {
+      const err = new Error('예약 정보를 확인하지 못했습니다.');
+      err.status = 500;
+      err.cause = fetchError;
+      throw err;
+    }
+
+    if (!existing) {
+      const err = new Error('예약을 찾을 수 없습니다.');
+      err.status = 404;
+      throw err;
+    }
+
+    const currentStatus = normalizeReservationStatus(existing.status);
+    if (currentStatus !== 'pending') {
+      const err = new Error('이미 처리된 예약입니다.');
+      err.status = 409;
+      throw err;
+    }
+
+    const payload = {
+      status: nextStatus,
+      N_reason: nextStatus === 'REJECTED' ? trimmedReason : null,
+    };
+
+    const { data, error } = await supabase
+      .from('reservations')
+      .update(payload)
+      .eq('id', exactId)
+      .select(
+        'id, facility_id, user_id, start_time, end_time, status, N_reason, facilities ( slug, name, location ), users ( name, student_id )',
+      )
+      .single();
+
+    if (error) {
+      const err = new Error('예약 처리에 실패했습니다.');
+      err.status = 500;
+      err.cause = error;
+      throw err;
+    }
+
+    return mapAdminReservationRow(data);
   },
 
   getStats: async () => {

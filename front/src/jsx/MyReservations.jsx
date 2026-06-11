@@ -1,4 +1,4 @@
-import { formatReservationDate, formatTimeSlots, RESERVATION_STATUS_LABEL } from '../components/reservation/reservationData';
+import { formatReservationDate, formatTimeSlots, RESERVATION_STATUS, RESERVATION_STATUS_LABEL } from '../components/reservation/reservationData';
 import '../public/css/reservation.css';
 
 function MyReservations({ reservations }) {
@@ -27,7 +27,11 @@ function MyReservations({ reservations }) {
                     <p className="font-body-md text-xs text-on-surface-variant mt-1">{reservation.location}</p>
                   )}
                 </div>
-                <span className="my-reservation-status">{RESERVATION_STATUS_LABEL[reservation.status]}</span>
+                <span
+                  className={`my-reservation-status my-reservation-status--${reservation.status || RESERVATION_STATUS.PENDING}`}
+                >
+                  {RESERVATION_STATUS_LABEL[reservation.status] ?? RESERVATION_STATUS_LABEL.pending}
+                </span>
               </div>
 
               <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 font-body-md text-sm text-on-surface-variant">
@@ -55,6 +59,14 @@ function MyReservations({ reservations }) {
                   </dt>
                   <dd>{reservation.reason || '—'}</dd>
                 </div>
+                {reservation.status === RESERVATION_STATUS.REJECTED && reservation.rejectReason && (
+                  <div className="sm:col-span-2">
+                    <dt className="font-label-md text-[11px] uppercase tracking-widest text-outline mb-0.5">
+                      반려 사유
+                    </dt>
+                    <dd className="text-error">{reservation.rejectReason}</dd>
+                  </div>
+                )}
               </dl>
             </li>
           ))}

@@ -3,11 +3,13 @@ export const MY_RESERVATIONS_ID = 'my_reservations';
 export const RESERVATION_STATUS = {
   APPROVED: 'approved',
   PENDING: 'pending',
+  REJECTED: 'rejected',
 };
 
 export const RESERVATION_STATUS_LABEL = {
-  [RESERVATION_STATUS.APPROVED]: '승인 완료',
-  [RESERVATION_STATUS.PENDING]: '승인 대기',
+  [RESERVATION_STATUS.APPROVED]: '승인',
+  [RESERVATION_STATUS.PENDING]: '예약 신청',
+  [RESERVATION_STATUS.REJECTED]: '반려',
 };
 
 export const MY_RESERVATIONS_STORAGE_KEY = 'baekseok-my-reservations';

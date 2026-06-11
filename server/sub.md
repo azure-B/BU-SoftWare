@@ -55,7 +55,7 @@ PostgreSQL 스키마·DDL·프론트 매핑: [DB_SCHEMA.md](DB_SCHEMA.md)
 | `/api/posts` | `postRouter.js` |
 | `/api/community` | `communityRouter.js` |
 | `/api/faq` | `faqRouter.js` |
-| `/api/admin` | `adminRouter.js` (관리자: 공지·시설 조회/등록/수정/삭제) |
+| `/api/admin` | `adminRouter.js` (관리자: 공지·시설·예약 조회/처리) |
 | `/api/counter` | `counterRouter.js` |
 
 ## API docs (Swagger)
